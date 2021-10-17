@@ -86,17 +86,16 @@ public class JexlActionTest {
     }
 
     @Test
-    public void testJexlActionExecutionWithFailure() {
+    public void testJexlActionExecutionWithFailure() throws Exception {
         // given
         Action action = new JexlAction("person.setBlah(true);");
         Facts facts = new Facts();
         Person foo = new Person("foo", 20);
         facts.put("person", foo);
-
         // when
         Assertions.assertThatThrownBy(() -> action.execute(facts))
                 .isInstanceOf(JexlException.Method.class)
-                .hasMessage("org.jeasy.rules.jexl.JexlAction.<init>@1:7 unsolvable function/method 'setBlah'");
+                .hasMessage("org.jeasy.rules.jexl.JexlAction.<init>:50 unsolvable function/method 'setBlah(Boolean)'");
 
         // then
         // excepted exception
