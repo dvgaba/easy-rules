@@ -13,7 +13,7 @@
     <description>JEXL integration module</description>
 
     <properties>
-        <jexl.version>3.1</jexl.version>
+        <jexl.version>3.2.1</jexl.version>
     </properties>
 
     <scm>
