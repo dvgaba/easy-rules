@@ -127,7 +127,7 @@ public class JexlActionTest {
     public void testWithBlackSandbox() {
         // given
         JexlSandbox sandbox = new JexlSandbox(false);
-        sandbox.black(System.class.getName()).execute("currentTimeMillis");
+        sandbox.block(System.class.getName()).execute("currentTimeMillis");
         Map<String, Object> namespaces = new HashMap<>();
         namespaces.put("s", System.class);
         JexlEngine jexl = new JexlBuilder()
