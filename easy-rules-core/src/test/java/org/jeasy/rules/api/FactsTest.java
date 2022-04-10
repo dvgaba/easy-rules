@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- *  Copyright (c) 2021, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *  Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -50,8 +50,7 @@ public class FactsTest {
         facts.add(fact1);
         facts.add(fact2);
 
-        assertThat(facts).contains(fact1);
-        assertThat(facts).contains(fact2);
+        assertThat(facts).contains(fact1).contains(fact2);
     }
 
     @Test
@@ -59,8 +58,8 @@ public class FactsTest {
         facts.put("foo", 1);
         facts.put("bar", 2);
 
-        assertThat(facts).contains(new Fact<>("foo", 1));
-        assertThat(facts).contains(new Fact<>("bar", 2));
+        assertThat(facts).contains(new Fact<>("foo", 1))
+                .contains(new Fact<>("bar", 2));
     }
 
     @Test
@@ -104,8 +103,7 @@ public class FactsTest {
         facts.add(fact1);
         facts.add(fact2);
         Map<String, Object> map = facts.asMap();
-        assertThat(map).containsKeys("foo", "bar");
-        assertThat(map).containsValues(1, 2);
+        assertThat(map).containsKeys("foo", "bar").containsValues(1, 2);
     }
 
     @Test

@@ -11,7 +11,7 @@
 [![Build Status](https://github.com/j-easy/easy-rules/workflows/Java%20CI/badge.svg)](https://github.com/j-easy/easy-rules/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jeasy/easy-rules-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|org.jeasy|easy-rules-core|4.1.0|)
 [![Javadoc](https://www.javadoc.io/badge/org.jeasy/easy-rules-core.svg)](http://www.javadoc.io/doc/org.jeasy/easy-rules-core)
-[![Project status](https://img.shields.io/badge/Project%20status-Maintenance-orange.svg)](https://img.shields.io/badge/Project%20status-Maintenance-orange.svg)
+[![Project status](https://img.shields.io/badge/Project%20status-active-green.svg)](https://img.shields.io/badge/Project%20status-active-green.svg)
 
 </div>
 
@@ -19,8 +19,7 @@
 
 ## Project status
 
-As of December 2020, Easy Rules is in maintenance mode. This means only bug fixes will be addressed from now on.
-Version 4.1.x is the only supported version. Please consider upgrading to this version at your earliest convenience.
+Active, will focus on existing issues and minor changes. 
 
 ## Latest news
 

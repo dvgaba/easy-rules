@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- *  Copyright (c) 2021, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *  Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -120,13 +120,13 @@ public class RulesTest {
 
     @Test
     public void size() {
-        assertThat(rules.size()).isEqualTo(0);
+        assertThat(rules.size()).isZero();
 
         rules.register(new DummyRule());
         assertThat(rules.size()).isEqualTo(1);
 
         rules.unregister(new DummyRule());
-        assertThat(rules.size()).isEqualTo(0);
+        assertThat(rules.size()).isZero();
     }
 
     @Test
@@ -141,7 +141,7 @@ public class RulesTest {
         assertThat(rules.size()).isEqualTo(2);
 
         rules.unregister(new BasicRule("ruleA"), new BasicRule("ruleB"));
-        assertThat(rules.size()).isEqualTo(0);
+        assertThat(rules.size()).isZero();
     }
 
     @Test
