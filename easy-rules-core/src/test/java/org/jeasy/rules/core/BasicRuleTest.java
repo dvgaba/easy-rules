@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- *  Copyright (c) 2021, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *  Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -42,8 +42,8 @@ public class BasicRuleTest extends AbstractTest {
         FirstRule rule1 = new FirstRule();
         FirstRule rule2 = new FirstRule();
 
-        assertThat(rule1.compareTo(rule2)).isEqualTo(0);
-        assertThat(rule2.compareTo(rule1)).isEqualTo(0);
+        assertThat(rule1.compareTo(rule2)).isZero();
+        assertThat(rule2.compareTo(rule1)).isZero();
     }
 
     @Test

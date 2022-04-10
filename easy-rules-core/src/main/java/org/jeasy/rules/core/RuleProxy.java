@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- *  Copyright (c) 2021, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *  Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -120,7 +120,7 @@ public class RuleProxy implements InvocationHandler {
 
     private Object evaluateMethod(final Object[] args) throws IllegalAccessException, InvocationTargetException {
         Facts facts = (Facts) args[0];
-        Method conditionMethod = getConditionMethod();
+        getConditionMethod();
         try {
             List<Object> actualParameters = getActualParameters(conditionMethod, facts);
             return conditionMethod.invoke(target, actualParameters.toArray()); // validated upfront
@@ -146,7 +146,7 @@ public class RuleProxy implements InvocationHandler {
     }
 
     private Object compareToMethod(final Object[] args) throws Exception {
-        Method compareToMethod = getCompareToMethod();
+        getCompareToMethod();
         Object otherRule = args[0]; // validated upfront
         if (compareToMethod != null && Proxy.isProxyClass(otherRule.getClass())) {
             if (compareToMethod.getParameters().length != 1) {
@@ -183,24 +183,24 @@ public class RuleProxy implements InvocationHandler {
         }
         Rule otherRule = (Rule) args[0];
         int otherPriority = otherRule.getPriority();
-        int priority = getRulePriority();
+        getRulePriority();
         if (priority != otherPriority) {
             return false;
         }
         String otherName = otherRule.getName();
-        String name = getRuleName();
+        getRuleName();
         if (!name.equals(otherName)) {
             return false;
         }
         String otherDescription = otherRule.getDescription();
-        String description =  getRuleDescription();
+        getRuleDescription();
         return Objects.equals(description, otherDescription);
     }
 
     private int hashCodeMethod() throws Exception {
         int result   = getRuleName().hashCode();
-        int priority = getRulePriority();
-        String description = getRuleDescription();
+        getRulePriority();
+        getRuleDescription();
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + priority;
         return result;
@@ -208,7 +208,7 @@ public class RuleProxy implements InvocationHandler {
 
     private Method getToStringMethod() {
         if (this.toStringMethod == null) {
-            Method[] methods = getMethods();
+            getMethods();
             for (Method method : methods) {
                 if ("toString".equals(method.getName())) {
                     this.toStringMethod = method;
@@ -220,7 +220,7 @@ public class RuleProxy implements InvocationHandler {
     }
 
     private String toStringMethod() throws Exception {
-        Method toStringMethod = getToStringMethod();
+        getToStringMethod();
         if (toStringMethod != null) {
             return (String) toStringMethod.invoke(target);
         } else {
@@ -230,43 +230,40 @@ public class RuleProxy implements InvocationHandler {
 
     private int compareTo(final Rule otherRule) throws Exception {
         int otherPriority = otherRule.getPriority();
-        int priority = getRulePriority();
+        getRulePriority();
         if (priority < otherPriority) {
             return -1;
         } else if (priority > otherPriority) {
             return 1;
         } else {
             String otherName = otherRule.getName();
-            String name = getRuleName();
+            getRuleName();
             return name.compareTo(otherName);
         }
     }
 
     private int getRulePriority() throws Exception {
         if (this.priority == null) {
-            int priority = Rule.DEFAULT_PRIORITY;
+            priority = Rule.DEFAULT_PRIORITY;
 
             org.jeasy.rules.annotation.Rule rule = getRuleAnnotation();
             if (rule.priority() != Rule.DEFAULT_PRIORITY) {
                 priority = rule.priority();
             }
 
-            Method[] methods = getMethods();
-            for (Method method : methods) {
+            for (Method method : getMethods()) {
                 if (method.isAnnotationPresent(Priority.class)) {
                     priority = (int) method.invoke(target);
                     break;
                 }
             }
-            this.priority = priority;
         }
         return this.priority;
     }
 
     private Method getConditionMethod() {
         if (this.conditionMethod == null) {
-            Method[] methods = getMethods();
-            for (Method method : methods) {
+            for (Method method : getMethods()) {
                 if (method.isAnnotationPresent(Condition.class)) {
                     this.conditionMethod = method;
                     return this.conditionMethod;
@@ -279,8 +276,7 @@ public class RuleProxy implements InvocationHandler {
     private Set<ActionMethodOrderBean> getActionMethodBeans() {
         if (this.actionMethods == null) {
             this.actionMethods = new TreeSet<>();
-            Method[] methods = getMethods();
-            for (Method method : methods) {
+            for (Method method : getMethods()) {
                 if (method.isAnnotationPresent(Action.class)) {
                     Action actionAnnotation = method.getAnnotation(Action.class);
                     int order = actionAnnotation.order();
@@ -293,8 +289,7 @@ public class RuleProxy implements InvocationHandler {
 
     private Method getCompareToMethod() {
         if (this.compareToMethod == null) {
-            Method[] methods = getMethods();
-            for (Method method : methods) {
+            for (Method method : getMethods()) {
                 if (method.getName().equals("compareTo")) {
                     this.compareToMethod = method;
                     return this.compareToMethod;
@@ -329,11 +324,11 @@ public class RuleProxy implements InvocationHandler {
     private String getRuleDescription() {
         if (this.description == null) {
             // Default description = "when " + conditionMethodName + " then " + comma separated actionMethodsNames
-            StringBuilder description = new StringBuilder();
-            appendConditionMethodName(description);
-            appendActionMethodsNames(description);
+            StringBuilder descriptionBuilder = new StringBuilder();
+            appendConditionMethodName(descriptionBuilder);
+            appendActionMethodsNames(descriptionBuilder);
             org.jeasy.rules.annotation.Rule rule = getRuleAnnotation();
-            this.description = rule.description().equals(Rule.DEFAULT_DESCRIPTION) ? description.toString() : rule.description();
+            this.description = rule.description().equals(Rule.DEFAULT_DESCRIPTION) ? descriptionBuilder.toString() : rule.description();
         }
         return this.description;
     }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- *  Copyright (c) 2021, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *  Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +52,7 @@ public abstract class CompositeRule extends BasicRule {
     /**
      * Create a new {@link CompositeRule}.
      */
-    public CompositeRule() {
+    protected CompositeRule() {
         this(Rule.DEFAULT_NAME, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
     }
 
@@ -61,7 +61,7 @@ public abstract class CompositeRule extends BasicRule {
      *
      * @param name rule name
      */
-    public CompositeRule(final String name) {
+    protected CompositeRule(final String name) {
         this(name, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
     }
 
@@ -71,7 +71,7 @@ public abstract class CompositeRule extends BasicRule {
      * @param name rule name
      * @param description rule description
      */
-    public CompositeRule(final String name, final String description) {
+    protected CompositeRule(final String name, final String description) {
         this(name, description, Rule.DEFAULT_PRIORITY);
     }
 
@@ -82,7 +82,7 @@ public abstract class CompositeRule extends BasicRule {
      * @param description rule description
      * @param priority rule priority
      */
-    public CompositeRule(final String name, final String description, final int priority) {
+    protected CompositeRule(final String name, final String description, final int priority) {
         super(name, description, priority);
         rules = new TreeSet<>();
         proxyRules = new HashMap<>();

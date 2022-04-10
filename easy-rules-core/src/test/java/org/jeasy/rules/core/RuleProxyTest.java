@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- *  Copyright (c) 2021, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *  Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -166,8 +166,8 @@ public class RuleProxyTest {
         Rule proxy2 = RuleProxy.asRule(rule2);
         Rule proxy3 = RuleProxy.asRule(rule3);
         assertEquals(proxy1.compareTo(proxy2),-1);
-        assertEquals(proxy2.compareTo(proxy1),1);
-        assertEquals(proxy2.compareTo(proxy3),0);
+        assertEquals(1,proxy2.compareTo(proxy1));
+        assertEquals(0, proxy2.compareTo(proxy3));
 
         try {
             Rules rules = new Rules();
