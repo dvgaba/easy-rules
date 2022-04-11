@@ -106,6 +106,9 @@ public final class DefaultRulesEngine extends AbstractRulesEngine {
                     LOGGER.debug("Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
                     break;
                 }
+                if (parameters.isFailsOnException()) {
+                    throw new RuntimeException("Exception in rule processing", exception);
+                }
             }
             if (evaluationResult) {
                 LOGGER.debug("Rule '{}' triggered", name);
@@ -125,6 +128,9 @@ public final class DefaultRulesEngine extends AbstractRulesEngine {
                     if (parameters.isSkipOnFirstFailedRule()) {
                         LOGGER.debug("Next rules will be skipped since parameter skipOnFirstFailedRule is set");
                         break;
+                    }
+                    if (parameters.isFailsOnException()) {
+                        throw new RuntimeException("Exception in rule processing", exception);
                     }
                 }
             } else {
@@ -172,9 +178,23 @@ public final class DefaultRulesEngine extends AbstractRulesEngine {
         Map<Rule, Boolean> result = new HashMap<>();
         for (Rule rule : rules) {
             if (shouldBeEvaluated(rule, facts)) {
-                boolean res =  rule.evaluate(facts);
-            	result.put(rule, res);
+                boolean res = false;
+                try {
+                    res = rule.evaluate(facts);
+                result.put(rule, res);
             	triggerListenersAfterEvaluate(rule, facts, res);
+                } catch (Exception exception) {
+                    LOGGER.error("Rule '" + rule.getName() + "' evaluated with error", exception);
+                    triggerListenersOnEvaluationError(rule, facts, exception);
+                    // give the option to either skip next rules on evaluation error or continue by considering the evaluation error as false
+                    if (parameters.isSkipOnFirstNonTriggeredRule()) {
+                        LOGGER.debug("Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
+                        break;
+                    }
+                    if (parameters.isFailsOnException()) {
+                        throw new RuntimeException("Exception in rule processing", exception);
+                    }
+                }
             }
         }
         return result;
