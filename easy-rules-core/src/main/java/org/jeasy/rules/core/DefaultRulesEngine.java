@@ -172,7 +172,9 @@ public final class DefaultRulesEngine extends AbstractRulesEngine {
         Map<Rule, Boolean> result = new HashMap<>();
         for (Rule rule : rules) {
             if (shouldBeEvaluated(rule, facts)) {
-                result.put(rule, rule.evaluate(facts));
+                boolean res =  rule.evaluate(facts);
+            	result.put(rule, res);
+            	triggerListenersAfterEvaluate(rule, facts, res);
             }
         }
         return result;
