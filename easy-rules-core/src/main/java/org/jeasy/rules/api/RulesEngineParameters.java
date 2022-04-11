@@ -59,6 +59,11 @@ public class RulesEngineParameters {
     private boolean skipOnFirstFailedRule;
 
     /**
+     * Parameter to skip next applicable rules when a rule has failed.
+     */
+    private boolean failsOnException;
+
+    /**
      * Parameter to skip next rules if priority exceeds a user defined threshold.
      */
     private int priorityThreshold;
@@ -78,11 +83,14 @@ public class RulesEngineParameters {
      * @param skipOnFirstNonTriggeredRule parameter to skip next applicable rules on first non triggered rule.
      * @param priorityThreshold threshold after which rules should be skipped.
      */
-    public RulesEngineParameters(final boolean skipOnFirstAppliedRule, final boolean skipOnFirstFailedRule, final boolean skipOnFirstNonTriggeredRule, final int priorityThreshold) {
+    public RulesEngineParameters(final boolean skipOnFirstAppliedRule, final boolean skipOnFirstFailedRule
+            , final boolean skipOnFirstNonTriggeredRule, final int priorityThreshold, final boolean failsOnException
+    ) {
         this.skipOnFirstAppliedRule = skipOnFirstAppliedRule;
         this.skipOnFirstFailedRule = skipOnFirstFailedRule;
         this.skipOnFirstNonTriggeredRule = skipOnFirstNonTriggeredRule;
         this.priorityThreshold = priorityThreshold;
+        this.failsOnException = failsOnException;
     }
 
     public int getPriorityThreshold() {
@@ -132,8 +140,21 @@ public class RulesEngineParameters {
         this.skipOnFirstFailedRule = skipOnFirstFailedRule;
     }
 
+    public boolean isFailsOnException() {
+        return failsOnException;
+    }
+
+    public void setFailsOnException(boolean failsOnException) {
+        this.failsOnException = failsOnException;
+    }
+
     public RulesEngineParameters skipOnFirstFailedRule(final boolean skipOnFirstFailedRule) {
         setSkipOnFirstFailedRule(skipOnFirstFailedRule);
+        return this;
+    }
+
+    public RulesEngineParameters failsOnException(final boolean failsOnException) {
+        setFailsOnException(failsOnException);
         return this;
     }
 

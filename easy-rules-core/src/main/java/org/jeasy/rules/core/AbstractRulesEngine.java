@@ -63,7 +63,8 @@ public abstract class AbstractRulesEngine implements RulesEngine {
                 parameters.isSkipOnFirstAppliedRule(),
                 parameters.isSkipOnFirstFailedRule(),
                 parameters.isSkipOnFirstNonTriggeredRule(),
-                parameters.getPriorityThreshold()
+                parameters.getPriorityThreshold(),
+                parameters.isFailsOnException()
         );
     }
 

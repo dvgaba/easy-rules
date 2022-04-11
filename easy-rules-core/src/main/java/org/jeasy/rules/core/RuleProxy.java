@@ -120,7 +120,7 @@ public class RuleProxy implements InvocationHandler {
 
     private Object evaluateMethod(final Object[] args) throws IllegalAccessException, InvocationTargetException {
         Facts facts = (Facts) args[0];
-        getConditionMethod();
+        Method conditionMethod = getConditionMethod();
         try {
             List<Object> actualParameters = getActualParameters(conditionMethod, facts);
             return conditionMethod.invoke(target, actualParameters.toArray()); // validated upfront
@@ -132,7 +132,10 @@ public class RuleProxy implements InvocationHandler {
             LOGGER.warn("Types of injected facts in method '{}' in rule '{}' do not match parameters types",
                     conditionMethod.getName(), getTargetClass().getName(), e);
             return false;
+        } catch(Exception e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     private Object executeMethod(final Object[] args) throws IllegalAccessException, InvocationTargetException {

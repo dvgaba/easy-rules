@@ -23,8 +23,7 @@
  */
 package org.jeasy.rules.core;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
@@ -152,12 +151,30 @@ public class DefaultRulesEngineTest extends AbstractTest {
     public void actionsMustBeExecutedInTheDefinedOrder() {
         // Given
         rules.register(annotatedRule);
-
+        rulesEngine = new DefaultRulesEngine(new RulesEngineParameters().failsOnException(true));
         // When
         rulesEngine.fire(rules, facts);
 
         // Then
         assertEquals("012", annotatedRule.getActionSequence());
+    }
+
+    @Test
+    public void doesntThrowExceptionForExceptionInRule() {
+        // Given
+        rules.register(new ExceptionRule(true, true));
+        rulesEngine = new DefaultRulesEngine();
+        // When
+        Assertions.assertThatNoException().isThrownBy(() -> rulesEngine.fire(rules, facts));
+    }
+
+    @Test
+    public void doesThrowExceptionForExceptionInRule() {
+        // Given
+        rules.register(new ExceptionRule(true, true));
+        rulesEngine = new DefaultRulesEngine(new RulesEngineParameters().failsOnException(true));
+        // When
+        Assertions.assertThatThrownBy(() -> rulesEngine.fire(rules, facts));
     }
 
     @Test
@@ -309,6 +326,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
 
         @Action
         public void then0() {
+
             actionSequence += "0";
         }
 
@@ -355,6 +373,43 @@ public class DefaultRulesEngineTest extends AbstractTest {
         public void action2() {
             // no op
         }
+    }
+
+
+    @org.jeasy.rules.annotation.Rule(name = "myRule", description = "my rule description")
+    public static class ExceptionRule {
+
+        private boolean exceptionInWhen;
+        private boolean exceptionInThen;
+
+        public ExceptionRule(boolean exceptionInWhen,  boolean exceptionInThen ) {
+            this.exceptionInWhen = exceptionInWhen;
+            this.exceptionInThen = exceptionInThen;
+        }
+
+        private String actionSequence = "";
+
+        @Condition
+        public boolean when() {
+            if(exceptionInWhen) {
+                throw new RuntimeException("ERROR");
+            }
+            return true;
+        }
+
+        @Action
+        public void then() {
+            if(exceptionInThen) {
+                throw new RuntimeException("ERROR");
+            }
+        }
+
+        @Priority
+        public int getPriority() {
+            return 0;
+        }
+
+
     }
 
 }
