@@ -26,25 +26,24 @@ package org.jeasy.rules.annotation;
 @Rule
 public class AnnotatedRuleWithPriorityMethodHavingArguments {
 
-    private boolean executed;
+  private boolean executed;
 
-    @Condition
-    private boolean when() {
-        return true;
-    }
+  @Condition
+  private boolean when() {
+    return true;
+  }
 
-    @Action
-    private void then() {
-        executed = true;
-    }
+  @Action
+  private void then() {
+    executed = true;
+  }
 
-    public boolean isExecuted() {
-        return executed;
-    }
+  public boolean isExecuted() {
+    return executed;
+  }
 
-    @Priority
-    public int getPriority(int i) {
-        return i;
-    }
-
+  @Priority
+  public int getPriority(int i) {
+    return i;
+  }
 }

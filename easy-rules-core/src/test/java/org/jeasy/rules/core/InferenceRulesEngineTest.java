@@ -38,175 +38,174 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class InferenceRulesEngineTest {
 
-    @Test(expected = NullPointerException.class)
-    public void whenFireRules_thenNullRulesShouldNotBeAccepted() {
-        InferenceRulesEngine engine = new InferenceRulesEngine();
-        engine.fire(null, new Facts());
+  @Test(expected = NullPointerException.class)
+  public void whenFireRules_thenNullRulesShouldNotBeAccepted() {
+    InferenceRulesEngine engine = new InferenceRulesEngine();
+    engine.fire(null, new Facts());
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void whenFireRules_thenNullFactsShouldNotBeAccepted() {
+    InferenceRulesEngine engine = new InferenceRulesEngine();
+    engine.fire(new Rules(), null);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void whenCheckRules_thenNullRulesShouldNotBeAccepted() {
+    InferenceRulesEngine engine = new InferenceRulesEngine();
+    engine.check(null, new Facts());
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void whenCheckRules_thenNullFactsShouldNotBeAccepted() {
+    InferenceRulesEngine engine = new InferenceRulesEngine();
+    engine.check(new Rules(), null);
+  }
+
+  @Test
+  public void testCandidateSelection() {
+    // Given
+    Facts facts = new Facts();
+    facts.put("foo", true);
+    DummyRule dummyRule = new DummyRule();
+    AnotherDummyRule anotherDummyRule = new AnotherDummyRule();
+    Rules rules = new Rules(dummyRule, anotherDummyRule);
+    RulesEngine rulesEngine = new InferenceRulesEngine();
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    assertThat(dummyRule.isExecuted()).isTrue();
+    assertThat(anotherDummyRule.isExecuted()).isFalse();
+  }
+
+  @Test
+  public void testCandidateOrdering() {
+    // Given
+    Facts facts = new Facts();
+    facts.put("foo", true);
+    facts.put("bar", true);
+    DummyRule dummyRule = new DummyRule();
+    AnotherDummyRule anotherDummyRule = new AnotherDummyRule();
+    Rules rules = new Rules(dummyRule, anotherDummyRule);
+    RulesEngine rulesEngine = new InferenceRulesEngine();
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    assertThat(dummyRule.isExecuted()).isTrue();
+    assertThat(anotherDummyRule.isExecuted()).isTrue();
+    assertThat(dummyRule.getTimestamp()).isLessThanOrEqualTo(anotherDummyRule.getTimestamp());
+  }
+
+  @Test
+  public void testRulesEngineListener() {
+    // Given
+    class StubRulesEngineListener implements RulesEngineListener {
+
+      private boolean executedBeforeEvaluate;
+      private boolean executedAfterExecute;
+
+      @Override
+      public void beforeEvaluate(Rules rules, Facts facts) {
+        executedBeforeEvaluate = true;
+      }
+
+      @Override
+      public void afterExecute(Rules rules, Facts facts) {
+        executedAfterExecute = true;
+      }
+
+      private boolean isExecutedBeforeEvaluate() {
+        return executedBeforeEvaluate;
+      }
+
+      private boolean isExecutedAfterExecute() {
+        return executedAfterExecute;
+      }
     }
 
-    @Test(expected = NullPointerException.class)
-    public void whenFireRules_thenNullFactsShouldNotBeAccepted() {
-        InferenceRulesEngine engine = new InferenceRulesEngine();
-        engine.fire(new Rules(), null);
+    Facts facts = new Facts();
+    facts.put("foo", true);
+    DummyRule rule = new DummyRule();
+    Rules rules = new Rules(rule);
+    StubRulesEngineListener rulesEngineListener = new StubRulesEngineListener();
+
+    // When
+    InferenceRulesEngine rulesEngine = new InferenceRulesEngine();
+    rulesEngine.registerRulesEngineListener(rulesEngineListener);
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    // Rules engine listener should be invoked
+    assertThat(rulesEngineListener.isExecutedBeforeEvaluate()).isTrue();
+    assertThat(rulesEngineListener.isExecutedAfterExecute()).isTrue();
+    assertThat(rule.isExecuted()).isTrue();
+  }
+
+  @Rule
+  static class DummyRule {
+
+    private boolean isExecuted;
+    private long timestamp;
+
+    @Condition
+    public boolean when(@Fact("foo") boolean foo) {
+      return foo;
     }
 
-    @Test(expected = NullPointerException.class)
-    public void whenCheckRules_thenNullRulesShouldNotBeAccepted() {
-        InferenceRulesEngine engine = new InferenceRulesEngine();
-        engine.check(null, new Facts());
+    @Action
+    public void then(Facts facts) {
+      isExecuted = true;
+      timestamp = System.currentTimeMillis();
+      facts.remove("foo");
     }
 
-    @Test(expected = NullPointerException.class)
-    public void whenCheckRules_thenNullFactsShouldNotBeAccepted() {
-        InferenceRulesEngine engine = new InferenceRulesEngine();
-        engine.check(new Rules(), null);
+    @Priority
+    public int priority() {
+      return 1;
     }
 
-    @Test
-    public void testCandidateSelection() {
-        // Given
-        Facts facts = new Facts();
-        facts.put("foo", true);
-        DummyRule dummyRule = new DummyRule();
-        AnotherDummyRule anotherDummyRule = new AnotherDummyRule();
-        Rules rules = new Rules(dummyRule, anotherDummyRule);
-        RulesEngine rulesEngine = new InferenceRulesEngine();
-
-        // When
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        assertThat(dummyRule.isExecuted()).isTrue();
-        assertThat(anotherDummyRule.isExecuted()).isFalse();
+    public boolean isExecuted() {
+      return isExecuted;
     }
 
-    @Test
-    public void testCandidateOrdering() {
-        // Given
-        Facts facts = new Facts();
-        facts.put("foo", true);
-        facts.put("bar", true);
-        DummyRule dummyRule = new DummyRule();
-        AnotherDummyRule anotherDummyRule = new AnotherDummyRule();
-        Rules rules = new Rules(dummyRule, anotherDummyRule);
-        RulesEngine rulesEngine = new InferenceRulesEngine();
+    public long getTimestamp() {
+      return timestamp;
+    }
+  }
 
-        // When
-        rulesEngine.fire(rules, facts);
+  @Rule
+  static class AnotherDummyRule {
 
-        // Then
-        assertThat(dummyRule.isExecuted()).isTrue();
-        assertThat(anotherDummyRule.isExecuted()).isTrue();
-        assertThat(dummyRule.getTimestamp()).isLessThanOrEqualTo(anotherDummyRule.getTimestamp());
+    private boolean isExecuted;
+    private long timestamp;
+
+    @Condition
+    public boolean when(@Fact("bar") boolean bar) {
+      return bar;
     }
 
-    @Test
-    public void testRulesEngineListener() {
-        // Given
-        class StubRulesEngineListener implements RulesEngineListener {
-
-            private boolean executedBeforeEvaluate;
-            private boolean executedAfterExecute;
-
-            @Override
-            public void beforeEvaluate(Rules rules, Facts facts) {
-                executedBeforeEvaluate = true;
-            }
-
-            @Override
-            public void afterExecute(Rules rules, Facts facts) {
-                executedAfterExecute = true;
-            }
-
-            private boolean isExecutedBeforeEvaluate() {
-                return executedBeforeEvaluate;
-            }
-
-            private boolean isExecutedAfterExecute() {
-                return executedAfterExecute;
-            }
-        }
-
-        Facts facts = new Facts();
-        facts.put("foo", true);
-        DummyRule rule = new DummyRule();
-        Rules rules = new Rules(rule);
-        StubRulesEngineListener rulesEngineListener = new StubRulesEngineListener();
-
-        // When
-        InferenceRulesEngine rulesEngine = new InferenceRulesEngine();
-        rulesEngine.registerRulesEngineListener(rulesEngineListener);
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        // Rules engine listener should be invoked
-        assertThat(rulesEngineListener.isExecutedBeforeEvaluate()).isTrue();
-        assertThat(rulesEngineListener.isExecutedAfterExecute()).isTrue();
-        assertThat(rule.isExecuted()).isTrue();
+    @Action
+    public void then(Facts facts) {
+      isExecuted = true;
+      timestamp = System.currentTimeMillis();
+      facts.remove("bar");
     }
 
-    @Rule
-	static class DummyRule {
-
-        private boolean isExecuted;
-        private long timestamp;
-
-        @Condition
-        public boolean when(@Fact("foo") boolean foo) {
-            return foo;
-        }
-
-        @Action
-        public void then(Facts facts) {
-            isExecuted = true;
-            timestamp = System.currentTimeMillis();
-            facts.remove("foo");
-        }
-
-        @Priority
-        public int priority() {
-            return 1;
-        }
-
-        public boolean isExecuted() {
-            return isExecuted;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
-        }
+    @Priority
+    public int priority() {
+      return 2;
     }
 
-    @Rule
-	static class AnotherDummyRule {
-
-        private boolean isExecuted;
-        private long timestamp;
-
-        @Condition
-        public boolean when(@Fact("bar") boolean bar) {
-            return bar;
-        }
-
-        @Action
-        public void then(Facts facts) {
-            isExecuted = true;
-            timestamp = System.currentTimeMillis();
-            facts.remove("bar");
-        }
-
-        @Priority
-        public int priority() {
-            return 2;
-        }
-
-        public boolean isExecuted() {
-            return isExecuted;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
-        }
+    public boolean isExecuted() {
+      return isExecuted;
     }
 
+    public long getTimestamp() {
+      return timestamp;
+    }
+  }
 }

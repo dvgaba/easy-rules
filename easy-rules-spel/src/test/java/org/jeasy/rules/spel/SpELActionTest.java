@@ -35,63 +35,61 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SpELActionTest {
 
-    @Test
-    public void testSpELActionExecution() throws Exception {
-        // given
-        Action markAsAdult = new SpELAction("#{ ['person'].setAdult(true) }");
-        Facts facts = new Facts();
-        Person foo = new Person("foo", 20);
-        facts.put("person", foo);
+  @Test
+  public void testSpELActionExecution() throws Exception {
+    // given
+    Action markAsAdult = new SpELAction("#{ ['person'].setAdult(true) }");
+    Facts facts = new Facts();
+    Person foo = new Person("foo", 20);
+    facts.put("person", foo);
 
-        // when
-        markAsAdult.execute(facts);
+    // when
+    markAsAdult.execute(facts);
 
+    // then
+    assertThat(foo.isAdult()).isTrue();
+  }
+
+  @Test
+  public void testSpELFunctionExecution() throws Exception {
+    // given
+    Action printAction = new SpELAction("#{ T(org.jeasy.rules.spel.Person).sayHello() }");
+    Facts facts = new Facts();
+
+    // when
+    String output = tapSystemOutNormalized(() -> printAction.execute(facts));
+
+    // then
+    assertThat(output).isEqualTo("hello\n");
+  }
+
+  @Test
+  public void testSpELActionExecutionWithFailure() {
+    // given
+    Action action = new SpELAction("#{ T(org.jeasy.rules.spel.Person).sayHi() }");
+    Facts facts = new Facts();
+    Person foo = new Person("foo", 20);
+    facts.put("person", foo);
+
+    // when
+    assertThatThrownBy(() -> action.execute(facts))
         // then
-        assertThat(foo.isAdult()).isTrue();
-    }
+        .isInstanceOf(Exception.class)
+        .hasMessage(
+            "EL1004E: Method call: Method sayHi() cannot be found on type org.jeasy.rules.spel.Person");
+  }
 
-    @Test
-    public void testSpELFunctionExecution() throws Exception {
-        // given
-        Action printAction = new SpELAction("#{ T(org.jeasy.rules.spel.Person).sayHello() }");
-        Facts facts = new Facts();
+  @Test
+  public void testSpELActionWithExpressionAndParserContext() throws Exception {
+    // given
+    ParserContext context = new TemplateParserContext("%{", "}");
+    Action printAction = new SpELAction("%{ T(org.jeasy.rules.spel.Person).sayHello() }", context);
+    Facts facts = new Facts();
 
-        // when
-        String output = tapSystemOutNormalized(
-                () -> printAction.execute(facts));
+    // when
+    String output = tapSystemOutNormalized(() -> printAction.execute(facts));
 
-        // then
-        assertThat(output).isEqualTo("hello\n");
-    }
-
-    @Test
-    public void testSpELActionExecutionWithFailure() {
-        // given
-        Action action = new SpELAction("#{ T(org.jeasy.rules.spel.Person).sayHi() }");
-        Facts facts = new Facts();
-        Person foo = new Person("foo", 20);
-        facts.put("person", foo);
-
-        // when
-        assertThatThrownBy(() -> action.execute(facts))
-                // then
-                .isInstanceOf(Exception.class)
-                .hasMessage("EL1004E: Method call: Method sayHi() cannot be found on type org.jeasy.rules.spel.Person");
-    }
-
-    @Test
-    public void testSpELActionWithExpressionAndParserContext() throws Exception {
-        // given
-        ParserContext context = new TemplateParserContext("%{", "}");
-        Action printAction = new SpELAction("%{ T(org.jeasy.rules.spel.Person).sayHello() }", context);
-        Facts facts = new Facts();
-
-        // when
-        String output = tapSystemOutNormalized(
-                () -> printAction.execute(facts));
-
-        // then
-        assertThat(output).isEqualTo("hello\n");
-
-    }
+    // then
+    assertThat(output).isEqualTo("hello\n");
+  }
 }

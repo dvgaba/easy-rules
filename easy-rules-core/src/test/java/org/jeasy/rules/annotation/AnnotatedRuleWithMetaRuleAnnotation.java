@@ -26,12 +26,11 @@ package org.jeasy.rules.annotation;
 @MetaRule
 public class AnnotatedRuleWithMetaRuleAnnotation {
 
-    @Condition
-    public boolean when() {
-        return true;
-    }
+  @Condition
+  public boolean when() {
+    return true;
+  }
 
-    @Action
-    public void then() {
-    }
+  @Action
+  public void then() {}
 }

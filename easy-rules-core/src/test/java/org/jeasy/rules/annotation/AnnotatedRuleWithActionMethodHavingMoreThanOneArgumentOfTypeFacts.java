@@ -28,13 +28,11 @@ import org.jeasy.rules.api.Facts;
 @Rule
 public class AnnotatedRuleWithActionMethodHavingMoreThanOneArgumentOfTypeFacts {
 
-    @Condition
-    public boolean when() {
-        return true;
-    }
+  @Condition
+  public boolean when() {
+    return true;
+  }
 
-    @Action
-    public void then(Facts facts, Facts otherFacts) {
-    }
-
+  @Action
+  public void then(Facts facts, Facts otherFacts) {}
 }

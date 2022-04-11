@@ -34,31 +34,30 @@ import static org.mockito.Mockito.when;
 
 public class SkipOnFirstFailedRuleTest extends AbstractTest {
 
-    @Before
-    public void setup() throws Exception {
-        super.setup();
-        RulesEngineParameters parameters = new RulesEngineParameters().skipOnFirstFailedRule(true);
-        rulesEngine = new DefaultRulesEngine(parameters);
-    }
+  @Before
+  public void setup() throws Exception {
+    super.setup();
+    RulesEngineParameters parameters = new RulesEngineParameters().skipOnFirstFailedRule(true);
+    rulesEngine = new DefaultRulesEngine(parameters);
+  }
 
-    @Test
-    public void testSkipOnFirstFailedRule() throws Exception {
-        // Given
-        when(rule1.evaluate(facts)).thenReturn(true);
-        when(rule2.compareTo(rule1)).thenReturn(1);
-        final Exception exception = new Exception("fatal error!");
-        doThrow(exception).when(rule1).execute(facts);
-        rules.register(rule1);
-        rules.register(rule2);
+  @Test
+  public void testSkipOnFirstFailedRule() throws Exception {
+    // Given
+    when(rule1.evaluate(facts)).thenReturn(true);
+    when(rule2.compareTo(rule1)).thenReturn(1);
+    final Exception exception = new Exception("fatal error!");
+    doThrow(exception).when(rule1).execute(facts);
+    rules.register(rule1);
+    rules.register(rule2);
 
-        // When
-        rulesEngine.fire(rules, facts);
+    // When
+    rulesEngine.fire(rules, facts);
 
-        // Then
-        //Rule 1 should be executed
-        verify(rule1).execute(facts);
-        //Rule 2 should be skipped since Rule 1 has failed
-        verify(rule2, never()).execute(facts);
-    }
-
+    // Then
+    // Rule 1 should be executed
+    verify(rule1).execute(facts);
+    // Rule 2 should be skipped since Rule 1 has failed
+    verify(rule2, never()).execute(facts);
+  }
 }

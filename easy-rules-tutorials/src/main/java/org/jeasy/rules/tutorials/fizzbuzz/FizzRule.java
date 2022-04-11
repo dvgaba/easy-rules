@@ -32,18 +32,18 @@ import org.jeasy.rules.annotation.Rule;
 @Rule
 public class FizzRule {
 
-    @Condition
-    public boolean isFizz(@Fact("number") Integer number) {
-        return number % 5 == 0;
-    }
+  @Condition
+  public boolean isFizz(@Fact("number") Integer number) {
+    return number % 5 == 0;
+  }
 
-    @Action
-    public void printFizz() {
-        System.out.print("fizz");
-    }
+  @Action
+  public void printFizz() {
+    System.out.print("fizz");
+  }
 
-    @Priority
-    public int getPriority() {
-        return 1;
-    }
+  @Priority
+  public int getPriority() {
+    return 1;
+  }
 }

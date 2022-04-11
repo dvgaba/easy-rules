@@ -41,50 +41,49 @@ import org.junit.Test;
  */
 public class JexlConditionTest {
 
-    @Test
-    public void testJexlExpressionEvaluation() {
-        // given
-        Condition isAdult = new JexlCondition("person.age > 18");
-        Facts facts = new Facts();
-        facts.put("person", new Person("foo", 20));
+  @Test
+  public void testJexlExpressionEvaluation() {
+    // given
+    Condition isAdult = new JexlCondition("person.age > 18");
+    Facts facts = new Facts();
+    facts.put("person", new Person("foo", 20));
 
-        // when
-        boolean evaluationResult = isAdult.evaluate(facts);
+    // when
+    boolean evaluationResult = isAdult.evaluate(facts);
 
-        // then
-        assertThat(evaluationResult).isTrue();
-    }
+    // then
+    assertThat(evaluationResult).isTrue();
+  }
 
-    // Note this behaviour is different in SpEL, where a missing fact is silently ignored and returns false
-    // This behaviour is similar to MVEL though, where a missing fact results in an exception
-    @Test(expected = RuntimeException.class)
-    public void whenDeclaredFactIsNotPresent_thenShouldThrowRuntimeException() {
-        // given
-        Condition isHot = new JexlCondition("temperature > 30");
-        Facts facts = new Facts();
+  // Note this behaviour is different in SpEL, where a missing fact is silently ignored and returns
+  // false
+  // This behaviour is similar to MVEL though, where a missing fact results in an exception
+  @Test(expected = RuntimeException.class)
+  public void whenDeclaredFactIsNotPresent_thenShouldThrowRuntimeException() {
+    // given
+    Condition isHot = new JexlCondition("temperature > 30");
+    Facts facts = new Facts();
 
-        // when
-        boolean evaluationResult = isHot.evaluate(facts);
+    // when
+    boolean evaluationResult = isHot.evaluate(facts);
 
-        // then
-        // expected exception
-    }
+    // then
+    // expected exception
+  }
 
-    @Test
-    public void testJexlConditionWithNamespace() {
-        // given
-        Map<String, Object> namespaces = new HashMap<>();
-        namespaces.put("rnd", new Random(123));
-        JexlEngine jexlEngine = new JexlBuilder()
-                .namespaces(namespaces)
-                .create();
-        Condition condition = new JexlCondition("return rnd:nextBoolean();", jexlEngine);
-        Facts facts = new Facts();
+  @Test
+  public void testJexlConditionWithNamespace() {
+    // given
+    Map<String, Object> namespaces = new HashMap<>();
+    namespaces.put("rnd", new Random(123));
+    JexlEngine jexlEngine = new JexlBuilder().namespaces(namespaces).create();
+    Condition condition = new JexlCondition("return rnd:nextBoolean();", jexlEngine);
+    Facts facts = new Facts();
 
-        // when
-        boolean evaluationResult = condition.evaluate(facts);
+    // when
+    boolean evaluationResult = condition.evaluate(facts);
 
-        // then
-        assertThat(evaluationResult).isTrue();
-    }
+    // then
+    assertThat(evaluationResult).isTrue();
+  }
 }

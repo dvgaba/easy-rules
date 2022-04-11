@@ -31,82 +31,81 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BasicRuleTest extends AbstractTest {
 
-    @Test
-    public void basicRuleEvaluateShouldReturnFalse() {
-        BasicRule basicRule = new BasicRule();
-        assertThat(basicRule.evaluate(facts)).isFalse();
+  @Test
+  public void basicRuleEvaluateShouldReturnFalse() {
+    BasicRule basicRule = new BasicRule();
+    assertThat(basicRule.evaluate(facts)).isFalse();
+  }
+
+  @Test
+  public void testCompareTo() {
+    FirstRule rule1 = new FirstRule();
+    FirstRule rule2 = new FirstRule();
+
+    assertThat(rule1.compareTo(rule2)).isZero();
+    assertThat(rule2.compareTo(rule1)).isZero();
+  }
+
+  @Test
+  public void testSortSequence() {
+    FirstRule rule1 = new FirstRule();
+    SecondRule rule2 = new SecondRule();
+    ThirdRule rule3 = new ThirdRule();
+
+    rules = new Rules(rule1, rule2, rule3);
+
+    rulesEngine.check(rules, facts);
+    assertThat(rules).containsSequence(rule1, rule3, rule2);
+  }
+
+  static class FirstRule extends BasicRule {
+    @Override
+    public int getPriority() {
+      return 1;
     }
 
-    @Test
-    public void testCompareTo() {
-        FirstRule rule1 = new FirstRule();
-        FirstRule rule2 = new FirstRule();
-
-        assertThat(rule1.compareTo(rule2)).isZero();
-        assertThat(rule2.compareTo(rule1)).isZero();
+    @Override
+    public boolean evaluate(Facts facts) {
+      return true;
     }
 
-    @Test
-    public void testSortSequence() {
-        FirstRule rule1 = new FirstRule();
-        SecondRule rule2 = new SecondRule();
-        ThirdRule rule3 = new ThirdRule();
+    @Override
+    public String getName() {
+      return "rule1";
+    }
+  }
 
-        rules = new Rules(rule1, rule2, rule3);
-
-        rulesEngine.check(rules, facts);
-        assertThat(rules).containsSequence(rule1, rule3, rule2);
+  static class SecondRule extends BasicRule {
+    @Override
+    public int getPriority() {
+      return 3;
     }
 
-    static class FirstRule extends BasicRule {
-        @Override
-        public int getPriority() {
-            return 1;
-        }
-
-        @Override
-        public boolean evaluate(Facts facts) {
-            return true;
-        }
-
-        @Override
-        public String getName() {
-            return "rule1";
-        }
+    @Override
+    public boolean evaluate(Facts facts) {
+      return true;
     }
 
-    static class SecondRule extends BasicRule {
-        @Override
-        public int getPriority() {
-            return 3;
-        }
+    @Override
+    public String getName() {
+      return "rule2";
+    }
+  }
 
-        @Override
-        public boolean evaluate(Facts facts) {
-            return true;
-        }
-
-        @Override
-        public String getName() {
-            return "rule2";
-        }
+  static class ThirdRule extends BasicRule {
+    @Override
+    public int getPriority() {
+      return 2;
     }
 
-    static class ThirdRule extends BasicRule {
-        @Override
-        public int getPriority() {
-            return 2;
-        }
-
-        @Override
-        public boolean evaluate(Facts facts) {
-            return true;
-        }
-
-        @Override
-        public String getName() {
-            return "rule3";
-        }
+    @Override
+    public boolean evaluate(Facts facts) {
+      return true;
     }
 
+    @Override
+    public String getName() {
+      return "rule3";
+    }
+  }
 }

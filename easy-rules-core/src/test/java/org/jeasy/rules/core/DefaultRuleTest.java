@@ -37,47 +37,37 @@ import static org.mockito.Mockito.when;
 
 public class DefaultRuleTest extends AbstractTest {
 
-    @Mock
-    private Condition condition;
-    @Mock
-    private Action action1, action2;
+  @Mock private Condition condition;
+  @Mock private Action action1, action2;
 
-    @Test
-    public void WhenConditionIsTrue_ThenActionsShouldBeExecutedInOrder() throws Exception {
-        // given
-        when(condition.evaluate(facts)).thenReturn(true);
-        Rule rule = new RuleBuilder()
-                .when(condition)
-                .then(action1)
-                .then(action2)
-                .build();
-        rules.register(rule);
+  @Test
+  public void WhenConditionIsTrue_ThenActionsShouldBeExecutedInOrder() throws Exception {
+    // given
+    when(condition.evaluate(facts)).thenReturn(true);
+    Rule rule = new RuleBuilder().when(condition).then(action1).then(action2).build();
+    rules.register(rule);
 
-        // when
-        rulesEngine.fire(rules, facts);
+    // when
+    rulesEngine.fire(rules, facts);
 
-        // then
-        InOrder inOrder = Mockito.inOrder(action1, action2);
-        inOrder.verify(action1).execute(facts);
-        inOrder.verify(action2).execute(facts);
-    }
+    // then
+    InOrder inOrder = Mockito.inOrder(action1, action2);
+    inOrder.verify(action1).execute(facts);
+    inOrder.verify(action2).execute(facts);
+  }
 
-    @Test
-    public void WhenConditionIsFalse_ThenActionsShouldNotBeExecuted() throws Exception {
-        // given
-        when(condition.evaluate(facts)).thenReturn(false);
-        Rule rule = new RuleBuilder()
-                .when(condition)
-                .then(action1)
-                .then(action2)
-                .build();
-        rules.register(rule);
+  @Test
+  public void WhenConditionIsFalse_ThenActionsShouldNotBeExecuted() throws Exception {
+    // given
+    when(condition.evaluate(facts)).thenReturn(false);
+    Rule rule = new RuleBuilder().when(condition).then(action1).then(action2).build();
+    rules.register(rule);
 
-        // when
-        rulesEngine.fire(rules, facts);
+    // when
+    rulesEngine.fire(rules, facts);
 
-        // then
-        verify(action1, never()).execute(facts);
-        verify(action2, never()).execute(facts);
-    }
+    // then
+    verify(action1, never()).execute(facts);
+    verify(action2, never()).execute(facts);
+  }
 }

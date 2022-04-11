@@ -29,81 +29,81 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Rule definition as defined in a rule descriptor.
- * This class encapsulates the static definition of a {@link Rule}.
+ * Rule definition as defined in a rule descriptor. This class encapsulates the static definition of
+ * a {@link Rule}.
  *
- * Rule definitions are produced by a {@code RuleDefinitionReader}s
- * and consumed by rule factories to create rules.
+ * <p>Rule definitions are produced by a {@code RuleDefinitionReader}s and consumed by rule
+ * factories to create rules.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class RuleDefinition {
 
-    private String name = Rule.DEFAULT_NAME;
-    private String description = Rule.DEFAULT_DESCRIPTION;
-    private int priority = Rule.DEFAULT_PRIORITY;
-    private String condition;
-    private List<String> actions = new ArrayList<>();
-    private List<RuleDefinition> composingRules = new ArrayList<>();
-    private String compositeRuleType;
+  private String name = Rule.DEFAULT_NAME;
+  private String description = Rule.DEFAULT_DESCRIPTION;
+  private int priority = Rule.DEFAULT_PRIORITY;
+  private String condition;
+  private List<String> actions = new ArrayList<>();
+  private List<RuleDefinition> composingRules = new ArrayList<>();
+  private String compositeRuleType;
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public String getCondition() {
-        return condition;
-    }
+  public String getCondition() {
+    return condition;
+  }
 
-    public void setCondition(String condition) {
-        this.condition = condition;
-    }
+  public void setCondition(String condition) {
+    this.condition = condition;
+  }
 
-    public int getPriority() {
-        return priority;
-    }
+  public int getPriority() {
+    return priority;
+  }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
+  public void setPriority(int priority) {
+    this.priority = priority;
+  }
 
-    public List<String> getActions() {
-        return actions;
-    }
+  public List<String> getActions() {
+    return actions;
+  }
 
-    public void setActions(List<String> actions) {
-        this.actions = actions;
-    }
+  public void setActions(List<String> actions) {
+    this.actions = actions;
+  }
 
-    public void setComposingRules(List<RuleDefinition> composingRuleDefinitions) {
-        this.composingRules = composingRuleDefinitions;
-    }
+  public void setComposingRules(List<RuleDefinition> composingRuleDefinitions) {
+    this.composingRules = composingRuleDefinitions;
+  }
 
-    public void setCompositeRuleType(String compositeRuleType) {
-        this.compositeRuleType = compositeRuleType;
-    }
+  public void setCompositeRuleType(String compositeRuleType) {
+    this.compositeRuleType = compositeRuleType;
+  }
 
-    public String getCompositeRuleType() {
-        return compositeRuleType;
-    }
+  public String getCompositeRuleType() {
+    return compositeRuleType;
+  }
 
-    public List<RuleDefinition> getComposingRules() {
-        return composingRules;
-    }
+  public List<RuleDefinition> getComposingRules() {
+    return composingRules;
+  }
 
-    public boolean isCompositeRule() {
-        return !composingRules.isEmpty();
-    }
+  public boolean isCompositeRule() {
+    return !composingRules.isEmpty();
+  }
 }

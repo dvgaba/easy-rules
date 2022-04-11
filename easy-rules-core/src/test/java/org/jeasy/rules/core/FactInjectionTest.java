@@ -39,185 +39,184 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class FactInjectionTest {
 
-    @Test
-    public void declaredFactsShouldBeCorrectlyInjectedByNameOrType() {
-        // Given
-        Object fact1 = new Object();
-        Object fact2 = new Object();
-        Facts facts = new Facts();
-        facts.put("fact1", fact1);
-        facts.put("fact2", fact2);
+  @Test
+  public void declaredFactsShouldBeCorrectlyInjectedByNameOrType() {
+    // Given
+    Object fact1 = new Object();
+    Object fact2 = new Object();
+    Facts facts = new Facts();
+    facts.put("fact1", fact1);
+    facts.put("fact2", fact2);
 
-        DummyRule rule = new DummyRule();
-        Rules rules = new Rules(rule);
+    DummyRule rule = new DummyRule();
+    Rules rules = new Rules(rule);
 
-        // When
-        RulesEngine rulesEngine = new DefaultRulesEngine();
-        rulesEngine.fire(rules, facts);
+    // When
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+    rulesEngine.fire(rules, facts);
 
-        // Then
-        assertThat(rule.getFact1()).isSameAs(fact1);
-        assertThat(rule.getFact2()).isSameAs(fact2);
-        assertThat(rule.getFacts()).isSameAs(facts);
+    // Then
+    assertThat(rule.getFact1()).isSameAs(fact1);
+    assertThat(rule.getFact2()).isSameAs(fact2);
+    assertThat(rule.getFacts()).isSameAs(facts);
+  }
+
+  @Test
+  public void rulesShouldBeExecutedWhenFactsAreCorrectlyInjected() {
+    // Given
+    Facts facts = new Facts();
+    facts.put("rain", true);
+    facts.put("age", 18);
+
+    WeatherRule weatherRule = new WeatherRule();
+    AgeRule ageRule = new AgeRule();
+    Rules rules = new Rules(weatherRule, ageRule);
+
+    // When
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    assertThat(ageRule.isExecuted()).isTrue();
+    assertThat(weatherRule.isExecuted()).isTrue();
+  }
+
+  @Test
+  public void whenFactTypeDoesNotMatchParameterType_thenTheRuleShouldNotBeExecuted() {
+    // Given
+    Facts facts = new Facts();
+    facts.put("age", "foo");
+    AgeRule ageRule = new AgeRule();
+    Rules rules = new Rules(ageRule);
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    assertThat(ageRule.isExecuted()).isFalse();
+  }
+
+  @Test
+  public void whenADeclaredFactIsMissingInEvaluateMethod_thenTheRuleShouldNotBeExecuted() {
+    // Given
+    Facts facts = new Facts();
+    AgeRule ageRule = new AgeRule();
+    Rules rules = new Rules(ageRule);
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    assertThat(ageRule.isExecuted()).isFalse();
+  }
+
+  @Test
+  public void whenADeclaredFactIsMissingInExecuteMethod_thenTheRuleShouldNotBeExecuted() {
+    // Given
+    Facts facts = new Facts();
+    AnotherDummyRule rule = new AnotherDummyRule();
+    Rules rules = new Rules(rule);
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    assertThat(rule.isExecuted()).isFalse();
+  }
+
+  @Rule
+  static class DummyRule {
+
+    private Object fact1, fact2;
+    private Facts facts;
+
+    @Condition
+    public boolean when(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2) {
+      this.fact1 = fact1;
+      this.fact2 = fact2;
+      return true;
     }
 
-    @Test
-    public void rulesShouldBeExecutedWhenFactsAreCorrectlyInjected() {
-        // Given
-        Facts facts = new Facts();
-        facts.put("rain", true);
-        facts.put("age", 18);
-
-        WeatherRule weatherRule = new WeatherRule();
-        AgeRule ageRule = new AgeRule();
-        Rules rules = new Rules(weatherRule, ageRule);
-
-        // When
-        RulesEngine rulesEngine = new DefaultRulesEngine();
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        assertThat(ageRule.isExecuted()).isTrue();
-        assertThat(weatherRule.isExecuted()).isTrue();
+    @Action
+    public void then(Facts facts) {
+      this.facts = facts;
     }
 
-    @Test
-    public void whenFactTypeDoesNotMatchParameterType_thenTheRuleShouldNotBeExecuted() {
-        // Given
-        Facts facts = new Facts();
-        facts.put("age", "foo");
-        AgeRule ageRule = new AgeRule();
-        Rules rules = new Rules(ageRule);
-        RulesEngine rulesEngine = new DefaultRulesEngine();
-
-        // When
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        assertThat(ageRule.isExecuted()).isFalse();
+    public Object getFact1() {
+      return fact1;
     }
 
-    @Test
-    public void whenADeclaredFactIsMissingInEvaluateMethod_thenTheRuleShouldNotBeExecuted() {
-        // Given
-        Facts facts = new Facts();
-        AgeRule ageRule = new AgeRule();
-        Rules rules = new Rules(ageRule);
-        RulesEngine rulesEngine = new DefaultRulesEngine();
-
-        // When
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        assertThat(ageRule.isExecuted()).isFalse();
+    public Object getFact2() {
+      return fact2;
     }
 
-    @Test
-    public void whenADeclaredFactIsMissingInExecuteMethod_thenTheRuleShouldNotBeExecuted() {
-        // Given
-        Facts facts = new Facts();
-        AnotherDummyRule rule = new AnotherDummyRule();
-        Rules rules = new Rules(rule);
-        RulesEngine rulesEngine = new DefaultRulesEngine();
+    public Facts getFacts() {
+      return facts;
+    }
+  }
 
-        // When
-        rulesEngine.fire(rules, facts);
+  @Rule
+  static class AnotherDummyRule {
 
-        // Then
-        assertThat(rule.isExecuted()).isFalse();
+    private boolean isExecuted;
+
+    @Condition
+    public boolean when() {
+      return true;
     }
 
-    @Rule
-	static class DummyRule {
-
-        private Object fact1, fact2;
-        private Facts facts;
-
-        @Condition
-        public boolean when(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2) {
-            this.fact1 = fact1;
-            this.fact2 = fact2;
-            return true;
-        }
-
-        @Action
-        public void then(Facts facts) {
-            this.facts = facts;
-        }
-
-        public Object getFact1() {
-            return fact1;
-        }
-
-        public Object getFact2() {
-            return fact2;
-        }
-
-        public Facts getFacts() {
-            return facts;
-        }
+    @Action
+    public void then(@Fact("foo") Object fact) {
+      isExecuted = true;
     }
 
-    @Rule
-	static class AnotherDummyRule {
+    public boolean isExecuted() {
+      return isExecuted;
+    }
+  }
 
-        private boolean isExecuted;
+  @Rule
+  static class AgeRule {
 
-        @Condition
-        public boolean when() {
-            return true;
-        }
+    private boolean isExecuted;
 
-        @Action
-        public void then(@Fact("foo") Object fact) {
-            isExecuted = true;
-        }
-
-        public boolean isExecuted() {
-            return isExecuted;
-        }
-
+    @Condition
+    public boolean isAdult(@Fact("age") int age) {
+      return age >= 18;
     }
 
-    @Rule
-	static class AgeRule {
-
-        private boolean isExecuted;
-
-        @Condition
-        public boolean isAdult(@Fact("age") int age) {
-            return age >= 18;
-        }
-
-        @Action
-        public void printYourAreAdult() {
-            System.out.println("You are an adult");
-            isExecuted = true;
-        }
-
-        public boolean isExecuted() {
-            return isExecuted;
-        }
+    @Action
+    public void printYourAreAdult() {
+      System.out.println("You are an adult");
+      isExecuted = true;
     }
 
-    @Rule
-	static class WeatherRule {
-
-        private boolean isExecuted;
-
-        @Condition
-        public boolean itRains(@Fact("rain") boolean rain) {
-            return rain;
-        }
-
-        @Action
-        public void takeAnUmbrella(Facts facts) {
-            System.out.println("It rains, take an umbrella!");
-            isExecuted = true;
-        }
-
-        public boolean isExecuted() {
-            return isExecuted;
-        }
+    public boolean isExecuted() {
+      return isExecuted;
     }
+  }
+
+  @Rule
+  static class WeatherRule {
+
+    private boolean isExecuted;
+
+    @Condition
+    public boolean itRains(@Fact("rain") boolean rain) {
+      return rain;
+    }
+
+    @Action
+    public void takeAnUmbrella(Facts facts) {
+      System.out.println("It rains, take an umbrella!");
+      isExecuted = true;
+    }
+
+    public boolean isExecuted() {
+      return isExecuted;
+    }
+  }
 }

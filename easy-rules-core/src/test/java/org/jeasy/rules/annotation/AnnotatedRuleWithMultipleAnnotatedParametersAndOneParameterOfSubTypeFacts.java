@@ -28,16 +28,13 @@ import org.jeasy.rules.api.Facts;
 @Rule
 public class AnnotatedRuleWithMultipleAnnotatedParametersAndOneParameterOfSubTypeFacts {
 
-    @Condition
-    public boolean when(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2, SubFacts facts) {
-        return true;
-    }
+  @Condition
+  public boolean when(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2, SubFacts facts) {
+    return true;
+  }
 
-    @Action
-    public void then(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2, SubFacts facts) {
-    }
+  @Action
+  public void then(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2, SubFacts facts) {}
 
-    public static class SubFacts extends Facts {
-
-    }
+  public static class SubFacts extends Facts {}
 }

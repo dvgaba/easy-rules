@@ -43,160 +43,164 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UnitRuleGroupTest {
 
-    @Mock
-    private Rule rule1, rule2;
+  @Mock private Rule rule1, rule2;
 
-    private Facts facts = new Facts();
-    private Rules rules = new Rules();
+  private Facts facts = new Facts();
+  private Rules rules = new Rules();
 
-    private DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
+  private DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
 
-    private UnitRuleGroup unitRuleGroup;
+  private UnitRuleGroup unitRuleGroup;
 
+  @Before
+  public void setUp() {
+    when(rule1.evaluate(facts)).thenReturn(true);
+    when(rule2.evaluate(facts)).thenReturn(true);
+    when(rule2.compareTo(rule1)).thenReturn(1);
+  }
 
-    @Before
-    public void setUp() {
-        when(rule1.evaluate(facts)).thenReturn(true);
-        when(rule2.evaluate(facts)).thenReturn(true);
-        when(rule2.compareTo(rule1)).thenReturn(1);
+  @Test
+  public void whenNoComposingRulesAreRegistered_thenUnitRuleGroupShouldEvaluateToFalse() {
+    // given
+    unitRuleGroup = new UnitRuleGroup();
+
+    // when
+    boolean evaluationResult = unitRuleGroup.evaluate(facts);
+
+    // then
+    assertThat(evaluationResult).isFalse();
+  }
+
+  @Test
+  public void compositeRuleAndComposingRulesMustBeExecuted() throws Exception {
+    // Given
+    unitRuleGroup = new UnitRuleGroup();
+    unitRuleGroup.addRule(rule1);
+    unitRuleGroup.addRule(rule2);
+    rules.register(unitRuleGroup);
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    verify(rule1).execute(facts);
+    verify(rule2).execute(facts);
+  }
+
+  @Test
+  public void compositeRuleMustNotBeExecutedIfAComposingRuleEvaluatesToFalse() throws Exception {
+    // Given
+    when(rule2.evaluate(facts)).thenReturn(false);
+    unitRuleGroup = new UnitRuleGroup();
+    unitRuleGroup.addRule(rule1);
+    unitRuleGroup.addRule(rule2);
+    rules.register(unitRuleGroup);
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    /*
+     * The composing rules should not be executed
+     * since not all rules conditions evaluate to TRUE
+     */
+
+    // Rule 1 should not be executed
+    verify(rule1, never()).execute(facts);
+    // Rule 2 should not be executed
+    verify(rule2, never()).execute(facts);
+  }
+
+  @Test
+  public void whenARuleIsRemoved_thenItShouldNotBeEvaluated() throws Exception {
+    // Given
+    unitRuleGroup = new UnitRuleGroup();
+    unitRuleGroup.addRule(rule1);
+    unitRuleGroup.addRule(rule2);
+    unitRuleGroup.removeRule(rule2);
+    rules.register(unitRuleGroup);
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    // Rule 1 should be executed
+    verify(rule1).execute(facts);
+
+    // Rule 2 should not be evaluated nor executed
+    verify(rule2, never()).evaluate(facts);
+    verify(rule2, never()).execute(facts);
+  }
+
+  @Test
+  public void testCompositeRuleWithAnnotatedComposingRules() {
+    // Given
+    MyRule rule = new MyRule();
+    unitRuleGroup = new UnitRuleGroup();
+    unitRuleGroup.addRule(rule);
+    rules.register(unitRuleGroup);
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    assertThat(rule.isExecuted()).isTrue();
+  }
+
+  @Test
+  public void whenAnnotatedRuleIsRemoved_thenItsProxyShouldBeRetrieved() {
+    // Given
+    MyRule rule = new MyRule();
+    MyAnnotatedRule annotatedRule = new MyAnnotatedRule();
+    unitRuleGroup = new UnitRuleGroup();
+    unitRuleGroup.addRule(rule);
+    unitRuleGroup.addRule(annotatedRule);
+    unitRuleGroup.removeRule(annotatedRule);
+    rules.register(unitRuleGroup);
+
+    // When
+    rulesEngine.fire(rules, facts);
+
+    // Then
+    assertThat(rule.isExecuted()).isTrue();
+    assertThat(annotatedRule.isExecuted()).isFalse();
+  }
+
+  @org.jeasy.rules.annotation.Rule
+  public static class MyRule {
+    boolean executed;
+
+    @Condition
+    public boolean when() {
+      return true;
     }
 
-    @Test
-    public void whenNoComposingRulesAreRegistered_thenUnitRuleGroupShouldEvaluateToFalse() {
-        // given
-        unitRuleGroup = new UnitRuleGroup();
-
-        // when
-        boolean evaluationResult = unitRuleGroup.evaluate(facts);
-
-        // then
-        assertThat(evaluationResult).isFalse();
+    @Action
+    public void then() {
+      executed = true;
     }
 
-    @Test
-    public void compositeRuleAndComposingRulesMustBeExecuted() throws Exception {
-        // Given
-        unitRuleGroup = new UnitRuleGroup();
-        unitRuleGroup.addRule(rule1);
-        unitRuleGroup.addRule(rule2);
-        rules.register(unitRuleGroup);
+    public boolean isExecuted() {
+      return executed;
+    }
+  }
 
-        // When
-        rulesEngine.fire(rules, facts);
+  @org.jeasy.rules.annotation.Rule
+  public static class MyAnnotatedRule {
+    private boolean executed;
 
-        // Then
-        verify(rule1).execute(facts);
-        verify(rule2).execute(facts);
+    @Condition
+    public boolean evaluate() {
+      return true;
     }
 
-    @Test
-    public void compositeRuleMustNotBeExecutedIfAComposingRuleEvaluatesToFalse() throws Exception {
-        // Given
-        when(rule2.evaluate(facts)).thenReturn(false);
-        unitRuleGroup = new UnitRuleGroup();
-        unitRuleGroup.addRule(rule1);
-        unitRuleGroup.addRule(rule2);
-        rules.register(unitRuleGroup);
-
-        // When
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        /*
-         * The composing rules should not be executed
-         * since not all rules conditions evaluate to TRUE
-         */
-
-        //Rule 1 should not be executed
-        verify(rule1, never()).execute(facts);
-        //Rule 2 should not be executed
-        verify(rule2, never()).execute(facts);
+    @Action
+    public void execute() {
+      executed = true;
     }
 
-    @Test
-    public void whenARuleIsRemoved_thenItShouldNotBeEvaluated() throws Exception {
-        // Given
-        unitRuleGroup = new UnitRuleGroup();
-        unitRuleGroup.addRule(rule1);
-        unitRuleGroup.addRule(rule2);
-        unitRuleGroup.removeRule(rule2);
-        rules.register(unitRuleGroup);
-
-        // When
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        //Rule 1 should be executed
-        verify(rule1).execute(facts);
-
-        //Rule 2 should not be evaluated nor executed
-        verify(rule2, never()).evaluate(facts);
-        verify(rule2, never()).execute(facts);
+    public boolean isExecuted() {
+      return executed;
     }
-
-    @Test
-    public void testCompositeRuleWithAnnotatedComposingRules() {
-        // Given
-        MyRule rule = new MyRule();
-        unitRuleGroup = new UnitRuleGroup();
-        unitRuleGroup.addRule(rule);
-        rules.register(unitRuleGroup);
-
-        // When
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        assertThat(rule.isExecuted()).isTrue();
-    }
-
-    @Test
-    public void whenAnnotatedRuleIsRemoved_thenItsProxyShouldBeRetrieved() {
-        // Given
-        MyRule rule = new MyRule();
-        MyAnnotatedRule annotatedRule = new MyAnnotatedRule();
-        unitRuleGroup = new UnitRuleGroup();
-        unitRuleGroup.addRule(rule);
-        unitRuleGroup.addRule(annotatedRule);
-        unitRuleGroup.removeRule(annotatedRule);
-        rules.register(unitRuleGroup);
-
-        // When
-        rulesEngine.fire(rules, facts);
-
-        // Then
-        assertThat(rule.isExecuted()).isTrue();
-        assertThat(annotatedRule.isExecuted()).isFalse();
-    }
-
-    @org.jeasy.rules.annotation.Rule
-    public static class MyRule {
-        boolean executed;
-        @Condition
-        public boolean when() {
-            return true;
-        }
-        @Action
-        public void then() {
-            executed = true;
-        }
-        public boolean isExecuted() {
-            return executed;
-        }
-    }
-
-    @org.jeasy.rules.annotation.Rule
-    public static class MyAnnotatedRule {
-        private boolean executed;
-        @Condition
-        public boolean evaluate() {
-            return true;
-        }
-        @Action
-        public void execute() {
-            executed = true;
-        }
-        public boolean isExecuted() {
-            return executed;
-        }
-    }
+  }
 }

@@ -31,11 +31,11 @@ package org.jeasy.rules.api;
 @FunctionalInterface
 public interface Action {
 
-    /**
-     * Execute the action when the rule's condition evaluates to true.
-     *
-     * @param facts known at the time of execution of the action
-     * @throws Exception when unable to execute the action
-     */
-    void execute(Facts facts) throws Exception;
+  /**
+   * Execute the action when the rule's condition evaluates to true.
+   *
+   * @param facts known at the time of execution of the action
+   * @throws Exception when unable to execute the action
+   */
+  void execute(Facts facts) throws Exception;
 }

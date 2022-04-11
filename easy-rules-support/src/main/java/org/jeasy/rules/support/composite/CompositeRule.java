@@ -35,84 +35,81 @@ import java.util.TreeSet;
 
 /**
  * Base class representing a composite rule composed of a set of rules.
- * 
- * <strong>This class is not thread-safe.
- * Sub-classes are inherently not thread-safe.</strong>
+ *
+ * <p><strong>This class is not thread-safe. Sub-classes are inherently not thread-safe.</strong>
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public abstract class CompositeRule extends BasicRule {
 
-    /**
-     * The set of composing rules.
-     */
-    protected Set<Rule> rules;
-    private final Map<Object, Rule> proxyRules;
+  /** The set of composing rules. */
+  protected Set<Rule> rules;
 
-    /**
-     * Create a new {@link CompositeRule}.
-     */
-    protected CompositeRule() {
-        this(Rule.DEFAULT_NAME, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
+  private final Map<Object, Rule> proxyRules;
+
+  /** Create a new {@link CompositeRule}. */
+  protected CompositeRule() {
+    this(Rule.DEFAULT_NAME, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
+  }
+
+  /**
+   * Create a new {@link CompositeRule}.
+   *
+   * @param name rule name
+   */
+  protected CompositeRule(final String name) {
+    this(name, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
+  }
+
+  /**
+   * Create a new {@link CompositeRule}.
+   *
+   * @param name rule name
+   * @param description rule description
+   */
+  protected CompositeRule(final String name, final String description) {
+    this(name, description, Rule.DEFAULT_PRIORITY);
+  }
+
+  /**
+   * Create a new {@link CompositeRule}.
+   *
+   * @param name rule name
+   * @param description rule description
+   * @param priority rule priority
+   */
+  protected CompositeRule(final String name, final String description, final int priority) {
+    super(name, description, priority);
+    rules = new TreeSet<>();
+    proxyRules = new HashMap<>();
+  }
+
+  @Override
+  public abstract boolean evaluate(Facts facts);
+
+  @Override
+  public abstract void execute(Facts facts) throws Exception;
+
+  /**
+   * Add a rule to the composite rule.
+   *
+   * @param rule the rule to add
+   */
+  public void addRule(final Object rule) {
+    Rule proxy = RuleProxy.asRule(rule);
+    rules.add(proxy);
+    proxyRules.put(rule, proxy);
+  }
+
+  /**
+   * Remove a rule from the composite rule.
+   *
+   * @param rule the rule to remove
+   */
+  public void removeRule(final Object rule) {
+    Rule proxy = proxyRules.get(rule);
+    if (proxy != null) {
+      rules.remove(proxy);
     }
-
-    /**
-     * Create a new {@link CompositeRule}.
-     *
-     * @param name rule name
-     */
-    protected CompositeRule(final String name) {
-        this(name, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
-    }
-
-    /**
-     * Create a new {@link CompositeRule}.
-     *
-     * @param name rule name
-     * @param description rule description
-     */
-    protected CompositeRule(final String name, final String description) {
-        this(name, description, Rule.DEFAULT_PRIORITY);
-    }
-
-    /**
-     * Create a new {@link CompositeRule}.
-     *
-     * @param name rule name
-     * @param description rule description
-     * @param priority rule priority
-     */
-    protected CompositeRule(final String name, final String description, final int priority) {
-        super(name, description, priority);
-        rules = new TreeSet<>();
-        proxyRules = new HashMap<>();
-    }
-
-    @Override
-    public abstract boolean evaluate(Facts facts);
-
-    @Override
-    public abstract void execute(Facts facts) throws Exception;
-
-    /**
-     * Add a rule to the composite rule.
-     * @param rule the rule to add
-     */
-    public void addRule(final Object rule) {
-        Rule proxy = RuleProxy.asRule(rule);
-        rules.add(proxy);
-        proxyRules.put(rule, proxy);
-    }
-
-    /**
-     * Remove a rule from the composite rule.
-     * @param rule the rule to remove
-     */
-    public void removeRule(final Object rule) {
-        Rule proxy = proxyRules.get(rule);
-        if (proxy != null) {
-            rules.remove(proxy);
-        }
-    }
-
+  }
 }

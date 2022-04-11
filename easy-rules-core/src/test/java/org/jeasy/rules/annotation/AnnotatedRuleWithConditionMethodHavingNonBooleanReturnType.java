@@ -26,20 +26,19 @@ package org.jeasy.rules.annotation;
 @Rule
 public class AnnotatedRuleWithConditionMethodHavingNonBooleanReturnType {
 
-    private boolean executed;
+  private boolean executed;
 
-    @Condition
-    public int when() {
-        return 0;
-    }
+  @Condition
+  public int when() {
+    return 0;
+  }
 
-    @Action
-    public void then() {
-        executed = true;
-    }
+  @Action
+  public void then() {
+    executed = true;
+  }
 
-    public boolean isExecuted() {
-        return executed;
-    }
-
+  public boolean isExecuted() {
+    return executed;
+  }
 }

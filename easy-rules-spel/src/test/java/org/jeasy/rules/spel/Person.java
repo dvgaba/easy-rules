@@ -25,40 +25,40 @@ package org.jeasy.rules.spel;
 
 public class Person {
 
-    private String name;
-    private int age;
-    private boolean isAdult;
+  private String name;
+  private int age;
+  private boolean isAdult;
 
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
+  public Person(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public int getAge() {
-        return age;
-    }
+  public int getAge() {
+    return age;
+  }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+  public void setAge(int age) {
+    this.age = age;
+  }
 
-    public boolean isAdult() {
-        return isAdult;
-    }
+  public boolean isAdult() {
+    return isAdult;
+  }
 
-    public void setAdult(boolean adult) {
-        isAdult = adult;
-    }
+  public void setAdult(boolean adult) {
+    isAdult = adult;
+  }
 
-    public static void sayHello() {
-        System.out.println("hello");
-    }
+  public static void sayHello() {
+    System.out.println("hello");
+  }
 }

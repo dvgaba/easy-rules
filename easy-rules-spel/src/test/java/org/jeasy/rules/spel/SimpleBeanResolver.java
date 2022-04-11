@@ -29,15 +29,14 @@ import org.springframework.expression.EvaluationContext;
 
 public class SimpleBeanResolver implements BeanResolver {
 
-    private ApplicationContext applicationContext;
+  private ApplicationContext applicationContext;
 
-    public SimpleBeanResolver(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+  public SimpleBeanResolver(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
 
-    @Override
-    public Object resolve(EvaluationContext context, String beanName) {
-        return applicationContext.getBean(beanName);
-    }
-
+  @Override
+  public Object resolve(EvaluationContext context, String beanName) {
+    return applicationContext.getBean(beanName);
+  }
 }

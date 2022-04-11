@@ -36,41 +36,40 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class RuleBuilderTest {
 
-    @Mock
-    private Condition condition;
-    @Mock
-    private Action action1, action2;
+  @Mock private Condition condition;
+  @Mock private Action action1, action2;
 
-    @Test
-    public void testDefaultRuleCreationWithDefaultValues() {
-        // when
-        Rule rule = new RuleBuilder().build();
+  @Test
+  public void testDefaultRuleCreationWithDefaultValues() {
+    // when
+    Rule rule = new RuleBuilder().build();
 
-        // then
-        assertThat(rule.getName()).isEqualTo(Rule.DEFAULT_NAME);
-        assertThat(rule.getDescription()).isEqualTo(Rule.DEFAULT_DESCRIPTION);
-        assertThat(rule.getPriority()).isEqualTo(Rule.DEFAULT_PRIORITY);
-        assertThat(rule).isInstanceOf(DefaultRule.class);
-    }
+    // then
+    assertThat(rule.getName()).isEqualTo(Rule.DEFAULT_NAME);
+    assertThat(rule.getDescription()).isEqualTo(Rule.DEFAULT_DESCRIPTION);
+    assertThat(rule.getPriority()).isEqualTo(Rule.DEFAULT_PRIORITY);
+    assertThat(rule).isInstanceOf(DefaultRule.class);
+  }
 
-    @Test
-    public void testDefaultRuleCreationWithCustomValues() {
-        // when
-        Rule rule = new RuleBuilder()
-                .name("myRule")
-                .description("myRuleDescription")
-                .priority(3)
-                .when(condition)
-                .then(action1)
-                .then(action2)
-                .build();
+  @Test
+  public void testDefaultRuleCreationWithCustomValues() {
+    // when
+    Rule rule =
+        new RuleBuilder()
+            .name("myRule")
+            .description("myRuleDescription")
+            .priority(3)
+            .when(condition)
+            .then(action1)
+            .then(action2)
+            .build();
 
-        // then
-        assertThat(rule.getName()).isEqualTo("myRule");
-        assertThat(rule.getDescription()).isEqualTo("myRuleDescription");
-        assertThat(rule.getPriority()).isEqualTo(3);
-        assertThat(rule).isInstanceOf(DefaultRule.class);
-        assertThat(rule).extracting("condition").isSameAs(condition);
-        assertThat(rule).extracting("actions").asList().containsExactly(action1, action2);
-    }
+    // then
+    assertThat(rule.getName()).isEqualTo("myRule");
+    assertThat(rule.getDescription()).isEqualTo("myRuleDescription");
+    assertThat(rule.getPriority()).isEqualTo(3);
+    assertThat(rule).isInstanceOf(DefaultRule.class);
+    assertThat(rule).extracting("condition").isSameAs(condition);
+    assertThat(rule).extracting("actions").asList().containsExactly(action1, action2);
+  }
 }

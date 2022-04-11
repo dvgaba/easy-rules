@@ -37,119 +37,145 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class ActivationRuleGroupTest {
 
-    private Facts facts = new Facts();
-    private Rules rules = new Rules();
+  private Facts facts = new Facts();
+  private Rules rules = new Rules();
 
-    private DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
+  private DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
 
-    @Test
-    public void onlySelectedRuleShouldBeExecuted_whenComposingRulesHaveDifferentPriorities() {
-        // given
-        Rule1 rule1 = new Rule1();
-        Rule2 rule2 = new Rule2();
-        ActivationRuleGroup activationRuleGroup = new ActivationRuleGroup("my activation rule", "rule1 xor rule2");
-        activationRuleGroup.addRule(rule1);
-        activationRuleGroup.addRule(rule2);
-        rules.register(activationRuleGroup);
+  @Test
+  public void onlySelectedRuleShouldBeExecuted_whenComposingRulesHaveDifferentPriorities() {
+    // given
+    Rule1 rule1 = new Rule1();
+    Rule2 rule2 = new Rule2();
+    ActivationRuleGroup activationRuleGroup =
+        new ActivationRuleGroup("my activation rule", "rule1 xor rule2");
+    activationRuleGroup.addRule(rule1);
+    activationRuleGroup.addRule(rule2);
+    rules.register(activationRuleGroup);
 
-        // when
-        rulesEngine.fire(rules, facts);
+    // when
+    rulesEngine.fire(rules, facts);
 
-        // then
-        assertThat(rule1.isExecuted()).isTrue();
-        assertThat(rule2.isExecuted()).isFalse();
+    // then
+    assertThat(rule1.isExecuted()).isTrue();
+    assertThat(rule2.isExecuted()).isFalse();
+  }
+
+  @Test
+  public void onlySelectedRuleShouldBeExecuted_whenComposingRulesHaveSamePriority() {
+    // given
+    Rule2 rule2 = new Rule2();
+    Rule3 rule3 = new Rule3();
+    ActivationRuleGroup activationRuleGroup =
+        new ActivationRuleGroup("my activation rule", "rule2 xor rule3");
+    activationRuleGroup.addRule(rule2);
+    activationRuleGroup.addRule(rule3);
+    rules.register(activationRuleGroup);
+
+    // when
+    rulesEngine.fire(rules, facts);
+
+    // then
+    // we don't know upfront which rule will be selected, but only one of them should be executed
+    if (rule2.isExecuted()) {
+      assertThat(rule3.isExecuted()).isFalse();
+    } else {
+      assertThat(rule3.isExecuted()).isTrue();
+    }
+  }
+
+  @Test
+  public void whenNoSelectedRule_thenNothingShouldHappen() {
+    // given
+    Rule4 rule4 = new Rule4();
+    ActivationRuleGroup activationRuleGroup =
+        new ActivationRuleGroup("my activation rule", "rule4");
+    activationRuleGroup.addRule(rule4);
+
+    // when
+    rules.register(activationRuleGroup);
+
+    // then
+    rulesEngine.fire(rules, facts);
+
+    // rule4 will not be selected, so it should not be executed
+    assertThat(rule4.isExecuted()).isFalse();
+  }
+
+  @org.jeasy.rules.annotation.Rule(priority = 1)
+  public static class Rule1 {
+    private boolean executed;
+
+    @Condition
+    public boolean when() {
+      return true;
     }
 
-    @Test
-    public void onlySelectedRuleShouldBeExecuted_whenComposingRulesHaveSamePriority() {
-        // given
-        Rule2 rule2 = new Rule2();
-        Rule3 rule3 = new Rule3();
-        ActivationRuleGroup activationRuleGroup = new ActivationRuleGroup("my activation rule", "rule2 xor rule3");
-        activationRuleGroup.addRule(rule2);
-        activationRuleGroup.addRule(rule3);
-        rules.register(activationRuleGroup);
-
-        // when
-        rulesEngine.fire(rules, facts);
-
-        // then
-        // we don't know upfront which rule will be selected, but only one of them should be executed
-        if (rule2.isExecuted()) {
-            assertThat(rule3.isExecuted()).isFalse();
-        } else {
-            assertThat(rule3.isExecuted()).isTrue();
-        }
+    @Action
+    public void then() {
+      executed = true;
     }
 
-    @Test
-    public void whenNoSelectedRule_thenNothingShouldHappen() {
-        // given
-        Rule4 rule4 = new Rule4();
-        ActivationRuleGroup activationRuleGroup = new ActivationRuleGroup("my activation rule", "rule4");
-        activationRuleGroup.addRule(rule4);
+    public boolean isExecuted() {
+      return executed;
+    }
+  }
 
-        //when
-        rules.register(activationRuleGroup);
+  @org.jeasy.rules.annotation.Rule(priority = 2)
+  public static class Rule2 {
+    private boolean executed;
 
-        //then
-        rulesEngine.fire(rules,facts);
-
-        // rule4 will not be selected, so it should not be executed
-        assertThat(rule4.isExecuted()).isFalse();
+    @Condition
+    public boolean when() {
+      return true;
     }
 
-    @org.jeasy.rules.annotation.Rule(priority = 1)
-    public static class Rule1 {
-        private boolean executed;
-
-        @Condition
-        public boolean when() { return true; }
-
-        @Action
-        public void then() { executed = true; }
-
-        public boolean isExecuted() { return executed; }
+    @Action
+    public void then() {
+      executed = true;
     }
 
-    @org.jeasy.rules.annotation.Rule(priority = 2)
-    public static class Rule2 {
-        private boolean executed;
+    public boolean isExecuted() {
+      return executed;
+    }
+  }
 
-        @Condition
-        public boolean when() { return true; }
+  @org.jeasy.rules.annotation.Rule(priority = 2)
+  public static class Rule3 {
+    private boolean executed;
 
-        @Action
-        public void then() { executed = true; }
-
-        public boolean isExecuted() { return executed; }
+    @Condition
+    public boolean when() {
+      return true;
     }
 
-    @org.jeasy.rules.annotation.Rule(priority = 2)
-    public static class Rule3 {
-        private boolean executed;
-
-        @Condition
-        public boolean when() { return true; }
-
-        @Action
-        public void then() { executed = true; }
-
-        public boolean isExecuted() { return executed; }
+    @Action
+    public void then() {
+      executed = true;
     }
 
-    @org.jeasy.rules.annotation.Rule(priority = 1)
-    public static class Rule4 {
-
-        private boolean executed;
-
-        @Condition
-        public boolean when() { return false; }
-
-        @Action
-        public void then() { executed = true; }
-
-        public boolean isExecuted() { return executed; }
-
+    public boolean isExecuted() {
+      return executed;
     }
+  }
+
+  @org.jeasy.rules.annotation.Rule(priority = 1)
+  public static class Rule4 {
+
+    private boolean executed;
+
+    @Condition
+    public boolean when() {
+      return false;
+    }
+
+    @Action
+    public void then() {
+      executed = true;
+    }
+
+    public boolean isExecuted() {
+      return executed;
+    }
+  }
 }

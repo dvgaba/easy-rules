@@ -31,9 +31,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Rule definition reader based on <a href="https://github.com/FasterXML/jackson-dataformats-text/tree/master/yaml">Jackson Yaml</a>.
+ * Rule definition reader based on <a
+ * href="https://github.com/FasterXML/jackson-dataformats-text/tree/master/yaml">Jackson Yaml</a>.
  *
- * This reader expects a collection of rule definitions as input even for a single rule. For example:
+ * <p>This reader expects a collection of rule definitions as input even for a single rule. For
+ * example:
  *
  * <pre>
  *     rule1
@@ -46,31 +48,29 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class YamlRuleDefinitionReader extends AbstractRuleDefinitionReader {
 
-    private final Yaml yaml;
+  private final Yaml yaml;
 
-    /**
-     * Create a new {@link YamlRuleDefinitionReader}.
-     */
-    public YamlRuleDefinitionReader() {
-        this(new Yaml());
-    }
+  /** Create a new {@link YamlRuleDefinitionReader}. */
+  public YamlRuleDefinitionReader() {
+    this(new Yaml());
+  }
 
-    /**
-     * Create a new {@link YamlRuleDefinitionReader}.
-     *
-     * @param yaml to use to read rule definitions
-     */
-    public YamlRuleDefinitionReader(Yaml yaml) {
-        this.yaml = yaml;
-    }
+  /**
+   * Create a new {@link YamlRuleDefinitionReader}.
+   *
+   * @param yaml to use to read rule definitions
+   */
+  public YamlRuleDefinitionReader(Yaml yaml) {
+    this.yaml = yaml;
+  }
 
-    @Override
-    protected Iterable<Map<String, Object>> loadRules(Reader reader) {
-        List<Map<String, Object>> rulesList = new ArrayList<>();
-        Iterable<Object> rules = yaml.loadAll(reader);
-        for (Object rule : rules) {
-            rulesList.add((Map<String, Object>) rule);
-        }
-        return rulesList;
+  @Override
+  protected Iterable<Map<String, Object>> loadRules(Reader reader) {
+    List<Map<String, Object>> rulesList = new ArrayList<>();
+    Iterable<Object> rules = yaml.loadAll(reader);
+    for (Object rule : rules) {
+      rulesList.add((Map<String, Object>) rule);
     }
+    return rulesList;
+  }
 }

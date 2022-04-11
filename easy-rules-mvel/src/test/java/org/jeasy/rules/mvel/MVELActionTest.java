@@ -34,64 +34,66 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MVELActionTest {
 
-    @Test
-    public void testMVELActionExecution() throws Exception {
-        // given
-        Action markAsAdult = new MVELAction("person.setAdult(true);");
-        Facts facts = new Facts();
-        Person foo = new Person("foo", 20);
-        facts.put("person", foo);
+  @Test
+  public void testMVELActionExecution() throws Exception {
+    // given
+    Action markAsAdult = new MVELAction("person.setAdult(true);");
+    Facts facts = new Facts();
+    Person foo = new Person("foo", 20);
+    facts.put("person", foo);
 
-        // when
-        markAsAdult.execute(facts);
+    // when
+    markAsAdult.execute(facts);
 
+    // then
+    assertThat(foo.isAdult()).isTrue();
+  }
+
+  @Test
+  public void testMVELFunctionExecution() throws Exception {
+    // given
+    Action printAction =
+        new MVELAction("def hello() { System.out.println(\"Hello from MVEL!\"); }; hello();");
+    Facts facts = new Facts();
+
+    // when
+    String output = tapSystemOutNormalized(() -> printAction.execute(facts));
+
+    // then
+    assertThat(output).isEqualTo("Hello from MVEL!\n");
+  }
+
+  @Test
+  public void testMVELActionExecutionWithFailure() {
+    // given
+    Action action = new MVELAction("person.setBlah(true);");
+    Facts facts = new Facts();
+    Person foo = new Person("foo", 20);
+    facts.put("person", foo);
+
+    // when
+    assertThatThrownBy(() -> action.execute(facts))
         // then
-        assertThat(foo.isAdult()).isTrue();
-    }
+        .isInstanceOf(Exception.class)
+        .hasMessageContaining(
+            "Error: unable to resolve method: org.jeasy.rules.mvel.Person.setBlah(java.lang.Boolean)");
+  }
 
-    @Test
-    public void testMVELFunctionExecution() throws Exception {
-        // given
-        Action printAction = new MVELAction("def hello() { System.out.println(\"Hello from MVEL!\"); }; hello();");
-        Facts facts = new Facts();
+  @Test
+  public void testMVELActionWithExpressionAndParserContext() throws Exception {
+    // given
+    ParserContext context = new ParserContext();
+    context.addPackageImport("java.util");
+    Action printAction =
+        new MVELAction(
+            "def random() { System.out.println(\"Random from MVEL = \" + new java.util.Random(123).nextInt(10)); }; random();",
+            context);
+    Facts facts = new Facts();
 
-        // when
-        String output = tapSystemOutNormalized(
-                () -> printAction.execute(facts));
+    // when
+    String output = tapSystemOutNormalized(() -> printAction.execute(facts));
 
-        // then
-        assertThat(output).isEqualTo("Hello from MVEL!\n");
-    }
-
-    @Test
-    public void testMVELActionExecutionWithFailure() {
-        // given
-        Action action = new MVELAction("person.setBlah(true);");
-        Facts facts = new Facts();
-        Person foo = new Person("foo", 20);
-        facts.put("person", foo);
-
-        // when
-        assertThatThrownBy(() -> action.execute(facts))
-                // then
-                .isInstanceOf(Exception.class)
-                .hasMessageContaining("Error: unable to resolve method: org.jeasy.rules.mvel.Person.setBlah(java.lang.Boolean)");
-    }
-
-    @Test
-    public void testMVELActionWithExpressionAndParserContext() throws Exception {
-        // given
-        ParserContext context = new ParserContext();
-        context.addPackageImport("java.util");
-        Action printAction = new MVELAction("def random() { System.out.println(\"Random from MVEL = \" + new java.util.Random(123).nextInt(10)); }; random();", context);
-        Facts facts = new Facts();
-
-        // when
-        String output = tapSystemOutNormalized(
-                () -> printAction.execute(facts));
-
-        // then
-        assertThat(output).isEqualTo("Random from MVEL = 2\n");
-
-    }
+    // then
+    assertThat(output).isEqualTo("Random from MVEL = 2\n");
+  }
 }

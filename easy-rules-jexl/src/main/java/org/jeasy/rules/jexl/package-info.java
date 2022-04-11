@@ -22,6 +22,7 @@
  *  THE SOFTWARE.
  */
 /**
- * This package contains classes to support <a href="http://commons.apache.org/proper/commons-jexl/">JEXL</a>.
+ * This package contains classes to support <a
+ * href="http://commons.apache.org/proper/commons-jexl/">JEXL</a>.
  */
 package org.jeasy.rules.jexl;

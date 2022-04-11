@@ -35,17 +35,18 @@ import static org.jeasy.rules.tutorials.web.SuspiciousRequestRule.SUSPICIOUS;
 @WebServlet("/index")
 public class IndexServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/plain");
-        PrintWriter out = response.getWriter();
-        if (isSuspicious(request)) {
-            out.print("Access denied\n");
-        } else {
-            out.print("Welcome!\n");
-        }
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+    response.setContentType("text/plain");
+    PrintWriter out = response.getWriter();
+    if (isSuspicious(request)) {
+      out.print("Access denied\n");
+    } else {
+      out.print("Welcome!\n");
     }
-    
-    private boolean isSuspicious(HttpServletRequest request) {
-        return request.getAttribute(SUSPICIOUS) != null;
-    }
+  }
+
+  private boolean isSuspicious(HttpServletRequest request) {
+    return request.getAttribute(SUSPICIOUS) != null;
+  }
 }

@@ -39,208 +39,218 @@ import java.util.Objects;
 /**
  * Default {@link RulesEngine} implementation.
  *
- * Rules are fired according to their natural order which is priority by default.
- * This implementation iterates over the sorted set of rules, evaluates the condition
- * of each rule and executes its actions if the condition evaluates to true.
+ * <p>Rules are fired according to their natural order which is priority by default. This
+ * implementation iterates over the sorted set of rules, evaluates the condition of each rule and
+ * executes its actions if the condition evaluates to true.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public final class DefaultRulesEngine extends AbstractRulesEngine {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRulesEngine.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRulesEngine.class);
 
-    /**
-     * Create a new {@link DefaultRulesEngine} with default parameters.
-     */
-    public DefaultRulesEngine() {
-        super();
+  /** Create a new {@link DefaultRulesEngine} with default parameters. */
+  public DefaultRulesEngine() {
+    super();
+  }
+
+  /**
+   * Create a new {@link DefaultRulesEngine}.
+   *
+   * @param parameters of the engine
+   */
+  public DefaultRulesEngine(final RulesEngineParameters parameters) {
+    super(parameters);
+  }
+
+  @Override
+  public void fire(Rules rules, Facts facts) {
+    Objects.requireNonNull(rules, "Rules must not be null");
+    Objects.requireNonNull(facts, "Facts must not be null");
+    triggerListenersBeforeRules(rules, facts);
+    doFire(rules, facts);
+    triggerListenersAfterRules(rules, facts);
+  }
+
+  void doFire(Rules rules, Facts facts) {
+    if (rules.isEmpty()) {
+      LOGGER.warn("No rules registered! Nothing to apply");
+      return;
     }
-
-    /**
-     * Create a new {@link DefaultRulesEngine}.
-     *
-     * @param parameters of the engine
-     */
-    public DefaultRulesEngine(final RulesEngineParameters parameters) {
-        super(parameters);
-    }
-
-    @Override
-    public void fire(Rules rules, Facts facts) {
-        Objects.requireNonNull(rules, "Rules must not be null");
-        Objects.requireNonNull(facts, "Facts must not be null");
-        triggerListenersBeforeRules(rules, facts);
-        doFire(rules, facts);
-        triggerListenersAfterRules(rules, facts);
-    }
-
-    void doFire(Rules rules, Facts facts) {
-        if (rules.isEmpty()) {
-            LOGGER.warn("No rules registered! Nothing to apply");
-            return;
+    logEngineParameters();
+    log(rules);
+    log(facts);
+    LOGGER.debug("Rules evaluation started");
+    for (Rule rule : rules) {
+      final String name = rule.getName();
+      final int priority = rule.getPriority();
+      if (priority > parameters.getPriorityThreshold()) {
+        LOGGER.debug(
+            "Rule priority threshold ({}) exceeded at rule '{}' with priority={}, next rules will be skipped",
+            parameters.getPriorityThreshold(),
+            name,
+            priority);
+        break;
+      }
+      if (!shouldBeEvaluated(rule, facts)) {
+        LOGGER.debug("Rule '{}' has been skipped before being evaluated", name);
+        continue;
+      }
+      boolean evaluationResult = false;
+      try {
+        evaluationResult = rule.evaluate(facts);
+      } catch (RuntimeException exception) {
+        LOGGER.error("Rule '" + name + "' evaluated with error", exception);
+        triggerListenersOnEvaluationError(rule, facts, exception);
+        // give the option to either skip next rules on evaluation error or continue by considering
+        // the evaluation error as false
+        if (parameters.isFailsOnException()) {
+          throw new RuntimeException("Exception in rule processing", exception);
         }
-        logEngineParameters();
-        log(rules);
-        log(facts);
-        LOGGER.debug("Rules evaluation started");
-        for (Rule rule : rules) {
-            final String name = rule.getName();
-            final int priority = rule.getPriority();
-            if (priority > parameters.getPriorityThreshold()) {
-                LOGGER.debug("Rule priority threshold ({}) exceeded at rule '{}' with priority={}, next rules will be skipped",
-                        parameters.getPriorityThreshold(), name, priority);
-                break;
-            }
-            if (!shouldBeEvaluated(rule, facts)) {
-                LOGGER.debug("Rule '{}' has been skipped before being evaluated", name);
-                continue;
-            }
-            boolean evaluationResult = false;
-            try {
-                evaluationResult = rule.evaluate(facts);
-            } catch (RuntimeException exception) {
-                LOGGER.error("Rule '" + name + "' evaluated with error", exception);
-                triggerListenersOnEvaluationError(rule, facts, exception);
-                // give the option to either skip next rules on evaluation error or continue by considering the evaluation error as false
-                if (parameters.isFailsOnException()) {
-                    throw new RuntimeException("Exception in rule processing", exception);
-                }
-                if (parameters.isSkipOnFirstNonTriggeredRule()) {
-                    LOGGER.debug("Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
-                    break;
-                }
-
-            }
-            if (evaluationResult) {
-                LOGGER.debug("Rule '{}' triggered", name);
-                triggerListenersAfterEvaluate(rule, facts, true);
-                try {
-                    triggerListenersBeforeExecute(rule, facts);
-                    rule.execute(facts);
-                    LOGGER.debug("Rule '{}' performed successfully", name);
-                    triggerListenersOnSuccess(rule, facts);
-                    if (parameters.isSkipOnFirstAppliedRule()) {
-                        LOGGER.debug("Next rules will be skipped since parameter skipOnFirstAppliedRule is set");
-                        break;
-                    }
-                } catch (Exception exception) {
-                    LOGGER.error("Rule '" + name + "' performed with error", exception);
-                    triggerListenersOnFailure(rule, exception, facts);
-                    if (parameters.isFailsOnException()) {
-                        throw new RuntimeException("Exception in rule processing", exception);
-                    }
-                    if (parameters.isSkipOnFirstFailedRule()) {
-                        LOGGER.debug("Next rules will be skipped since parameter skipOnFirstFailedRule is set");
-                        break;
-                    }
-
-                }
-            } else {
-                LOGGER.debug("Rule '{}' has been evaluated to false, it has not been executed", name);
-                triggerListenersAfterEvaluate(rule, facts, false);
-                if (parameters.isSkipOnFirstNonTriggeredRule()) {
-                    LOGGER.debug("Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
-                    break;
-                }
-            }
+        if (parameters.isSkipOnFirstNonTriggeredRule()) {
+          LOGGER.debug(
+              "Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
+          break;
         }
-    }
-
-    private void logEngineParameters() {
-        LOGGER.debug("{}", parameters);
-    }
-
-    private void log(Rules rules) {
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Registered rules:");
-            for (Rule rule : rules) {
-                LOGGER.debug("Rule { name = '{}', description = '{}', priority = '{}'}",
-                        rule.getName(), rule.getDescription(), rule.getPriority());
-            }
+      }
+      if (evaluationResult) {
+        LOGGER.debug("Rule '{}' triggered", name);
+        triggerListenersAfterEvaluate(rule, facts, true);
+        try {
+          triggerListenersBeforeExecute(rule, facts);
+          rule.execute(facts);
+          LOGGER.debug("Rule '{}' performed successfully", name);
+          triggerListenersOnSuccess(rule, facts);
+          if (parameters.isSkipOnFirstAppliedRule()) {
+            LOGGER.debug(
+                "Next rules will be skipped since parameter skipOnFirstAppliedRule is set");
+            break;
+          }
+        } catch (Exception exception) {
+          LOGGER.error("Rule '" + name + "' performed with error", exception);
+          triggerListenersOnFailure(rule, exception, facts);
+          if (parameters.isFailsOnException()) {
+            throw new RuntimeException("Exception in rule processing", exception);
+          }
+          if (parameters.isSkipOnFirstFailedRule()) {
+            LOGGER.debug("Next rules will be skipped since parameter skipOnFirstFailedRule is set");
+            break;
+          }
         }
-    }
-
-    private void log(Facts facts) {
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Known facts:");
-            for (Fact<?> fact : facts) {
-                LOGGER.debug("{}", fact);
-            }
+      } else {
+        LOGGER.debug("Rule '{}' has been evaluated to false, it has not been executed", name);
+        triggerListenersAfterEvaluate(rule, facts, false);
+        if (parameters.isSkipOnFirstNonTriggeredRule()) {
+          LOGGER.debug(
+              "Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
+          break;
         }
+      }
     }
+  }
 
-    @Override
-    public Map<Rule, Boolean> check(Rules rules, Facts facts) {
-        Objects.requireNonNull(rules, "Rules must not be null");
-        Objects.requireNonNull(facts, "Facts must not be null");
-        triggerListenersBeforeRules(rules, facts);
-        Map<Rule, Boolean> result = doCheck(rules, facts);
-        triggerListenersAfterRules(rules, facts);
-        return result;
+  private void logEngineParameters() {
+    LOGGER.debug("{}", parameters);
+  }
+
+  private void log(Rules rules) {
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Registered rules:");
+      for (Rule rule : rules) {
+        LOGGER.debug(
+            "Rule { name = '{}', description = '{}', priority = '{}'}",
+            rule.getName(),
+            rule.getDescription(),
+            rule.getPriority());
+      }
     }
+  }
 
-    private Map<Rule, Boolean> doCheck(Rules rules, Facts facts) {
-        LOGGER.debug("Checking rules");
-        Map<Rule, Boolean> result = new HashMap<>();
-        for (Rule rule : rules) {
-            if (shouldBeEvaluated(rule, facts)) {
-                boolean res = false;
-                try {
-                    res = rule.evaluate(facts);
-                result.put(rule, res);
-            	triggerListenersAfterEvaluate(rule, facts, res);
-                } catch (Exception exception) {
-                    LOGGER.error("Rule '" + rule.getName() + "' evaluated with error", exception);
-                    triggerListenersOnEvaluationError(rule, facts, exception);
-                    // give the option to either skip next rules on evaluation error or continue by considering the evaluation error as false
-                    if (parameters.isFailsOnException()) {
-                        throw new RuntimeException("Exception in rule processing", exception);
-                    }
-                    if (parameters.isSkipOnFirstNonTriggeredRule()) {
-                        LOGGER.debug("Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
-                        break;
-                    }
+  private void log(Facts facts) {
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Known facts:");
+      for (Fact<?> fact : facts) {
+        LOGGER.debug("{}", fact);
+      }
+    }
+  }
 
-                }
-            }
+  @Override
+  public Map<Rule, Boolean> check(Rules rules, Facts facts) {
+    Objects.requireNonNull(rules, "Rules must not be null");
+    Objects.requireNonNull(facts, "Facts must not be null");
+    triggerListenersBeforeRules(rules, facts);
+    Map<Rule, Boolean> result = doCheck(rules, facts);
+    triggerListenersAfterRules(rules, facts);
+    return result;
+  }
+
+  private Map<Rule, Boolean> doCheck(Rules rules, Facts facts) {
+    LOGGER.debug("Checking rules");
+    Map<Rule, Boolean> result = new HashMap<>();
+    for (Rule rule : rules) {
+      if (shouldBeEvaluated(rule, facts)) {
+        boolean res;
+        try {
+          res = rule.evaluate(facts);
+          result.put(rule, res);
+          triggerListenersAfterEvaluate(rule, facts, res);
+        } catch (Exception exception) {
+          LOGGER.error("Rule '" + rule.getName() + "' evaluated with error", exception);
+          triggerListenersOnEvaluationError(rule, facts, exception);
+          // give the option to either skip next rules on evaluation error or continue by
+          // considering the evaluation error as false
+          if (parameters.isFailsOnException()) {
+            throw new RuntimeException("Exception in rule processing", exception);
+          }
+          if (parameters.isSkipOnFirstNonTriggeredRule()) {
+            LOGGER.debug(
+                "Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
+            break;
+          }
         }
-        return result;
+      }
     }
+    return result;
+  }
 
-    private void triggerListenersOnFailure(final Rule rule, final Exception exception, Facts facts) {
-        ruleListeners.forEach(ruleListener -> ruleListener.onFailure(rule, facts, exception));
-    }
+  private void triggerListenersOnFailure(final Rule rule, final Exception exception, Facts facts) {
+    ruleListeners.forEach(ruleListener -> ruleListener.onFailure(rule, facts, exception));
+  }
 
-    private void triggerListenersOnSuccess(final Rule rule, Facts facts) {
-        ruleListeners.forEach(ruleListener -> ruleListener.onSuccess(rule, facts));
-    }
+  private void triggerListenersOnSuccess(final Rule rule, Facts facts) {
+    ruleListeners.forEach(ruleListener -> ruleListener.onSuccess(rule, facts));
+  }
 
-    private void triggerListenersBeforeExecute(final Rule rule, Facts facts) {
-        ruleListeners.forEach(ruleListener -> ruleListener.beforeExecute(rule, facts));
-    }
+  private void triggerListenersBeforeExecute(final Rule rule, Facts facts) {
+    ruleListeners.forEach(ruleListener -> ruleListener.beforeExecute(rule, facts));
+  }
 
-    private boolean triggerListenersBeforeEvaluate(Rule rule, Facts facts) {
-        return ruleListeners.stream().allMatch(ruleListener -> ruleListener.beforeEvaluate(rule, facts));
-    }
+  private boolean triggerListenersBeforeEvaluate(Rule rule, Facts facts) {
+    return ruleListeners.stream()
+        .allMatch(ruleListener -> ruleListener.beforeEvaluate(rule, facts));
+  }
 
-    private void triggerListenersAfterEvaluate(Rule rule, Facts facts, boolean evaluationResult) {
-        ruleListeners.forEach(ruleListener -> ruleListener.afterEvaluate(rule, facts, evaluationResult));
-    }
+  private void triggerListenersAfterEvaluate(Rule rule, Facts facts, boolean evaluationResult) {
+    ruleListeners.forEach(
+        ruleListener -> ruleListener.afterEvaluate(rule, facts, evaluationResult));
+  }
 
-    private void triggerListenersOnEvaluationError(Rule rule, Facts facts, Exception exception) {
-        ruleListeners.forEach(ruleListener -> ruleListener.onEvaluationError(rule, facts, exception));
-    }
+  private void triggerListenersOnEvaluationError(Rule rule, Facts facts, Exception exception) {
+    ruleListeners.forEach(ruleListener -> ruleListener.onEvaluationError(rule, facts, exception));
+  }
 
-    private void triggerListenersBeforeRules(Rules rule, Facts facts) {
-        rulesEngineListeners.forEach(rulesEngineListener -> rulesEngineListener.beforeEvaluate(rule, facts));
-    }
+  private void triggerListenersBeforeRules(Rules rule, Facts facts) {
+    rulesEngineListeners.forEach(
+        rulesEngineListener -> rulesEngineListener.beforeEvaluate(rule, facts));
+  }
 
-    private void triggerListenersAfterRules(Rules rule, Facts facts) {
-        rulesEngineListeners.forEach(rulesEngineListener -> rulesEngineListener.afterExecute(rule, facts));
-    }
+  private void triggerListenersAfterRules(Rules rule, Facts facts) {
+    rulesEngineListeners.forEach(
+        rulesEngineListener -> rulesEngineListener.afterExecute(rule, facts));
+  }
 
-    private boolean shouldBeEvaluated(Rule rule, Facts facts) {
-        return triggerListenersBeforeEvaluate(rule, facts);
-    }
-
+  private boolean shouldBeEvaluated(Rule rule, Facts facts) {
+    return triggerListenersBeforeEvaluate(rule, facts);
+  }
 }

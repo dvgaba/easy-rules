@@ -41,59 +41,59 @@ import org.jeasy.rules.core.BasicRule;
  */
 public class JexlRule extends BasicRule {
 
-    static final JexlEngine DEFAULT_JEXL = new JexlBuilder().safe(false).create();
+  static final JexlEngine DEFAULT_JEXL = new JexlBuilder().safe(false).create();
 
-    private Condition condition = Condition.FALSE;
-    private final List<Action> actions = new ArrayList<>();
-    private final JexlEngine jexl;
+  private Condition condition = Condition.FALSE;
+  private final List<Action> actions = new ArrayList<>();
+  private final JexlEngine jexl;
 
-    public JexlRule() {
-        this(DEFAULT_JEXL);
+  public JexlRule() {
+    this(DEFAULT_JEXL);
+  }
+
+  public JexlRule(JexlEngine jexl) {
+    super(Rule.DEFAULT_NAME, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
+    this.jexl = Objects.requireNonNull(jexl, "jexl cannot be null");
+  }
+
+  public JexlRule name(String name) {
+    this.name = Objects.requireNonNull(name, "name cannot be null");
+    return this;
+  }
+
+  public JexlRule description(String description) {
+    this.description = Objects.requireNonNull(description, "description cannot be null");
+    return this;
+  }
+
+  public JexlRule priority(int priority) {
+    this.priority = priority;
+    return this;
+  }
+
+  public JexlRule when(String condition) {
+    Objects.requireNonNull(condition, "condition cannot be null");
+    this.condition = new JexlCondition(condition, jexl);
+    return this;
+  }
+
+  public JexlRule then(String action) {
+    Objects.requireNonNull(action, "action cannot be null");
+    this.actions.add(new JexlAction(action, jexl));
+    return this;
+  }
+
+  @Override
+  public boolean evaluate(Facts facts) {
+    Objects.requireNonNull(facts, "facts cannot be null");
+    return condition.evaluate(facts);
+  }
+
+  @Override
+  public void execute(Facts facts) throws Exception {
+    Objects.requireNonNull(facts, "facts cannot be null");
+    for (Action action : actions) {
+      action.execute(facts);
     }
-
-    public JexlRule(JexlEngine jexl) {
-        super(Rule.DEFAULT_NAME, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
-        this.jexl = Objects.requireNonNull(jexl, "jexl cannot be null");
-    }
-
-    public JexlRule name(String name) {
-        this.name = Objects.requireNonNull(name, "name cannot be null");
-        return this;
-    }
-
-    public JexlRule description(String description) {
-        this.description = Objects.requireNonNull(description, "description cannot be null");
-        return this;
-    }
-
-    public JexlRule priority(int priority) {
-        this.priority = priority;
-        return this;
-    }
-
-    public JexlRule when(String condition) {
-        Objects.requireNonNull(condition, "condition cannot be null");
-        this.condition = new JexlCondition(condition, jexl);
-        return this;
-    }
-
-    public JexlRule then(String action) {
-        Objects.requireNonNull(action, "action cannot be null");
-        this.actions.add(new JexlAction(action, jexl));
-        return this;
-    }
-
-    @Override
-    public boolean evaluate(Facts facts) {
-        Objects.requireNonNull(facts, "facts cannot be null");
-        return condition.evaluate(facts);
-    }
-
-    @Override
-    public void execute(Facts facts) throws Exception {
-        Objects.requireNonNull(facts, "facts cannot be null");
-        for (Action action : actions) {
-            action.execute(facts);
-        }
-    }
+  }
 }

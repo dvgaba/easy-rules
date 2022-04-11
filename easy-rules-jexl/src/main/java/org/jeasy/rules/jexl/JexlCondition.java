@@ -37,23 +37,23 @@ import org.jeasy.rules.api.Facts;
  */
 public class JexlCondition implements Condition {
 
-    private final JexlScript compiledScript;
+  private final JexlScript compiledScript;
 
-    public JexlCondition(String expression) {
-        Objects.requireNonNull(expression, "expression cannot be null");
-        this.compiledScript = JexlRule.DEFAULT_JEXL.createScript(expression);
-    }
+  public JexlCondition(String expression) {
+    Objects.requireNonNull(expression, "expression cannot be null");
+    this.compiledScript = JexlRule.DEFAULT_JEXL.createScript(expression);
+  }
 
-    public JexlCondition(String expression, JexlEngine jexl) {
-        Objects.requireNonNull(expression, "expression cannot be null");
-        Objects.requireNonNull(jexl, "jexl cannot be null");
-        this.compiledScript = jexl.createScript(expression);
-    }
+  public JexlCondition(String expression, JexlEngine jexl) {
+    Objects.requireNonNull(expression, "expression cannot be null");
+    Objects.requireNonNull(jexl, "jexl cannot be null");
+    this.compiledScript = jexl.createScript(expression);
+  }
 
-    @Override
-    public boolean evaluate(Facts facts) {
-        Objects.requireNonNull(facts, "facts cannot be null");
-        MapContext ctx = new MapContext(facts.asMap());
-        return (Boolean) compiledScript.execute(ctx);
-    }
+  @Override
+  public boolean evaluate(Facts facts) {
+    Objects.requireNonNull(facts, "facts cannot be null");
+    MapContext ctx = new MapContext(facts.asMap());
+    return (Boolean) compiledScript.execute(ctx);
+  }
 }

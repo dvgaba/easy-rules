@@ -35,23 +35,23 @@ import static org.jeasy.rules.tutorials.airco.HighTemperatureCondition.itIsHot;
 
 public class Launcher {
 
-    public static void main(String[] args) {
-        // define facts
-        Facts facts = new Facts();
-        facts.put("temperature", 30);
+  public static void main(String[] args) {
+    // define facts
+    Facts facts = new Facts();
+    facts.put("temperature", 30);
 
-        // define rules
-        Rule airConditioningRule = new RuleBuilder()
-                .name("air conditioning rule")
-                .when(itIsHot())
-                .then(decreaseTemperature())
-                .build();
-        Rules rules = new Rules();
-        rules.register(airConditioningRule);
+    // define rules
+    Rule airConditioningRule =
+        new RuleBuilder()
+            .name("air conditioning rule")
+            .when(itIsHot())
+            .then(decreaseTemperature())
+            .build();
+    Rules rules = new Rules();
+    rules.register(airConditioningRule);
 
-        // fire rules on known facts
-        RulesEngine rulesEngine = new InferenceRulesEngine();
-        rulesEngine.fire(rules, facts);
-    }
-
+    // fire rules on known facts
+    RulesEngine rulesEngine = new InferenceRulesEngine();
+    rulesEngine.fire(rules, facts);
+  }
 }

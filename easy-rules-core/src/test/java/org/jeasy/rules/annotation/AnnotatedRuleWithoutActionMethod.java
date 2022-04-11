@@ -26,19 +26,18 @@ package org.jeasy.rules.annotation;
 @Rule
 public class AnnotatedRuleWithoutActionMethod {
 
-    private boolean executed;
+  private boolean executed;
 
-    @Condition
-    public boolean when() {
-        return true;
-    }
+  @Condition
+  public boolean when() {
+    return true;
+  }
 
-    public void then() {
-        executed = true;
-    }
+  public void then() {
+    executed = true;
+  }
 
-    public boolean isExecuted() {
-        return executed;
-    }
-
+  public boolean isExecuted() {
+    return executed;
+  }
 }

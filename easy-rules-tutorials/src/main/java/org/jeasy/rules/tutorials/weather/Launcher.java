@@ -30,19 +30,18 @@ import org.jeasy.rules.core.DefaultRulesEngine;
 
 public class Launcher {
 
-    public static void main(String[] args) {
-        // define facts
-        Facts facts = new Facts();
-        facts.put("rain", true);
+  public static void main(String[] args) {
+    // define facts
+    Facts facts = new Facts();
+    facts.put("rain", true);
 
-        // define rules
-        WeatherRule weatherRule = new WeatherRule();
-        Rules rules = new Rules();
-        rules.register(weatherRule);
+    // define rules
+    WeatherRule weatherRule = new WeatherRule();
+    Rules rules = new Rules();
+    rules.register(weatherRule);
 
-        // fire rules on known facts
-        RulesEngine rulesEngine = new DefaultRulesEngine();
-        rulesEngine.fire(rules, facts);
-    }
-
+    // fire rules on known facts
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+    rulesEngine.fire(rules, facts);
+  }
 }

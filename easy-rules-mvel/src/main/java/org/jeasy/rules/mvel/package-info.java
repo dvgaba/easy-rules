@@ -21,7 +21,5 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-/**
- * This package contains classes to support <a href="https://github.com/mvel/mvel">MVEL</a>.
- */
+/** This package contains classes to support <a href="https://github.com/mvel/mvel">MVEL</a>. */
 package org.jeasy.rules.mvel;

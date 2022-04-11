@@ -36,45 +36,42 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CustomRuleOrderingTest extends AbstractTest {
 
-    @Mock
-    private MyRule rule1, rule2;
+  @Mock private MyRule rule1, rule2;
 
-    @Test
-    public void whenCompareToIsOverridden_thenShouldExecuteRulesInTheCustomOrder() throws Exception {
-        // Given
-        when(rule1.getName()).thenReturn("a");
-        when(rule1.getPriority()).thenReturn(1);
-        when(rule1.evaluate(facts)).thenReturn(true);
+  @Test
+  public void whenCompareToIsOverridden_thenShouldExecuteRulesInTheCustomOrder() throws Exception {
+    // Given
+    when(rule1.getName()).thenReturn("a");
+    when(rule1.getPriority()).thenReturn(1);
+    when(rule1.evaluate(facts)).thenReturn(true);
 
-        when(rule2.getName()).thenReturn("b");
-        when(rule2.getPriority()).thenReturn(0);
-        when(rule2.evaluate(facts)).thenReturn(true);
+    when(rule2.getName()).thenReturn("b");
+    when(rule2.getPriority()).thenReturn(0);
+    when(rule2.evaluate(facts)).thenReturn(true);
 
-        when(rule2.compareTo(rule1)).thenCallRealMethod();
+    when(rule2.compareTo(rule1)).thenCallRealMethod();
 
-        rules.register(rule1);
-        rules.register(rule2);
+    rules.register(rule1);
+    rules.register(rule2);
 
-        // When
-        rulesEngine.fire(rules, facts);
+    // When
+    rulesEngine.fire(rules, facts);
 
-        // Then
-        /*
-         * By default, if compareTo is not overridden, then rule2 should be executed first (priority 0 < 1).
-         * But in this case, the compareTo method order rules by their name, so rule1 should be executed first ("a" < "b")
-         */
-        InOrder inOrder = inOrder(rule1, rule2);
-        inOrder.verify(rule1).execute(facts);
-        inOrder.verify(rule2).execute(facts);
+    // Then
+    /*
+     * By default, if compareTo is not overridden, then rule2 should be executed first (priority 0 < 1).
+     * But in this case, the compareTo method order rules by their name, so rule1 should be executed first ("a" < "b")
+     */
+    InOrder inOrder = inOrder(rule1, rule2);
+    inOrder.verify(rule1).execute(facts);
+    inOrder.verify(rule2).execute(facts);
+  }
 
+  static class MyRule extends BasicRule {
+
+    @Override
+    public int compareTo(Rule rule) {
+      return getName().compareTo(rule.getName());
     }
-
-    static class MyRule extends BasicRule {
-
-        @Override
-        public int compareTo(Rule rule) {
-            return getName().compareTo(rule.getName());
-        }
-
-    }
+  }
 }

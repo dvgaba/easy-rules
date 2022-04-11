@@ -34,37 +34,33 @@ import org.junit.Test;
 
 import java.util.Map;
 
-/**
- * Null facts are not accepted by design, a declared fact can be missing though.
- */
+/** Null facts are not accepted by design, a declared fact can be missing though. */
 public class MissingFactAnnotationParameterTest extends AbstractTest {
 
-    @Test
-    public void testMissingFact() {
-        Rules rules = new Rules();
-        rules.register(new AnnotatedParametersRule());
+  @Test
+  public void testMissingFact() {
+    Rules rules = new Rules();
+    rules.register(new AnnotatedParametersRule());
 
-        Facts facts = new Facts();
-        facts.put("fact1", new Object());
+    Facts facts = new Facts();
+    facts.put("fact1", new Object());
 
-        Map<org.jeasy.rules.api.Rule, Boolean> results = rulesEngine.check(rules, facts);
+    Map<org.jeasy.rules.api.Rule, Boolean> results = rulesEngine.check(rules, facts);
 
-        for (boolean b : results.values()) {
-            Assert.assertFalse(b);
-        }
+    for (boolean b : results.values()) {
+      Assert.assertFalse(b);
+    }
+  }
+
+  @Rule
+  public static class AnnotatedParametersRule {
+
+    @Condition
+    public boolean when(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2) {
+      return fact1 != null && fact2 == null;
     }
 
-    @Rule
-    public static class AnnotatedParametersRule {
-
-        @Condition
-        public boolean when(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2) {
-            return fact1 != null && fact2 == null;
-        }
-
-        @Action
-        public void then(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2) {
-        }
-
-    }
+    @Action
+    public void then(@Fact("fact1") Object fact1, @Fact("fact2") Object fact2) {}
+  }
 }

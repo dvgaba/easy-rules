@@ -22,6 +22,7 @@
  *  THE SOFTWARE.
  */
 /**
- * This package contains classes to support <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressionsl">SpEL</a>.
+ * This package contains classes to support <a
+ * href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressionsl">SpEL</a>.
  */
 package org.jeasy.rules.spel;

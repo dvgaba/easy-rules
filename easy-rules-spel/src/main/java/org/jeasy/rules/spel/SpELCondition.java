@@ -34,71 +34,73 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
- * This class is an implementation of {@link Condition} that uses
- * <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">SpEL</a>
+ * This class is an implementation of {@link Condition} that uses <a
+ * href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">SpEL</a>
  * to evaluate the condition.
  *
- * Each fact is set as a variable in the {@link org.springframework.expression.EvaluationContext}.
+ * <p>Each fact is set as a variable in the {@link
+ * org.springframework.expression.EvaluationContext}.
  *
- * The facts map is set as the root object of the {@link org.springframework.expression.EvaluationContext}.
+ * <p>The facts map is set as the root object of the {@link
+ * org.springframework.expression.EvaluationContext}.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class SpELCondition implements Condition {
 
-    private final ExpressionParser parser = new SpelExpressionParser();
-    private final Expression compiledExpression;
-    private BeanResolver beanResolver;
+  private final ExpressionParser parser = new SpelExpressionParser();
+  private final Expression compiledExpression;
+  private BeanResolver beanResolver;
 
-    /**
-     * Create a new {@link SpELCondition}.
-     *
-     * @param expression the condition written in expression language
-     */
-    public SpELCondition(String expression) {
-        this(expression, ParserContext.TEMPLATE_EXPRESSION);
-    }
+  /**
+   * Create a new {@link SpELCondition}.
+   *
+   * @param expression the condition written in expression language
+   */
+  public SpELCondition(String expression) {
+    this(expression, ParserContext.TEMPLATE_EXPRESSION);
+  }
 
-    /**
-     * Create a new {@link SpELCondition}.
-     *
-     * @param expression    the condition written in expression language
-     * @param beanResolver  the bean resolver used to resolve bean references
-     */
-    public SpELCondition(String expression, BeanResolver beanResolver) {
-        this(expression, ParserContext.TEMPLATE_EXPRESSION, beanResolver);
-    }
+  /**
+   * Create a new {@link SpELCondition}.
+   *
+   * @param expression the condition written in expression language
+   * @param beanResolver the bean resolver used to resolve bean references
+   */
+  public SpELCondition(String expression, BeanResolver beanResolver) {
+    this(expression, ParserContext.TEMPLATE_EXPRESSION, beanResolver);
+  }
 
-    /**
-     * Create a new {@link SpELCondition}.
-     *
-     * @param expression    the condition written in expression language
-     * @param parserContext the SpEL parser context
-     */
-    public SpELCondition(String expression, ParserContext parserContext) {
-        compiledExpression = parser.parseExpression(expression, parserContext);
-    }
+  /**
+   * Create a new {@link SpELCondition}.
+   *
+   * @param expression the condition written in expression language
+   * @param parserContext the SpEL parser context
+   */
+  public SpELCondition(String expression, ParserContext parserContext) {
+    compiledExpression = parser.parseExpression(expression, parserContext);
+  }
 
-    /**
-     * Create a new {@link SpELCondition}.
-     *
-     * @param expression    the condition written in expression language
-     * @param beanResolver  the bean resolver used to resolve bean references
-     * @param parserContext the SpEL parser context
-     */
-    public SpELCondition(String expression, ParserContext parserContext, BeanResolver beanResolver) {
-        this.beanResolver = beanResolver;
-        compiledExpression = parser.parseExpression(expression, parserContext);
-    }
+  /**
+   * Create a new {@link SpELCondition}.
+   *
+   * @param expression the condition written in expression language
+   * @param beanResolver the bean resolver used to resolve bean references
+   * @param parserContext the SpEL parser context
+   */
+  public SpELCondition(String expression, ParserContext parserContext, BeanResolver beanResolver) {
+    this.beanResolver = beanResolver;
+    compiledExpression = parser.parseExpression(expression, parserContext);
+  }
 
-    @Override
-    public boolean evaluate(Facts facts) {
-        StandardEvaluationContext context = new StandardEvaluationContext();
-        context.setRootObject(facts.asMap());
-        context.setVariables(facts.asMap());
-        if (beanResolver != null) {
-            context.setBeanResolver(beanResolver);
-        }
-        return compiledExpression.getValue(context, Boolean.class);
+  @Override
+  public boolean evaluate(Facts facts) {
+    StandardEvaluationContext context = new StandardEvaluationContext();
+    context.setRootObject(facts.asMap());
+    context.setVariables(facts.asMap());
+    if (beanResolver != null) {
+      context.setBeanResolver(beanResolver);
     }
+    return compiledExpression.getValue(context, Boolean.class);
+  }
 }

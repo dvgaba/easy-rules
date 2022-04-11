@@ -28,14 +28,13 @@ import org.jeasy.rules.api.Facts;
 
 public class HighTemperatureCondition implements Condition {
 
-    static HighTemperatureCondition itIsHot() {
-        return new HighTemperatureCondition();
-    }
+  static HighTemperatureCondition itIsHot() {
+    return new HighTemperatureCondition();
+  }
 
-    @Override
-    public boolean evaluate(Facts facts) {
-        Integer temperature = facts.get("temperature");
-        return temperature > 25;
-    }
-
+  @Override
+  public boolean evaluate(Facts facts) {
+    Integer temperature = facts.get("temperature");
+    return temperature > 25;
+  }
 }

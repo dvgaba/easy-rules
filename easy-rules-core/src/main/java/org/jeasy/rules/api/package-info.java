@@ -21,7 +21,5 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-/**
- * This package contains Easy Rules public API.
- */
+/** This package contains Easy Rules public API. */
 package org.jeasy.rules.api;

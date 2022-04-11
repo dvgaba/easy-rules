@@ -30,18 +30,17 @@ import org.jeasy.rules.core.DefaultRulesEngine;
 
 public class Launcher {
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        // create facts
-        Facts facts = new Facts();
+    // create facts
+    Facts facts = new Facts();
 
-        // create rules
-        Rules rules = new Rules();
-        rules.register(new HelloWorldRule());
+    // create rules
+    Rules rules = new Rules();
+    rules.register(new HelloWorldRule());
 
-        // create a rules engine and fire rules on known facts
-        RulesEngine rulesEngine = new DefaultRulesEngine();
-        rulesEngine.fire(rules, facts);
-
-    }
+    // create a rules engine and fire rules on known facts
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+    rulesEngine.fire(rules, facts);
+  }
 }

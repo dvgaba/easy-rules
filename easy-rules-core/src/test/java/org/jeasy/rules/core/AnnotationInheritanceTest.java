@@ -33,37 +33,38 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnnotationInheritanceTest extends AbstractTest {
 
-    @Test
-    public void annotationsShouldBeInherited() {
-        // Given
-        MyChildRule myChildRule = new MyChildRule();
-        rules.register(myChildRule);
+  @Test
+  public void annotationsShouldBeInherited() {
+    // Given
+    MyChildRule myChildRule = new MyChildRule();
+    rules.register(myChildRule);
 
-        // When
-        RulesEngine rulesEngine = new DefaultRulesEngine();
-        rulesEngine.fire(rules, facts);
+    // When
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+    rulesEngine.fire(rules, facts);
 
-        // Then
-        assertThat(myChildRule.isExecuted()).isTrue();
+    // Then
+    assertThat(myChildRule.isExecuted()).isTrue();
+  }
+
+  @Rule
+  static class MyBaseRule {
+    protected boolean executed;
+
+    @Condition
+    public boolean when() {
+      return true;
     }
 
-    @Rule
-	static class MyBaseRule {
-        protected boolean executed;
-        @Condition
-        public boolean when() {
-            return true;
-        }
-        @Action
-        public void then() {
-            executed = true;
-        }
-        public boolean isExecuted() {
-            return executed;
-        }
+    @Action
+    public void then() {
+      executed = true;
     }
 
-    class MyChildRule extends MyBaseRule {
-
+    public boolean isExecuted() {
+      return executed;
     }
+  }
+
+  class MyChildRule extends MyBaseRule {}
 }

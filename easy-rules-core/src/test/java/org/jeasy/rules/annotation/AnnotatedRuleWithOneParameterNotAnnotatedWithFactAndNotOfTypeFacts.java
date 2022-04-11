@@ -26,13 +26,11 @@ package org.jeasy.rules.annotation;
 @Rule
 public class AnnotatedRuleWithOneParameterNotAnnotatedWithFactAndNotOfTypeFacts {
 
-    @Condition
-    public boolean when(@Fact("fact1") Object fact1, Object fact2) {
-        return true;
-    }
+  @Condition
+  public boolean when(@Fact("fact1") Object fact1, Object fact2) {
+    return true;
+  }
 
-    @Action
-    public void then(@Fact("fact1") Object fact1, Object fact2) {
-    }
-
+  @Action
+  public void then(@Fact("fact1") Object fact1, Object fact2) {}
 }

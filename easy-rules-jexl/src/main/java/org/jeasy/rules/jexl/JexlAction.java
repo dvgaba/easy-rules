@@ -40,31 +40,31 @@ import org.slf4j.LoggerFactory;
  */
 public class JexlAction implements Action {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JexlAction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JexlAction.class);
 
-    private final JexlScript compiledScript;
-    private final String expression;
+  private final JexlScript compiledScript;
+  private final String expression;
 
-    public JexlAction(String expression) {
-        this.expression = Objects.requireNonNull(expression, "expression cannot be null");
-        this.compiledScript = JexlRule.DEFAULT_JEXL.createScript(expression);
+  public JexlAction(String expression) {
+    this.expression = Objects.requireNonNull(expression, "expression cannot be null");
+    this.compiledScript = JexlRule.DEFAULT_JEXL.createScript(expression);
+  }
+
+  public JexlAction(String expression, JexlEngine jexl) {
+    this.expression = Objects.requireNonNull(expression, "expression cannot be null");
+    Objects.requireNonNull(jexl, "jexl cannot be null");
+    this.compiledScript = jexl.createScript(expression);
+  }
+
+  @Override
+  public void execute(Facts facts) {
+    Objects.requireNonNull(facts, "facts cannot be null");
+    MapContext ctx = new MapContext(facts.asMap());
+    try {
+      compiledScript.execute(ctx);
+    } catch (JexlException e) {
+      LOGGER.error("Unable to execute expression: '" + expression + "' on facts: " + facts, e);
+      throw e;
     }
-
-    public JexlAction(String expression, JexlEngine jexl) {
-        this.expression = Objects.requireNonNull(expression, "expression cannot be null");
-        Objects.requireNonNull(jexl, "jexl cannot be null");
-        this.compiledScript = jexl.createScript(expression);
-    }
-
-    @Override
-    public void execute(Facts facts) {
-        Objects.requireNonNull(facts, "facts cannot be null");
-        MapContext ctx = new MapContext(facts.asMap());
-        try {
-            compiledScript.execute(ctx);
-        } catch (JexlException e) {
-            LOGGER.error("Unable to execute expression: '" + expression + "' on facts: " + facts, e);
-            throw e;
-        }
-    }
+  }
 }

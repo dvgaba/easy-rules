@@ -31,25 +31,25 @@ import java.util.List;
 
 class DefaultRule extends BasicRule {
 
-    private final Condition condition;
-    private final List<Action> actions;
+  private final Condition condition;
+  private final List<Action> actions;
 
-    DefaultRule(String name, String description, int priority, Condition condition, List<Action> actions) {
-        super(name, description, priority);
-        this.condition = condition;
-        this.actions = actions;
+  DefaultRule(
+      String name, String description, int priority, Condition condition, List<Action> actions) {
+    super(name, description, priority);
+    this.condition = condition;
+    this.actions = actions;
+  }
+
+  @Override
+  public boolean evaluate(Facts facts) {
+    return condition.evaluate(facts);
+  }
+
+  @Override
+  public void execute(Facts facts) throws Exception {
+    for (Action action : actions) {
+      action.execute(facts);
     }
-
-    @Override
-    public boolean evaluate(Facts facts) {
-        return condition.evaluate(facts);
-    }
-
-    @Override
-    public void execute(Facts facts) throws Exception {
-        for (Action action : actions) {
-            action.execute(facts);
-        }
-    }
-
+  }
 }

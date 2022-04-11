@@ -39,22 +39,24 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Rule {
 
-    /**
-     * The rule name which must be unique within a rules registry.
-     * @return The rule name
-     */
-    String name() default org.jeasy.rules.api.Rule.DEFAULT_NAME;
+  /**
+   * The rule name which must be unique within a rules registry.
+   *
+   * @return The rule name
+   */
+  String name() default org.jeasy.rules.api.Rule.DEFAULT_NAME;
 
-    /**
-     * The rule description.
-     * @return The rule description
-     */
-    String description() default  org.jeasy.rules.api.Rule.DEFAULT_DESCRIPTION;
+  /**
+   * The rule description.
+   *
+   * @return The rule description
+   */
+  String description() default org.jeasy.rules.api.Rule.DEFAULT_DESCRIPTION;
 
-    /**
-     * The rule priority.
-     * @return The rule priority
-     */
-    int priority() default org.jeasy.rules.api.Rule.DEFAULT_PRIORITY;
-
+  /**
+   * The rule priority.
+   *
+   * @return The rule priority
+   */
+  int priority() default org.jeasy.rules.api.Rule.DEFAULT_PRIORITY;
 }

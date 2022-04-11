@@ -32,124 +32,122 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * This class encapsulates a set of rules and represents a rules namespace.
- * Rules must have a unique name within a rules namespace.
- * 
- * Rules will be compared to each other based on {@link Rule#compareTo(Object)}
- * method, so {@link Rule}'s implementations are expected to correctly implement
- * {@code compareTo} to ensure unique rule names within a single namespace.
+ * This class encapsulates a set of rules and represents a rules namespace. Rules must have a unique
+ * name within a rules namespace.
+ *
+ * <p>Rules will be compared to each other based on {@link Rule#compareTo(Object)} method, so {@link
+ * Rule}'s implementations are expected to correctly implement {@code compareTo} to ensure unique
+ * rule names within a single namespace.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class Rules implements Iterable<Rule> {
 
-    private Set<Rule> rules = new TreeSet<>();
+  private Set<Rule> rules = new TreeSet<>();
 
-    /**
-     * Create a new {@link Rules} object.
-     *
-     * @param rules to register
-     */
-    public Rules(Set<Rule> rules) {
-        this.rules = new TreeSet<>(rules);
-    }
+  /**
+   * Create a new {@link Rules} object.
+   *
+   * @param rules to register
+   */
+  public Rules(Set<Rule> rules) {
+    this.rules = new TreeSet<>(rules);
+  }
 
-    /**
-     * Create a new {@link Rules} object.
-     *
-     * @param rules to register
-     */
-    public Rules(Rule... rules) {
-        Collections.addAll(this.rules, rules);
-    }
+  /**
+   * Create a new {@link Rules} object.
+   *
+   * @param rules to register
+   */
+  public Rules(Rule... rules) {
+    Collections.addAll(this.rules, rules);
+  }
 
-    /**
-     * Create a new {@link Rules} object.
-     *
-     * @param rules to register
-     */
-    public Rules(Object... rules) {
-        this.register(rules);
-    }
+  /**
+   * Create a new {@link Rules} object.
+   *
+   * @param rules to register
+   */
+  public Rules(Object... rules) {
+    this.register(rules);
+  }
 
-    /**
-     * Register one or more new rules.
-     *
-     * @param rules to register, must not be null
-     */
-    public void register(Object... rules) {
-        Objects.requireNonNull(rules);
-        for (Object rule : rules) {
-            Objects.requireNonNull(rule);
-            this.rules.add(RuleProxy.asRule(rule));
-        }
+  /**
+   * Register one or more new rules.
+   *
+   * @param rules to register, must not be null
+   */
+  public void register(Object... rules) {
+    Objects.requireNonNull(rules);
+    for (Object rule : rules) {
+      Objects.requireNonNull(rule);
+      this.rules.add(RuleProxy.asRule(rule));
     }
+  }
 
-    /**
-     * Unregister one or more rules.
-     *
-     * @param rules to unregister, must not be null
-     */
-    public void unregister(Object... rules) {
-        Objects.requireNonNull(rules);
-        for (Object rule : rules) {
-            Objects.requireNonNull(rule);
-            this.rules.remove(RuleProxy.asRule(rule));
-        }
+  /**
+   * Unregister one or more rules.
+   *
+   * @param rules to unregister, must not be null
+   */
+  public void unregister(Object... rules) {
+    Objects.requireNonNull(rules);
+    for (Object rule : rules) {
+      Objects.requireNonNull(rule);
+      this.rules.remove(RuleProxy.asRule(rule));
     }
+  }
 
-    /**
-     * Unregister a rule by name.
-     *
-     * @param ruleName name of the rule to unregister, must not be null
-     */
-    public void unregister(final String ruleName) {
-        Objects.requireNonNull(ruleName);
-        Rule rule = findRuleByName(ruleName);
-        if (rule != null) {
-            unregister(rule);
-        }
+  /**
+   * Unregister a rule by name.
+   *
+   * @param ruleName name of the rule to unregister, must not be null
+   */
+  public void unregister(final String ruleName) {
+    Objects.requireNonNull(ruleName);
+    Rule rule = findRuleByName(ruleName);
+    if (rule != null) {
+      unregister(rule);
     }
+  }
 
-    /**
-     * Check if the rule set is empty.
-     *
-     * @return true if the rule set is empty, false otherwise
-     */
-    public boolean isEmpty() {
-        return rules.isEmpty();
-    }
+  /**
+   * Check if the rule set is empty.
+   *
+   * @return true if the rule set is empty, false otherwise
+   */
+  public boolean isEmpty() {
+    return rules.isEmpty();
+  }
 
-    /**
-     * Clear rules.
-     */
-    public void clear() {
-        rules.clear();
-    }
+  /** Clear rules. */
+  public void clear() {
+    rules.clear();
+  }
 
-    /**
-     * Return how many rules are currently registered.
-     *
-     * @return the number of rules currently registered
-     */
-    public int size() {
-        return rules.size();
-    }
+  /**
+   * Return how many rules are currently registered.
+   *
+   * @return the number of rules currently registered
+   */
+  public int size() {
+    return rules.size();
+  }
 
-    /**
-     * Return an iterator on the rules set. It is not intended to remove rules
-     * using this iterator.
-     * @return an iterator on the rules set
-     */
-    @Override
-    public Iterator<Rule> iterator() {
-        return rules.iterator();
-    }
+  /**
+   * Return an iterator on the rules set. It is not intended to remove rules using this iterator.
+   *
+   * @return an iterator on the rules set
+   */
+  @Override
+  public Iterator<Rule> iterator() {
+    return rules.iterator();
+  }
 
-    private Rule findRuleByName(String ruleName) {
-        return rules.stream()
-                .filter(rule -> rule.getName().equalsIgnoreCase(ruleName))
-                .findFirst()
-                .orElse(null);
-    }
+  private Rule findRuleByName(String ruleName) {
+    return rules.stream()
+        .filter(rule -> rule.getName().equalsIgnoreCase(ruleName))
+        .findFirst()
+        .orElse(null);
+  }
 }

@@ -26,21 +26,20 @@ package org.jeasy.rules.annotation;
 @Rule
 public class AnnotatedRuleWithActionMethodThatReturnsNonVoidType {
 
-    private boolean executed;
+  private boolean executed;
 
-    @Condition
-    private boolean when() {
-        return true;
-    }
+  @Condition
+  private boolean when() {
+    return true;
+  }
 
-    @Action
-    private int then() {
-        executed = true;
-        return 0;
-    }
+  @Action
+  private int then() {
+    executed = true;
+    return 0;
+  }
 
-    public boolean isExecuted() {
-        return executed;
-    }
-
+  public boolean isExecuted() {
+    return executed;
+  }
 }

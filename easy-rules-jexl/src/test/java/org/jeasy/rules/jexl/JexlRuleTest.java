@@ -35,37 +35,37 @@ import org.junit.Test;
  */
 public class JexlRuleTest {
 
-    private final Facts facts = new Facts();
-    private final JexlRule jexlRule = new JexlRule();
+  private final Facts facts = new Facts();
+  private final JexlRule jexlRule = new JexlRule();
 
-    @Before
-    public void setUp() {
-        jexlRule.when("person.age > 18");
-        jexlRule.then("person.setAdult(true);");
-    }
+  @Before
+  public void setUp() {
+    jexlRule.when("person.age > 18");
+    jexlRule.then("person.setAdult(true);");
+  }
 
-    @Test
-    public void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
-        // given
-        facts.put("person", new Person("foo", 20));
+  @Test
+  public void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
+    // given
+    facts.put("person", new Person("foo", 20));
 
-        // when
-        boolean evaluationResult = jexlRule.evaluate(facts);
+    // when
+    boolean evaluationResult = jexlRule.evaluate(facts);
 
-        // then
-        assertThat(evaluationResult).isTrue();
-    }
+    // then
+    assertThat(evaluationResult).isTrue();
+  }
 
-    @Test
-    public void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
-        // given
-        Person foo = new Person("foo", 20);
-        facts.put("person", foo);
+  @Test
+  public void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
+    // given
+    Person foo = new Person("foo", 20);
+    facts.put("person", foo);
 
-        // when
-        jexlRule.execute(facts);
+    // when
+    jexlRule.execute(facts);
 
-        // then
-        assertThat(foo.isAdult()).isTrue();
-    }
+    // then
+    assertThat(foo.isAdult()).isTrue();
+  }
 }

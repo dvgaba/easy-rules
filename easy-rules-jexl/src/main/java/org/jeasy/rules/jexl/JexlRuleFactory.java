@@ -40,49 +40,50 @@ import org.jeasy.rules.support.reader.RuleDefinitionReader;
  */
 public class JexlRuleFactory extends AbstractRuleFactory {
 
-    private final RuleDefinitionReader reader;
-    private final JexlEngine jexl;
+  private final RuleDefinitionReader reader;
+  private final JexlEngine jexl;
 
-    public JexlRuleFactory(RuleDefinitionReader reader) {
-        this(reader, JexlRule.DEFAULT_JEXL);
-    }
+  public JexlRuleFactory(RuleDefinitionReader reader) {
+    this(reader, JexlRule.DEFAULT_JEXL);
+  }
 
-    public JexlRuleFactory(RuleDefinitionReader reader, JexlEngine jexl) {
-        this.reader = Objects.requireNonNull(reader, "reader cannot be null");
-        this.jexl = Objects.requireNonNull(jexl, "Jexl Engine cannot be null");
-    }
+  public JexlRuleFactory(RuleDefinitionReader reader, JexlEngine jexl) {
+    this.reader = Objects.requireNonNull(reader, "reader cannot be null");
+    this.jexl = Objects.requireNonNull(jexl, "Jexl Engine cannot be null");
+  }
 
-    public Rule createRule(Reader ruleDescriptor) throws Exception {
-        Objects.requireNonNull(ruleDescriptor, "ruleDescriptor cannot be null");
-        Objects.requireNonNull(jexl, "jexl cannot be null");
-        List<RuleDefinition> ruleDefinitions = reader.read(ruleDescriptor);
-        if (ruleDefinitions.isEmpty()) {
-            throw new IllegalArgumentException("rule descriptor is empty");
-        }
-        return createRule(ruleDefinitions.get(0));
+  public Rule createRule(Reader ruleDescriptor) throws Exception {
+    Objects.requireNonNull(ruleDescriptor, "ruleDescriptor cannot be null");
+    Objects.requireNonNull(jexl, "jexl cannot be null");
+    List<RuleDefinition> ruleDefinitions = reader.read(ruleDescriptor);
+    if (ruleDefinitions.isEmpty()) {
+      throw new IllegalArgumentException("rule descriptor is empty");
     }
+    return createRule(ruleDefinitions.get(0));
+  }
 
-    public Rules createRules(Reader rulesDescriptor) throws Exception {
-        Objects.requireNonNull(rulesDescriptor, "rulesDescriptor cannot be null");
-        Rules rules = new Rules();
-        List<RuleDefinition> ruleDefinitions = reader.read(rulesDescriptor);
-        for (RuleDefinition ruleDefinition : ruleDefinitions) {
-            rules.register(createRule(ruleDefinition));
-        }
-        return rules;
+  public Rules createRules(Reader rulesDescriptor) throws Exception {
+    Objects.requireNonNull(rulesDescriptor, "rulesDescriptor cannot be null");
+    Rules rules = new Rules();
+    List<RuleDefinition> ruleDefinitions = reader.read(rulesDescriptor);
+    for (RuleDefinition ruleDefinition : ruleDefinitions) {
+      rules.register(createRule(ruleDefinition));
     }
+    return rules;
+  }
 
-    @Override
-    protected Rule createSimpleRule(RuleDefinition ruleDefinition) {
-        Objects.requireNonNull(ruleDefinition, "ruleDefinition cannot be null");
-        JexlRule rule = new JexlRule(jexl)
-                .name(ruleDefinition.getName())
-                .description(ruleDefinition.getDescription())
-                .priority(ruleDefinition.getPriority())
-                .when(ruleDefinition.getCondition());
-        for (String action : ruleDefinition.getActions()) {
-            rule.then(action);
-        }
-        return rule;
+  @Override
+  protected Rule createSimpleRule(RuleDefinition ruleDefinition) {
+    Objects.requireNonNull(ruleDefinition, "ruleDefinition cannot be null");
+    JexlRule rule =
+        new JexlRule(jexl)
+            .name(ruleDefinition.getName())
+            .description(ruleDefinition.getDescription())
+            .priority(ruleDefinition.getPriority())
+            .when(ruleDefinition.getCondition());
+    for (String action : ruleDefinition.getActions()) {
+      rule.then(action);
     }
+    return rule;
+  }
 }

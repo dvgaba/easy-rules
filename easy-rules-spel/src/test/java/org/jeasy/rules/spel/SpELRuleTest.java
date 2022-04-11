@@ -31,56 +31,64 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpELRuleTest {
 
-    private Facts facts;
-    private SpELRule spelRule;
+  private Facts facts;
+  private SpELRule spelRule;
 
-    @Before
-    public void setUp() {
-        facts = new Facts();
-        spelRule = new SpELRule().name("spel rule").description("rule using SpEL").priority(1)
-                .when("#{ ['person'].age > 18 }")
-                .then("#{ ['person'].setAdult(true) }");
-    }
+  @Before
+  public void setUp() {
+    facts = new Facts();
+    spelRule =
+        new SpELRule()
+            .name("spel rule")
+            .description("rule using SpEL")
+            .priority(1)
+            .when("#{ ['person'].age > 18 }")
+            .then("#{ ['person'].setAdult(true) }");
+  }
 
-    @Test
-    public void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
-        // given
-        Person person = new Person("foo", 20);
-        facts.put("person", person);
+  @Test
+  public void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
+    // given
+    Person person = new Person("foo", 20);
+    facts.put("person", person);
 
-        // when
-        boolean evaluationResult = spelRule.evaluate(facts);
+    // when
+    boolean evaluationResult = spelRule.evaluate(facts);
 
-        // then
-        assertThat(evaluationResult).isTrue();
-    }
+    // then
+    assertThat(evaluationResult).isTrue();
+  }
 
-    @Test
-    public void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
-        // given
-        Person foo = new Person("foo", 20);
-        facts.put("person", foo);
+  @Test
+  public void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
+    // given
+    Person foo = new Person("foo", 20);
+    facts.put("person", foo);
 
-        // when
-        spelRule.execute(facts);
+    // when
+    spelRule.execute(facts);
 
-        // then
-        assertThat(foo.isAdult()).isTrue();
-    }
+    // then
+    assertThat(foo.isAdult()).isTrue();
+  }
 
-    @Test
-    public void testRuleWithRootVariable() throws Exception {
-        // given
-        Person foo = new Person("foo", 20);
-        facts.put("person", foo);
-        spelRule = new SpELRule().name("rn").description("rd").priority(1)
-                .when("#{ #root['person'].age > 18 }")
-                .then("#{ #root['person'].setAdult(true) }");
+  @Test
+  public void testRuleWithRootVariable() throws Exception {
+    // given
+    Person foo = new Person("foo", 20);
+    facts.put("person", foo);
+    spelRule =
+        new SpELRule()
+            .name("rn")
+            .description("rd")
+            .priority(1)
+            .when("#{ #root['person'].age > 18 }")
+            .then("#{ #root['person'].setAdult(true) }");
 
-        // when
-        spelRule.execute(facts);
+    // when
+    spelRule.execute(facts);
 
-        // then
-        assertThat(foo.isAdult()).isTrue();
-    }
+    // then
+    assertThat(foo.isAdult()).isTrue();
+  }
 }

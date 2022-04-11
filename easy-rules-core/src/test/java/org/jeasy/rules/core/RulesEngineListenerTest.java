@@ -35,50 +35,48 @@ import static org.mockito.Mockito.when;
 
 public class RulesEngineListenerTest extends AbstractTest {
 
-    @Mock
-    private RulesEngineListener rulesEngineListener1, rulesEngineListener2;
+  @Mock private RulesEngineListener rulesEngineListener1, rulesEngineListener2;
 
-    @Before
-    public void setup() throws Exception {
-        super.setup();
-        rulesEngine.registerRulesEngineListeners(asList(rulesEngineListener1, rulesEngineListener2));
-    }
+  @Before
+  public void setup() throws Exception {
+    super.setup();
+    rulesEngine.registerRulesEngineListeners(asList(rulesEngineListener1, rulesEngineListener2));
+  }
 
-    @Test
-    public void rulesEngineListenersShouldBeCalledInOrderWhenFiringRules() throws Exception {
-        // Given
-        when(rule1.evaluate(facts)).thenReturn(true);
-        rules.register(rule1);
+  @Test
+  public void rulesEngineListenersShouldBeCalledInOrderWhenFiringRules() throws Exception {
+    // Given
+    when(rule1.evaluate(facts)).thenReturn(true);
+    rules.register(rule1);
 
-        // When
-        rulesEngine.fire(rules, facts);
+    // When
+    rulesEngine.fire(rules, facts);
 
-        // Then
-        InOrder inOrder = inOrder(rule1, fact1, fact2, rulesEngineListener1, rulesEngineListener2);
-        inOrder.verify(rulesEngineListener1).beforeEvaluate(rules, facts);
-        inOrder.verify(rulesEngineListener2).beforeEvaluate(rules, facts);
-        inOrder.verify(rule1).evaluate(facts);
-        inOrder.verify(rule1).execute(facts);
-        inOrder.verify(rulesEngineListener1).afterExecute(rules, facts);
-        inOrder.verify(rulesEngineListener2).afterExecute(rules, facts);
-    }
+    // Then
+    InOrder inOrder = inOrder(rule1, fact1, fact2, rulesEngineListener1, rulesEngineListener2);
+    inOrder.verify(rulesEngineListener1).beforeEvaluate(rules, facts);
+    inOrder.verify(rulesEngineListener2).beforeEvaluate(rules, facts);
+    inOrder.verify(rule1).evaluate(facts);
+    inOrder.verify(rule1).execute(facts);
+    inOrder.verify(rulesEngineListener1).afterExecute(rules, facts);
+    inOrder.verify(rulesEngineListener2).afterExecute(rules, facts);
+  }
 
-    @Test
-    public void rulesEngineListenersShouldBeCalledInOrderWhenCheckingRules() {
-        // Given
-        when(rule1.evaluate(facts)).thenReturn(true);
-        rules.register(rule1);
+  @Test
+  public void rulesEngineListenersShouldBeCalledInOrderWhenCheckingRules() {
+    // Given
+    when(rule1.evaluate(facts)).thenReturn(true);
+    rules.register(rule1);
 
-        // When
-        rulesEngine.check(rules, facts);
+    // When
+    rulesEngine.check(rules, facts);
 
-        // Then
-        InOrder inOrder = inOrder(rule1, fact1, fact2, rulesEngineListener1, rulesEngineListener2);
-        inOrder.verify(rulesEngineListener1).beforeEvaluate(rules, facts);
-        inOrder.verify(rulesEngineListener2).beforeEvaluate(rules, facts);
-        inOrder.verify(rule1).evaluate(facts);
-        inOrder.verify(rulesEngineListener1).afterExecute(rules, facts);
-        inOrder.verify(rulesEngineListener2).afterExecute(rules, facts);
-    }
-
+    // Then
+    InOrder inOrder = inOrder(rule1, fact1, fact2, rulesEngineListener1, rulesEngineListener2);
+    inOrder.verify(rulesEngineListener1).beforeEvaluate(rules, facts);
+    inOrder.verify(rulesEngineListener2).beforeEvaluate(rules, facts);
+    inOrder.verify(rule1).evaluate(facts);
+    inOrder.verify(rulesEngineListener1).afterExecute(rules, facts);
+    inOrder.verify(rulesEngineListener2).afterExecute(rules, facts);
+  }
 }

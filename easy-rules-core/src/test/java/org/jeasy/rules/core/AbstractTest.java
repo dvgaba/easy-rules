@@ -34,24 +34,21 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractTest {
 
-    @Mock
-    protected Rule rule1, rule2;
-    @Mock
-    protected Object fact1, fact2;
+  @Mock protected Rule rule1, rule2;
+  @Mock protected Object fact1, fact2;
 
-    protected Facts facts;
-    protected Rules rules;
+  protected Facts facts;
+  protected Rules rules;
 
-    protected DefaultRulesEngine rulesEngine;
+  protected DefaultRulesEngine rulesEngine;
 
-    @Before
-    public void setup() throws Exception {
-        facts = new Facts();
-        facts.put("fact1", fact1);
-        facts.put("fact2", fact2);
-        rules = new Rules();
+  @Before
+  public void setup() throws Exception {
+    facts = new Facts();
+    facts.put("fact1", fact1);
+    facts.put("fact2", fact2);
+    rules = new Rules();
 
-        rulesEngine = new DefaultRulesEngine();
-    }
-
+    rulesEngine = new DefaultRulesEngine();
+  }
 }
