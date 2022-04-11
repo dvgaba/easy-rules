@@ -19,11 +19,11 @@
 
 ## Project status
 
-Active, will focus on existing issues and minor changes. 
+This project is forked from [j-easy/easy-rules](https://github.com/j-easy/easy-rules) because it is in maintaince mode. Current plan is to support community with minor enhacements and bug fixes. 
 
 ## Latest news
 
-* 06/12/2020: Version 4.1 is out with a new module to support [Apache JEXL](https://commons.apache.org/proper/commons-jexl/) as an additional supported expression language! You can find all details about other changes in the [release notes](https://github.com/j-easy/easy-rules/releases).
+* 06/12/2020: Version 4.1 is out with a new module to support [Apache JEXL](https://commons.apache.org/proper/commons-jexl/) as an additional supported expression language! You can find all details about other changes in the [release notes](https://github.com/dvgaba/easy-rules/releases).
 
 ## What is Easy Rules?
 
@@ -127,10 +127,7 @@ This is the hello world of Easy Rules. You can find other examples like the [Sho
 ## Contribution
 
 You are welcome to contribute to the project with pull requests on GitHub.
-Please note that Easy Rules is in [maintenance mode](https://github.com/j-easy/easy-rules#project-status),
-which means only pull requests for bug fixes will be considered.
-
-If you believe you found a bug or have any question, please use the [issue tracker](https://github.com/j-easy/easy-rules/issues).
+If you believe you found a bug or have any question, please use the [issue tracker](https://github.com/dvgaba/easy-rules/issues).
 
 ## Awesome contributors
 
