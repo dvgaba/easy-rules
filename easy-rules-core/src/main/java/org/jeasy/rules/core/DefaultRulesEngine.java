@@ -149,17 +149,21 @@ public final class DefaultRulesEngine extends AbstractRulesEngine {
     }
 
     private void log(Rules rules) {
-        LOGGER.debug("Registered rules:");
-        for (Rule rule : rules) {
-            LOGGER.debug("Rule { name = '{}', description = '{}', priority = '{}'}",
-                    rule.getName(), rule.getDescription(), rule.getPriority());
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Registered rules:");
+            for (Rule rule : rules) {
+                LOGGER.debug("Rule { name = '{}', description = '{}', priority = '{}'}",
+                        rule.getName(), rule.getDescription(), rule.getPriority());
+            }
         }
     }
 
     private void log(Facts facts) {
-        LOGGER.debug("Known facts:");
-        for (Fact<?> fact : facts) {
-            LOGGER.debug("{}", fact);
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Known facts:");
+            for (Fact<?> fact : facts) {
+                LOGGER.debug("{}", fact);
+            }
         }
     }
 
