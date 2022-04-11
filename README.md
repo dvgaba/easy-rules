@@ -8,9 +8,9 @@
 <div align="center">
 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/j-easy/easy-rules/workflows/Java%20CI/badge.svg)](https://github.com/j-easy/easy-rules/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jeasy/easy-rules-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|org.jeasy|easy-rules-core|4.1.0|)
-[![Javadoc](https://www.javadoc.io/badge/org.jeasy/easy-rules-core.svg)](http://www.javadoc.io/doc/org.jeasy/easy-rules-core)
+[![Build Status](https://github.com/dvgaba/easy-rules/workflows/Java%20CI/badge.svg)](https://github.com/dvgaba/easy-rules/actions)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.dvgaba/easy-rules-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|io.github.dvgaba|easy-rules-core|0.0.1|)
+[![Javadoc](https://www.javadoc.io/badge/io.github.dvgaba/easy-rules-core.svg)](https://www.javadoc.io/doc/io.github.dvgaba/easy-rules-core)
 [![Project status](https://img.shields.io/badge/Project%20status-active-green.svg)](https://img.shields.io/badge/Project%20status-active-green.svg)
 
 </div>
