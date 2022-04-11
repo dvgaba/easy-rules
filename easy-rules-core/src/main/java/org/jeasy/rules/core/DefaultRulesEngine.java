@@ -102,13 +102,14 @@ public final class DefaultRulesEngine extends AbstractRulesEngine {
                 LOGGER.error("Rule '" + name + "' evaluated with error", exception);
                 triggerListenersOnEvaluationError(rule, facts, exception);
                 // give the option to either skip next rules on evaluation error or continue by considering the evaluation error as false
+                if (parameters.isFailsOnException()) {
+                    throw new RuntimeException("Exception in rule processing", exception);
+                }
                 if (parameters.isSkipOnFirstNonTriggeredRule()) {
                     LOGGER.debug("Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
                     break;
                 }
-                if (parameters.isFailsOnException()) {
-                    throw new RuntimeException("Exception in rule processing", exception);
-                }
+
             }
             if (evaluationResult) {
                 LOGGER.debug("Rule '{}' triggered", name);
@@ -125,13 +126,14 @@ public final class DefaultRulesEngine extends AbstractRulesEngine {
                 } catch (Exception exception) {
                     LOGGER.error("Rule '" + name + "' performed with error", exception);
                     triggerListenersOnFailure(rule, exception, facts);
+                    if (parameters.isFailsOnException()) {
+                        throw new RuntimeException("Exception in rule processing", exception);
+                    }
                     if (parameters.isSkipOnFirstFailedRule()) {
                         LOGGER.debug("Next rules will be skipped since parameter skipOnFirstFailedRule is set");
                         break;
                     }
-                    if (parameters.isFailsOnException()) {
-                        throw new RuntimeException("Exception in rule processing", exception);
-                    }
+
                 }
             } else {
                 LOGGER.debug("Rule '{}' has been evaluated to false, it has not been executed", name);
@@ -191,13 +193,14 @@ public final class DefaultRulesEngine extends AbstractRulesEngine {
                     LOGGER.error("Rule '" + rule.getName() + "' evaluated with error", exception);
                     triggerListenersOnEvaluationError(rule, facts, exception);
                     // give the option to either skip next rules on evaluation error or continue by considering the evaluation error as false
+                    if (parameters.isFailsOnException()) {
+                        throw new RuntimeException("Exception in rule processing", exception);
+                    }
                     if (parameters.isSkipOnFirstNonTriggeredRule()) {
                         LOGGER.debug("Next rules will be skipped since parameter skipOnFirstNonTriggeredRule is set");
                         break;
                     }
-                    if (parameters.isFailsOnException()) {
-                        throw new RuntimeException("Exception in rule processing", exception);
-                    }
+
                 }
             }
         }
