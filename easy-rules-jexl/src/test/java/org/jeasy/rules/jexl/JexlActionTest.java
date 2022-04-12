@@ -94,7 +94,7 @@ public class JexlActionTest {
     Assertions.assertThatThrownBy(() -> action.execute(facts))
         .isInstanceOf(JexlException.Method.class)
         .hasMessage(
-            "org.jeasy.rules.jexl.JexlAction.<init>:50 unsolvable function/method 'setBlah(Boolean)'");
+            "org.jeasy.rules.jexl.JexlAction.<init>:49 unsolvable function/method 'setBlah(Boolean)'");
 
     // then
     // excepted exception
