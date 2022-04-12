@@ -23,12 +23,11 @@
  */
 package org.jeasy.rules.mvel;
 
+import java.io.Serializable;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
 import org.mvel2.MVEL;
 import org.mvel2.ParserContext;
-
-import java.io.Serializable;
 
 /**
  * This class is an implementation of {@link Condition} that uses <a

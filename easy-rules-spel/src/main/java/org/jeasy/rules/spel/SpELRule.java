@@ -23,17 +23,15 @@
  */
 package org.jeasy.rules.spel;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.core.BasicRule;
-
 import org.springframework.expression.BeanResolver;
 import org.springframework.expression.ParserContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A {@link Rule} implementation that uses <a

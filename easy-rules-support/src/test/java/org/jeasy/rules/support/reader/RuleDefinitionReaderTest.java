@@ -23,6 +23,8 @@
  */
 package org.jeasy.rules.support.reader;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.StringReader;
@@ -33,14 +35,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.support.RuleDefinition;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class RuleDefinitionReaderTest {

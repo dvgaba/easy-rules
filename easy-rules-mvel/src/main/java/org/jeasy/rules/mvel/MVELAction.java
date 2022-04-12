@@ -23,14 +23,13 @@
  */
 package org.jeasy.rules.mvel;
 
+import java.io.Serializable;
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Facts;
 import org.mvel2.MVEL;
 import org.mvel2.ParserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.Serializable;
 
 /**
  * This class is an implementation of {@link Action} that uses <a

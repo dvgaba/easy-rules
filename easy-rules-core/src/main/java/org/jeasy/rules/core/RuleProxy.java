@@ -23,14 +23,7 @@
  */
 package org.jeasy.rules.core;
 
-import org.jeasy.rules.annotation.Action;
-import org.jeasy.rules.annotation.Condition;
-import org.jeasy.rules.annotation.Fact;
-import org.jeasy.rules.annotation.Priority;
-import org.jeasy.rules.api.Facts;
-import org.jeasy.rules.api.Rule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.lang.String.format;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
@@ -43,8 +36,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
-
-import static java.lang.String.format;
+import org.jeasy.rules.annotation.Action;
+import org.jeasy.rules.annotation.Condition;
+import org.jeasy.rules.annotation.Fact;
+import org.jeasy.rules.annotation.Priority;
+import org.jeasy.rules.api.Facts;
+import org.jeasy.rules.api.Rule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main class to create rule proxies from annotated objects.
@@ -188,7 +187,7 @@ public class RuleProxy implements InvocationHandler {
       } else {
         actualParameters.add(
             facts); // validated upfront, there may be only one parameter not annotated and which is
-                    // of type Facts.class
+        // of type Facts.class
       }
     }
     return actualParameters;

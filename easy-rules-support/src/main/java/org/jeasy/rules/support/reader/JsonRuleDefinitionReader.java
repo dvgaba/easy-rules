@@ -24,7 +24,6 @@
 package org.jeasy.rules.support.reader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;

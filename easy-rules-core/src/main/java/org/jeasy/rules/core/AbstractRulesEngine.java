@@ -23,14 +23,13 @@
  */
 package org.jeasy.rules.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.jeasy.rules.api.RuleListener;
 import org.jeasy.rules.api.RulesEngine;
 import org.jeasy.rules.api.RulesEngineListener;
 import org.jeasy.rules.api.RulesEngineParameters;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Base class for {@link RulesEngine} implementations.

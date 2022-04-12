@@ -23,12 +23,11 @@
  */
 package org.jeasy.rules.core;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Rule;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Builder to create {@link Rule} instances.

@@ -23,17 +23,17 @@
  */
 package org.jeasy.rules.core;
 
-import org.jeasy.rules.api.RuleListener;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.Mock;
-
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.jeasy.rules.api.RuleListener;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mock;
 
 public class RuleListenerTest extends AbstractTest {
 

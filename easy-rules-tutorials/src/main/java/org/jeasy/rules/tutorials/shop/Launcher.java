@@ -23,6 +23,7 @@
  */
 package org.jeasy.rules.tutorials.shop;
 
+import java.io.FileReader;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.api.Rules;
@@ -31,8 +32,6 @@ import org.jeasy.rules.core.DefaultRulesEngine;
 import org.jeasy.rules.mvel.MVELRule;
 import org.jeasy.rules.mvel.MVELRuleFactory;
 import org.jeasy.rules.support.reader.YamlRuleDefinitionReader;
-
-import java.io.FileReader;
 
 public class Launcher {
 

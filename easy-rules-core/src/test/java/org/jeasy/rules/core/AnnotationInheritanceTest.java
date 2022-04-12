@@ -23,13 +23,13 @@
  */
 package org.jeasy.rules.core;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
-import org.jeasy.rules.api.RulesEngine;
 import org.jeasy.rules.annotation.Rule;
+import org.jeasy.rules.api.RulesEngine;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnnotationInheritanceTest extends AbstractTest {
 

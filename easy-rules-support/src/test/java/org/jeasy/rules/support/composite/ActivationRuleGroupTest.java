@@ -23,6 +23,8 @@
  */
 package org.jeasy.rules.support.composite;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
 import org.jeasy.rules.api.Facts;
@@ -31,8 +33,6 @@ import org.jeasy.rules.core.DefaultRulesEngine;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ActivationRuleGroupTest {

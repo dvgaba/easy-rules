@@ -23,14 +23,13 @@
  */
 package org.jeasy.rules.support.composite;
 
-import org.jeasy.rules.api.Facts;
-import org.jeasy.rules.api.Rule;
-
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+import org.jeasy.rules.api.Facts;
+import org.jeasy.rules.api.Rule;
 
 /**
  * A conditional rule group is a composite rule where the rule with the highest priority acts as a

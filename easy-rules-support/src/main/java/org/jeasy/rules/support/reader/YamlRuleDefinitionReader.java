@@ -23,12 +23,11 @@
  */
 package org.jeasy.rules.support.reader;
 
-import org.yaml.snakeyaml.Yaml;
-
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Rule definition reader based on <a

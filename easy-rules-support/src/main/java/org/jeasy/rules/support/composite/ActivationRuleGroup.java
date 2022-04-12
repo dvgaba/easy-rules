@@ -23,10 +23,9 @@
  */
 package org.jeasy.rules.support.composite;
 
+import java.util.TreeSet;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
-
-import java.util.TreeSet;
 
 /**
  * An activation rule group is a composite rule that fires the first applicable rule and ignores

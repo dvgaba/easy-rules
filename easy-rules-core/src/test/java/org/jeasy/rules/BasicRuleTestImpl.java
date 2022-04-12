@@ -21,34 +21,59 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-package org.jeasy.rules.core;
+package org.jeasy.rules;
 
-import java.util.List;
-import org.jeasy.rules.api.Action;
-import org.jeasy.rules.api.Condition;
-import org.jeasy.rules.api.Facts;
+import org.jeasy.rules.api.Rule;
+import org.jeasy.rules.core.BasicRule;
 
-class DefaultRule extends BasicRule {
+public class BasicRuleTestImpl extends BasicRule {
+  /** Create a new {@link BasicRule}. */
+  public BasicRuleTestImpl() {
+    this(Rule.DEFAULT_NAME, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
+  }
 
-  private final Condition condition;
-  private final List<Action> actions;
+  /**
+   * Create a new {@link BasicRule}.
+   *
+   * @param name rule name
+   */
+  public BasicRuleTestImpl(final String name) {
+    this(name, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
+  }
 
-  DefaultRule(
-      String name, String description, int priority, Condition condition, List<Action> actions) {
+  /**
+   * Create a new {@link BasicRule}.
+   *
+   * @param name rule name
+   * @param description rule description
+   */
+  public BasicRuleTestImpl(final String name, final String description) {
+    this(name, description, Rule.DEFAULT_PRIORITY);
+  }
+
+  /**
+   * Create a new {@link BasicRule}.
+   *
+   * @param name rule name
+   * @param description rule description
+   * @param priority rule priority
+   */
+  public BasicRuleTestImpl(final String name, final String description, final int priority) {
     super(name, description, priority);
-    this.condition = condition;
-    this.actions = actions;
   }
 
   @Override
-  public boolean evaluate(Facts facts) {
-    return condition.evaluate(facts);
+  public boolean equals(Object o) {
+    return super.equals(o);
   }
 
   @Override
-  public void execute(Facts facts) throws Exception {
-    for (Action action : actions) {
-      action.execute(facts);
-    }
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
+  public int compareTo(Rule rule) {
+    return super.compareTo(rule);
   }
 }

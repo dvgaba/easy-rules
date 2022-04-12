@@ -26,8 +26,8 @@ package org.jeasy.rules.tutorials.fizzbuzz;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngine;
-import org.jeasy.rules.core.DefaultRulesEngine;
 import org.jeasy.rules.api.RulesEngineParameters;
+import org.jeasy.rules.core.DefaultRulesEngine;
 
 public class FizzBuzzWithEasyRules {
   public static void main(String[] args) {

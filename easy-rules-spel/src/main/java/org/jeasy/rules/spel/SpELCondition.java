@@ -25,7 +25,6 @@ package org.jeasy.rules.spel;
 
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
-
 import org.springframework.expression.BeanResolver;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;

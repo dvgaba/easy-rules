@@ -24,7 +24,6 @@
 package org.jeasy.rules.core;
 
 import java.util.Objects;
-
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 
@@ -36,7 +35,7 @@ import org.jeasy.rules.api.Rule;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class BasicRule implements Rule {
+public abstract class BasicRule implements Rule {
 
   /** Rule name. */
   protected String name;
@@ -47,8 +46,12 @@ public class BasicRule implements Rule {
   /** Rule priority. */
   protected int priority;
 
-  /** Create a new {@link BasicRule}. */
-  public BasicRule() {
+  /**
+   * Create a new {@link BasicRule}. Please use other constructor method as name parameter uniquely
+   * identifies a rule
+   */
+  @Deprecated
+  protected BasicRule() {
     this(Rule.DEFAULT_NAME, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
   }
 
@@ -57,7 +60,7 @@ public class BasicRule implements Rule {
    *
    * @param name rule name
    */
-  public BasicRule(final String name) {
+  protected BasicRule(final String name) {
     this(name, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
   }
 
@@ -67,7 +70,7 @@ public class BasicRule implements Rule {
    * @param name rule name
    * @param description rule description
    */
-  public BasicRule(final String name, final String description) {
+  protected BasicRule(final String name, final String description) {
     this(name, description, Rule.DEFAULT_PRIORITY);
   }
 
@@ -78,7 +81,7 @@ public class BasicRule implements Rule {
    * @param description rule description
    * @param priority rule priority
    */
-  public BasicRule(final String name, final String description, final int priority) {
+  protected BasicRule(final String name, final String description, final int priority) {
     this.name = name;
     this.description = description;
     this.priority = priority;

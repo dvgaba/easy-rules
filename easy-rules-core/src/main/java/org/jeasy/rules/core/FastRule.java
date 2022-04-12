@@ -23,32 +23,65 @@
  */
 package org.jeasy.rules.core;
 
-import java.util.List;
-import org.jeasy.rules.api.Action;
-import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
+import org.jeasy.rules.api.Rule;
 
-class DefaultRule extends BasicRule {
+/**
+ * Basic rule implementation class that provides common methods.
+ *
+ * <p>You can extend this class and override {@link FastRule#when(Facts)} and {@link
+ * FastRule#then(Facts)} to provide rule conditions and actions logic. This is very similar to
+ * {@link BasicRule}
+ *
+ * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ */
+public abstract class FastRule implements Rule {
 
-  private final Condition condition;
-  private final List<Action> actions;
+  /** Rule name. */
+  protected String name;
 
-  DefaultRule(
-      String name, String description, int priority, Condition condition, List<Action> actions) {
-    super(name, description, priority);
-    this.condition = condition;
-    this.actions = actions;
+  /** Rule description. */
+  protected String description;
+
+  /** Rule priority. */
+  protected int priority;
+
+  protected FastRule(String name, String description, int priority) {
+    this.name = name;
+    this.description = description;
+    this.priority = priority;
+  }
+
+  protected FastRule(String name) {
+    this.name = name;
+  }
+
+  protected abstract boolean when(Facts facts);
+
+  protected abstract void then(Facts facts);
+
+  @Override
+  public final boolean evaluate(Facts facts) {
+    return this.when(facts);
   }
 
   @Override
-  public boolean evaluate(Facts facts) {
-    return condition.evaluate(facts);
+  public final void execute(Facts facts) throws Exception {
+    this.then(facts);
   }
 
   @Override
-  public void execute(Facts facts) throws Exception {
-    for (Action action : actions) {
-      action.execute(facts);
-    }
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  public String getDescription() {
+    return description;
+  }
+
+  @Override
+  public int getPriority() {
+    return priority;
   }
 }

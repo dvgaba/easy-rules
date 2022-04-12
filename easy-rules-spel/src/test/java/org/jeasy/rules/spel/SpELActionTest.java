@@ -23,15 +23,15 @@
  */
 package org.jeasy.rules.spel;
 
+import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOutNormalized;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Facts;
 import org.junit.Test;
 import org.springframework.expression.ParserContext;
 import org.springframework.expression.common.TemplateParserContext;
-
-import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOutNormalized;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SpELActionTest {
 

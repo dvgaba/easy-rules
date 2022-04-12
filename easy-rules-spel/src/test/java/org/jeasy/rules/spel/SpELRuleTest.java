@@ -23,11 +23,11 @@
  */
 package org.jeasy.rules.spel;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.jeasy.rules.api.Facts;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpELRuleTest {
 

@@ -25,7 +25,6 @@ package org.jeasy.rules.support.reader;
 
 import java.io.Reader;
 import java.util.List;
-
 import org.jeasy.rules.support.RuleDefinition;
 
 /**

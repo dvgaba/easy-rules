@@ -23,11 +23,10 @@
  */
 package org.jeasy.rules.api;
 
-import java.util.Map;
-
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Map;
+import org.junit.Test;
 
 public class FactsTest {
 
