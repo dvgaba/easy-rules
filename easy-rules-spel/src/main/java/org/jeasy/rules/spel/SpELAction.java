@@ -27,7 +27,6 @@ import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Facts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.expression.BeanResolver;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;

@@ -23,14 +23,14 @@
  */
 package org.jeasy.rules.tutorials.web;
 
+import static org.jeasy.rules.tutorials.web.SuspiciousRequestRule.SUSPICIOUS;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static org.jeasy.rules.tutorials.web.SuspiciousRequestRule.SUSPICIOUS;
 
 @WebServlet("/index")
 public class IndexServlet extends HttpServlet {

@@ -23,15 +23,15 @@
  */
 package org.jeasy.rules.tutorials.airco;
 
+import static org.jeasy.rules.tutorials.airco.DecreaseTemperatureAction.decreaseTemperature;
+import static org.jeasy.rules.tutorials.airco.HighTemperatureCondition.itIsHot;
+
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngine;
 import org.jeasy.rules.core.InferenceRulesEngine;
 import org.jeasy.rules.core.RuleBuilder;
-
-import static org.jeasy.rules.tutorials.airco.DecreaseTemperatureAction.decreaseTemperature;
-import static org.jeasy.rules.tutorials.airco.HighTemperatureCondition.itIsHot;
 
 public class Launcher {
 

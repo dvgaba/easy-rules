@@ -23,15 +23,14 @@
  */
 package org.jeasy.rules.mvel;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.core.BasicRule;
 import org.mvel2.ParserContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A {@link org.jeasy.rules.api.Rule} implementation that uses <a

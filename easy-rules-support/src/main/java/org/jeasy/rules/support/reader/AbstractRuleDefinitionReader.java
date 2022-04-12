@@ -23,13 +23,12 @@
  */
 package org.jeasy.rules.support.reader;
 
-import org.jeasy.rules.api.Rule;
-import org.jeasy.rules.support.RuleDefinition;
-
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.jeasy.rules.api.Rule;
+import org.jeasy.rules.support.RuleDefinition;
 
 /**
  * Base class for {@link RuleDefinitionReader}s.

@@ -23,6 +23,12 @@
  */
 package org.jeasy.rules.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import org.jeasy.rules.BasicRuleTestImpl;
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.AnnotatedRuleWithMetaRuleAnnotation;
 import org.jeasy.rules.annotation.Condition;
@@ -30,11 +36,6 @@ import org.jeasy.rules.annotation.Priority;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.api.Rules;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 public class RuleProxyTest {
 
@@ -53,7 +54,7 @@ public class RuleProxyTest {
 
   @Test
   public void asRuleForObjectThatImplementsRule() {
-    Object rule = new BasicRule();
+    Object rule = new BasicRuleTestImpl();
     Rule proxy = RuleProxy.asRule(rule);
 
     assertNotNull(proxy.getDescription());

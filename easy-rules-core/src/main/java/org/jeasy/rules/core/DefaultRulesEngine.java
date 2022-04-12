@@ -23,6 +23,9 @@
  */
 package org.jeasy.rules.core;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import org.jeasy.rules.api.Fact;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
@@ -31,10 +34,6 @@ import org.jeasy.rules.api.RulesEngine;
 import org.jeasy.rules.api.RulesEngineParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Default {@link RulesEngine} implementation.

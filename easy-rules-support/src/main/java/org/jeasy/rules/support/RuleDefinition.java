@@ -23,10 +23,9 @@
  */
 package org.jeasy.rules.support;
 
-import org.jeasy.rules.api.Rule;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.jeasy.rules.api.Rule;
 
 /**
  * Rule definition as defined in a rule descriptor. This class encapsulates the static definition of

@@ -23,6 +23,10 @@
  */
 package org.jeasy.rules.support.composite;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
 import org.jeasy.rules.annotation.Priority;
@@ -33,11 +37,6 @@ import org.jeasy.rules.core.DefaultRulesEngine;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConditionalRuleGroupTest {
 

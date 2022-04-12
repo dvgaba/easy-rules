@@ -23,15 +23,15 @@
  */
 package org.jeasy.rules.core;
 
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.when;
+
 import org.jeasy.rules.api.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomRuleOrderingTest extends AbstractTest {

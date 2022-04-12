@@ -23,6 +23,8 @@
  */
 package org.jeasy.rules.support;
 
+import java.util.Arrays;
+import java.util.List;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.support.composite.ActivationRuleGroup;
 import org.jeasy.rules.support.composite.CompositeRule;
@@ -30,9 +32,6 @@ import org.jeasy.rules.support.composite.ConditionalRuleGroup;
 import org.jeasy.rules.support.composite.UnitRuleGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Base class for rule factories.

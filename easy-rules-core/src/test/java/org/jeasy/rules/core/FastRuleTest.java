@@ -1,7 +1,7 @@
-/**
+/*
  * The MIT License
  *
- *  Copyright (c) 2021, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *  Copyright (c) 2022, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,50 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-package $
+package org.jeasy.rules.core;
 
+import org.jeasy.rules.BasicRuleTestImpl;
 import org.jeasy.rules.api.Facts;
+import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngine;
-import org.jeasy.rules.core.DefaultRulesEngine;
+import org.junit.Test;
 
-public class Launcher {
+public class FastRuleTest {
 
-    public static void main(String[] args) {
+  private static class FastDummyRule extends FastRule {
 
-        // create facts
-        Facts facts = new Facts();
-
-        // create rules
-        Rules rules = new Rules();
-        rules.register(new HelloWorldRule());
-
-        // create a rules engine and fire rules on known facts
-        RulesEngine rulesEngine = new DefaultRulesEngine();
-        rulesEngine.fire(rules, facts);
-
+    public FastDummyRule(String name, String description, int priority) {
+      super(name, description, priority);
     }
+
+    @Override
+    protected boolean when(Facts facts) {
+      String data = facts.get("data");
+      return data.equals("data");
+    }
+
+    @Override
+    protected void then(Facts facts) {
+      facts.put("result", "done");
+    }
+
+    @Override
+    public int compareTo(final Rule rule) {
+      return Integer.compare(this.getPriority(), rule.getPriority());
+    }
+  }
+
+  @Test
+  public void evaluate() {
+    RulesEngine rulesEngine = new DefaultRulesEngine();
+    Rules rules = new Rules();
+
+    rules.register(new BasicRuleTestImpl());
+    rules.register(new FastDummyRule("Rule", "Rule", 0));
+    Facts facts = new Facts();
+    facts.put("data", "data");
+    rulesEngine.fire(rules, facts);
+    System.out.println((String) facts.get("result"));
+  }
 }

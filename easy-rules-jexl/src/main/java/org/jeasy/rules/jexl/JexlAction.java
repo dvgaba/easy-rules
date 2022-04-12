@@ -24,7 +24,6 @@
 package org.jeasy.rules.jexl;
 
 import java.util.Objects;
-
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlException;
 import org.apache.commons.jexl3.JexlScript;

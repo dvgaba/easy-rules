@@ -23,14 +23,14 @@
  */
 package org.jeasy.rules.mvel;
 
+import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOutNormalized;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Facts;
 import org.junit.Test;
 import org.mvel2.ParserContext;
-
-import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOutNormalized;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MVELActionTest {
 

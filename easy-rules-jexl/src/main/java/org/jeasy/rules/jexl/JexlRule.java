@@ -26,7 +26,6 @@ package org.jeasy.rules.jexl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 import org.jeasy.rules.api.Action;

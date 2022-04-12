@@ -21,7 +21,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-package ${packageName};
+package $
 
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;

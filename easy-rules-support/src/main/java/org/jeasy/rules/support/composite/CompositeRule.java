@@ -23,15 +23,14 @@
  */
 package org.jeasy.rules.support.composite;
 
-import org.jeasy.rules.api.Facts;
-import org.jeasy.rules.api.Rule;
-import org.jeasy.rules.core.BasicRule;
-import org.jeasy.rules.core.RuleProxy;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import org.jeasy.rules.api.Facts;
+import org.jeasy.rules.api.Rule;
+import org.jeasy.rules.core.BasicRule;
+import org.jeasy.rules.core.RuleProxy;
 
 /**
  * Base class representing a composite rule composed of a set of rules.

@@ -23,6 +23,11 @@
  */
 package org.jeasy.rules.core;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.api.RuleListener;
@@ -32,12 +37,6 @@ import org.jeasy.rules.api.RulesEngineListener;
 import org.jeasy.rules.api.RulesEngineParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Inference {@link RulesEngine} implementation.

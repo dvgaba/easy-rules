@@ -23,13 +23,12 @@
  */
 package org.jeasy.rules.api;
 
-import org.jeasy.rules.core.RuleProxy;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import org.jeasy.rules.core.RuleProxy;
 
 /**
  * This class encapsulates a set of rules and represents a rules namespace. Rules must have a unique
@@ -82,6 +81,22 @@ public class Rules implements Iterable<Rule> {
     for (Object rule : rules) {
       Objects.requireNonNull(rule);
       this.rules.add(RuleProxy.asRule(rule));
+    }
+  }
+
+  public void register(Rule... rules) {
+    Objects.requireNonNull(rules);
+    for (Rule rule : rules) {
+      Objects.requireNonNull(rule);
+      this.rules.add(rule);
+    }
+  }
+
+  public void unregister(Rules... rules) {
+    Objects.requireNonNull(rules);
+    for (Object rule : rules) {
+      Objects.requireNonNull(rule);
+      this.rules.remove(rule);
     }
   }
 
