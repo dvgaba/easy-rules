@@ -11,7 +11,7 @@
   <artifactId>easy-rules-archetype</artifactId>
   <name>Easy Rules Quick Start Archetype</name>
   <description>Maven archetype to create a skeleton project</description>
-  <url>http://www.github.com/j-easy/easy-rules</url>
+  <url>http://www.github.com/dvgaba/easy-rules</url>
 
   <developers>
     <developer>
@@ -26,20 +26,20 @@
   </developers>
 
   <scm>
-    <url>git@github.com:j-easy/easy-rules.git</url>
-    <connection>scm:git:git@github.com:j-easy/easy-rules.git</connection>
-    <developerConnection>scm:git:git@github.com:j-easy/easy-rules.git</developerConnection>
+    <url>git@github.com:dvgaba/easy-rules.git</url>
+    <connection>scm:git:git@github.com:dvgaba/easy-rules.git</connection>
+    <developerConnection>scm:git:git@github.com:dvgaba/easy-rules.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/j-easy/easy-rules/issues</url>
+    <url>https://github.com/dvgaba/easy-rules/issues</url>
   </issueManagement>
 
   <ciManagement>
     <system>Github Actions</system>
-    <url>https://github.com/j-easy/easy-rules/actions</url>
+    <url>https://github.com/dvgaba/easy-rules/actions</url>
   </ciManagement>
 
   <licenses>

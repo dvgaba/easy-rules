@@ -22,7 +22,7 @@
 
   <name>Easy Rules</name>
   <description>Easy Rules is a simple, stupid rules engine for Java</description>
-  <url>http://www.github.com/j-easy/easy-rules</url>
+  <url>http://www.github.com/dvgaba/easy-rules</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,20 +42,20 @@
   </properties>
 
   <scm>
-    <url>git@github.com:j-easy/easy-rules.git</url>
-    <connection>scm:git:git@github.com:j-easy/easy-rules.git</connection>
-    <developerConnection>scm:git:git@github.com:j-easy/easy-rules.git</developerConnection>
+    <url>git@github.com:dvgaba/easy-rules.git</url>
+    <connection>scm:git:git@github.com:dvgaba/easy-rules.git</connection>
+    <developerConnection>scm:git:git@github.com:dvgaba/easy-rules.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/j-easy/easy-rules/issues</url>
+    <url>https://github.com/dvgaba/easy-rules/issues</url>
   </issueManagement>
 
   <ciManagement>
     <system>Github Actions</system>
-    <url>https://github.com/j-easy/easy-rules/actions</url>
+    <url>https://github.com/dvgaba/easy-rules/actions</url>
   </ciManagement>
 
   <developers>
@@ -66,6 +66,14 @@
       <email>mahmoud.benhassine@icloud.com</email>
       <roles>
         <role>Lead developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>dvgaba</id>
+      <name>Dhruv</name>
+      <url>https://github.com/dvgaba</url>
+      <roles>
+        <role>Developer</role>
       </roles>
     </developer>
   </developers>

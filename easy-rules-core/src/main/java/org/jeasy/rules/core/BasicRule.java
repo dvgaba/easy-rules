@@ -49,8 +49,9 @@ public abstract class BasicRule implements Rule {
   /**
    * Create a new {@link BasicRule}. Please use other constructor method as name parameter uniquely
    * identifies a rule
+   * @deprecated To avoid hardcoded rule name, Rule name should be unique
    */
-  @Deprecated
+  @Deprecated(since="1.0.1", forRemoval = true)
   protected BasicRule() {
     this(Rule.DEFAULT_NAME, Rule.DEFAULT_DESCRIPTION, Rule.DEFAULT_PRIORITY);
   }
