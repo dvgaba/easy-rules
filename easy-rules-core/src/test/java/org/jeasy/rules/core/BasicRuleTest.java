@@ -43,8 +43,8 @@ public class BasicRuleTest extends AbstractTest {
     FirstRule rule1 = new FirstRule();
     FirstRule rule2 = new FirstRule();
 
-    assertThat(rule1.compareTo(rule2)).isZero();
-    assertThat(rule2.compareTo(rule1)).isZero();
+    assertThat(rule1).isEqualByComparingTo(rule2);
+    assertThat(rule2).isEqualByComparingTo(rule1);
   }
 
   @Test

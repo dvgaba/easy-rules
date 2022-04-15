@@ -23,6 +23,8 @@
  */
 package org.jeasy.rules.core;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.jeasy.rules.BasicRuleTestImpl;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
@@ -65,6 +67,6 @@ public class FastRuleTest {
     Facts facts = new Facts();
     facts.put("data", "data");
     rulesEngine.fire(rules, facts);
-    System.out.println((String) facts.get("result"));
+    assertThat((String)facts.get("result")).isEqualTo("done");
   }
 }

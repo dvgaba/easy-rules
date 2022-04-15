@@ -16,20 +16,20 @@
   <description>Public API and core implementation of Easy Rules</description>
 
   <scm>
-    <url>git@github.com:j-easy/easy-rules.git</url>
-    <connection>scm:git:git@github.com:j-easy/easy-rules.git</connection>
-    <developerConnection>scm:git:git@github.com:j-easy/easy-rules.git</developerConnection>
+    <url>git@github.com:dvgaba/easy-rules.git</url>
+    <connection>scm:git:git@github.com:dvgaba/easy-rules.git</connection>
+    <developerConnection>scm:git:git@github.com:dvgaba/easy-rules.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/j-easy/easy-rules/issues</url>
+    <url>https://github.com/dvgaba/easy-rules/issues</url>
   </issueManagement>
 
   <ciManagement>
     <system>Github Actions</system>
-    <url>https://github.com/j-easy/easy-rules/actions</url>
+    <url>https://github.com/dvgaba/easy-rules/actions</url>
   </ciManagement>
 
   <developers>
