@@ -28,18 +28,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.jeasy.rules.BasicRuleTestImpl;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BasicRuleTest extends AbstractTest {
 
   @Test
-  public void basicRuleEvaluateShouldReturnFalse() {
+  void basicRuleEvaluateShouldReturnFalse() {
     BasicRule basicRule = new BasicRuleTestImpl();
     assertThat(basicRule.evaluate(facts)).isFalse();
   }
 
   @Test
-  public void testCompareTo() {
+  void testCompareTo() {
     FirstRule rule1 = new FirstRule();
     FirstRule rule2 = new FirstRule();
 
@@ -48,7 +48,7 @@ public class BasicRuleTest extends AbstractTest {
   }
 
   @Test
-  public void testSortSequence() {
+  void testSortSequence() {
     FirstRule rule1 = new FirstRule();
     SecondRule rule2 = new SecondRule();
     ThirdRule rule3 = new ThirdRule();

@@ -29,12 +29,12 @@ import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
 import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.RulesEngine;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AnnotationInheritanceTest extends AbstractTest {
 
   @Test
-  public void annotationsShouldBeInherited() {
+  void annotationsShouldBeInherited() {
     // Given
     MyChildRule myChildRule = new MyChildRule();
     rules.register(myChildRule);

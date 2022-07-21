@@ -41,30 +41,25 @@ import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.support.composite.UnitRuleGroup;
 import org.jeasy.rules.support.reader.JsonRuleDefinitionReader;
 import org.jeasy.rules.support.reader.YamlRuleDefinitionReader;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class MVELRuleFactoryTest {
 
-  @Parameterized.Parameters
   public static Collection<Object[]> parameters() {
     return Arrays.asList(
-        new Object[][] {
-          {new MVELRuleFactory(new YamlRuleDefinitionReader()), "yml"},
-          {new MVELRuleFactory(new JsonRuleDefinitionReader()), "json"},
+        new Object[][]{
+            {new MVELRuleFactory(new YamlRuleDefinitionReader()), "yml"},
+            {new MVELRuleFactory(new JsonRuleDefinitionReader()), "json"},
         });
   }
-
-  @Parameterized.Parameter(0)
   public MVELRuleFactory factory;
-
-  @Parameterized.Parameter(1)
   public String fileExtension;
 
-  @Test
-  public void testRulesCreation() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRulesCreation(MVELRuleFactory factory, String fileExtension) throws Exception {
+    initMVELRuleFactoryTest(factory, fileExtension);
     // given
     File rulesDescriptor = new File("src/test/resources/rules." + fileExtension);
 
@@ -88,8 +83,10 @@ public class MVELRuleFactoryTest {
     assertThat(rule.getPriority()).isEqualTo(2);
   }
 
-  @Test
-  public void testRuleCreationFromFileReader() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader(MVELRuleFactory factory, String fileExtension) throws Exception {
+    initMVELRuleFactoryTest(factory, fileExtension);
     // given
     Reader adultRuleDescriptorAsReader =
         new FileReader("src/test/resources/adult-rule." + fileExtension);
@@ -104,8 +101,10 @@ public class MVELRuleFactoryTest {
     assertThat(adultRule.getPriority()).isEqualTo(1);
   }
 
-  @Test
-  public void testRuleCreationFromStringReader() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleCreationFromStringReader(MVELRuleFactory factory, String fileExtension) throws Exception {
+    initMVELRuleFactoryTest(factory, fileExtension);
     // given
     Path ruleDescriptor = Paths.get("src/test/resources/adult-rule." + fileExtension);
     Reader adultRuleDescriptorAsReader =
@@ -121,8 +120,10 @@ public class MVELRuleFactoryTest {
     assertThat(adultRule.getPriority()).isEqualTo(1);
   }
 
-  @Test
-  public void testRuleCreationFromFileReader_withCompositeRules() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader_withCompositeRules(MVELRuleFactory factory, String fileExtension) throws Exception {
+    initMVELRuleFactoryTest(factory, fileExtension);
     // given
     File rulesDescriptor = new File("src/test/resources/composite-rules." + fileExtension);
 
@@ -147,8 +148,10 @@ public class MVELRuleFactoryTest {
     assertThat(rule.getPriority()).isEqualTo(1);
   }
 
-  @Test
-  public void testRuleCreationFromFileReader_withInvalidCompositeRuleType() {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader_withInvalidCompositeRuleType(MVELRuleFactory factory, String fileExtension) {
+    initMVELRuleFactoryTest(factory, fileExtension);
     // given
     File rulesDescriptor =
         new File("src/test/resources/composite-rule-invalid-composite-rule-type." + fileExtension);
@@ -161,8 +164,10 @@ public class MVELRuleFactoryTest {
             "Invalid composite rule type, must be one of [UnitRuleGroup, ConditionalRuleGroup, ActivationRuleGroup]");
   }
 
-  @Test
-  public void testRuleCreationFromFileReader_withEmptyComposingRules() {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader_withEmptyComposingRules(MVELRuleFactory factory, String fileExtension) {
+    initMVELRuleFactoryTest(factory, fileExtension);
     // given
     File rulesDescriptor =
         new File(
@@ -175,8 +180,10 @@ public class MVELRuleFactoryTest {
         .hasMessage("Composite rules must have composing rules specified");
   }
 
-  @Test
-  public void testRuleCreationFromFileReader_withNonCompositeRuleDeclaresComposingRules() {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader_withNonCompositeRuleDeclaresComposingRules(MVELRuleFactory factory, String fileExtension) {
+    initMVELRuleFactoryTest(factory, fileExtension);
     // given
     File rulesDescriptor =
         new File("src/test/resources/non-composite-rule-with-composing-rules." + fileExtension);
@@ -186,5 +193,10 @@ public class MVELRuleFactoryTest {
         // then
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Non-composite rules cannot have composing rules");
+  }
+
+  public void initMVELRuleFactoryTest(MVELRuleFactory factory, String fileExtension) {
+    this.factory = factory;
+    this.fileExtension = fileExtension;
   }
 }

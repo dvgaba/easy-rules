@@ -24,6 +24,7 @@
 package org.jeasy.rules.support.composite;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,13 +35,13 @@ import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.core.DefaultRulesEngine;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UnitRuleGroupTest {
 
   @Mock private Rule rule1, rule2;
@@ -52,15 +53,15 @@ public class UnitRuleGroupTest {
 
   private UnitRuleGroup unitRuleGroup;
 
-  @Before
+  @BeforeEach
   public void setUp() {
-    when(rule1.evaluate(facts)).thenReturn(true);
-    when(rule2.evaluate(facts)).thenReturn(true);
-    when(rule2.compareTo(rule1)).thenReturn(1);
+    lenient().when(rule1.evaluate(facts)).thenReturn(true);
+    lenient().when(rule2.evaluate(facts)).thenReturn(true);
+    lenient().when(rule2.compareTo(rule1)).thenReturn(1);
   }
 
   @Test
-  public void whenNoComposingRulesAreRegistered_thenUnitRuleGroupShouldEvaluateToFalse() {
+  void whenNoComposingRulesAreRegistered_thenUnitRuleGroupShouldEvaluateToFalse() {
     // given
     unitRuleGroup = new UnitRuleGroup();
 
@@ -72,7 +73,7 @@ public class UnitRuleGroupTest {
   }
 
   @Test
-  public void compositeRuleAndComposingRulesMustBeExecuted() throws Exception {
+  void compositeRuleAndComposingRulesMustBeExecuted() throws Exception {
     // Given
     unitRuleGroup = new UnitRuleGroup();
     unitRuleGroup.addRule(rule1);
@@ -88,7 +89,7 @@ public class UnitRuleGroupTest {
   }
 
   @Test
-  public void compositeRuleMustNotBeExecutedIfAComposingRuleEvaluatesToFalse() throws Exception {
+  void compositeRuleMustNotBeExecutedIfAComposingRuleEvaluatesToFalse() throws Exception {
     // Given
     when(rule2.evaluate(facts)).thenReturn(false);
     unitRuleGroup = new UnitRuleGroup();
@@ -112,7 +113,7 @@ public class UnitRuleGroupTest {
   }
 
   @Test
-  public void whenARuleIsRemoved_thenItShouldNotBeEvaluated() throws Exception {
+  void whenARuleIsRemoved_thenItShouldNotBeEvaluated() throws Exception {
     // Given
     unitRuleGroup = new UnitRuleGroup();
     unitRuleGroup.addRule(rule1);
@@ -133,7 +134,7 @@ public class UnitRuleGroupTest {
   }
 
   @Test
-  public void testCompositeRuleWithAnnotatedComposingRules() {
+  void testCompositeRuleWithAnnotatedComposingRules() {
     // Given
     MyRule rule = new MyRule();
     unitRuleGroup = new UnitRuleGroup();
@@ -148,7 +149,7 @@ public class UnitRuleGroupTest {
   }
 
   @Test
-  public void whenAnnotatedRuleIsRemoved_thenItsProxyShouldBeRetrieved() {
+  void whenAnnotatedRuleIsRemoved_thenItsProxyShouldBeRetrieved() {
     // Given
     MyRule rule = new MyRule();
     MyAnnotatedRule annotatedRule = new MyAnnotatedRule();

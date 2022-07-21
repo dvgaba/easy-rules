@@ -29,13 +29,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Facts;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mvel2.ParserContext;
 
 public class MVELActionTest {
 
   @Test
-  public void testMVELActionExecution() throws Exception {
+  void testMVELActionExecution() throws Exception {
     // given
     Action markAsAdult = new MVELAction("person.setAdult(true);");
     Facts facts = new Facts();
@@ -50,7 +50,7 @@ public class MVELActionTest {
   }
 
   @Test
-  public void testMVELFunctionExecution() throws Exception {
+  void testMVELFunctionExecution() throws Exception {
     // given
     Action printAction =
         new MVELAction("def hello() { System.out.println(\"Hello from MVEL!\"); }; hello();");
@@ -64,7 +64,7 @@ public class MVELActionTest {
   }
 
   @Test
-  public void testMVELActionExecutionWithFailure() {
+  void testMVELActionExecutionWithFailure() {
     // given
     Action action = new MVELAction("person.setBlah(true);");
     Facts facts = new Facts();
@@ -80,7 +80,7 @@ public class MVELActionTest {
   }
 
   @Test
-  public void testMVELActionWithExpressionAndParserContext() throws Exception {
+  void testMVELActionWithExpressionAndParserContext() throws Exception {
     // given
     ParserContext context = new ParserContext();
     context.addPackageImport("java.util");

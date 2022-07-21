@@ -24,6 +24,7 @@
 package org.jeasy.rules.jexl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Lauri Kimmel
@@ -41,7 +42,7 @@ import org.junit.Test;
 public class JexlConditionTest {
 
   @Test
-  public void testJexlExpressionEvaluation() {
+  void testJexlExpressionEvaluation() {
     // given
     Condition isAdult = new JexlCondition("person.age > 18");
     Facts facts = new Facts();
@@ -57,21 +58,26 @@ public class JexlConditionTest {
   // Note this behaviour is different in SpEL, where a missing fact is silently ignored and returns
   // false
   // This behaviour is similar to MVEL though, where a missing fact results in an exception
-  @Test(expected = RuntimeException.class)
-  public void whenDeclaredFactIsNotPresent_thenShouldThrowRuntimeException() {
-    // given
-    Condition isHot = new JexlCondition("temperature > 30");
-    Facts facts = new Facts();
+  @Test
+  void whenDeclaredFactIsNotPresent_thenShouldThrowRuntimeException() {
+    assertThrows(RuntimeException.class, () -> {
+      // given
+      Condition isHot = new JexlCondition("temperature > 30");
+      Facts facts = new Facts();
 
-    // when
-    boolean evaluationResult = isHot.evaluate(facts);
+      // when
+      boolean evaluationResult = isHot.evaluate(facts);
+
+      // then
+      // expected exception
+    });
 
     // then
     // expected exception
   }
 
   @Test
-  public void testJexlConditionWithNamespace() {
+  void testJexlConditionWithNamespace() {
     // given
     Map<String, Object> namespaces = new HashMap<>();
     namespaces.put("rnd", new Random(123));

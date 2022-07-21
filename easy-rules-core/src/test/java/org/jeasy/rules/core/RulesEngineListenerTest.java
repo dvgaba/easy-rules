@@ -28,8 +28,8 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 
 import org.jeasy.rules.api.RulesEngineListener;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 
@@ -37,14 +37,14 @@ public class RulesEngineListenerTest extends AbstractTest {
 
   @Mock private RulesEngineListener rulesEngineListener1, rulesEngineListener2;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     super.setup();
     rulesEngine.registerRulesEngineListeners(asList(rulesEngineListener1, rulesEngineListener2));
   }
 
   @Test
-  public void rulesEngineListenersShouldBeCalledInOrderWhenFiringRules() throws Exception {
+  void rulesEngineListenersShouldBeCalledInOrderWhenFiringRules() throws Exception {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     rules.register(rule1);
@@ -63,7 +63,7 @@ public class RulesEngineListenerTest extends AbstractTest {
   }
 
   @Test
-  public void rulesEngineListenersShouldBeCalledInOrderWhenCheckingRules() {
+  void rulesEngineListenersShouldBeCalledInOrderWhenCheckingRules() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     rules.register(rule1);

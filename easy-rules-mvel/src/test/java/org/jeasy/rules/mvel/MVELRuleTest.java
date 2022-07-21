@@ -26,22 +26,22 @@ package org.jeasy.rules.mvel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.jeasy.rules.api.Facts;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MVELRuleTest {
 
   private Facts facts = new Facts();
   private MVELRule mvelRule = new MVELRule().name("rn").description("rd").priority(1);
 
-  @Before
+  @BeforeEach
   public void setUp() {
     mvelRule.when("person.age > 18");
     mvelRule.then("person.setAdult(true);");
   }
 
   @Test
-  public void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
+  void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
     // given
     facts.put("person", new Person("foo", 20));
 
@@ -53,7 +53,7 @@ public class MVELRuleTest {
   }
 
   @Test
-  public void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
+  void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
     // given
     Person foo = new Person("foo", 20);
     facts.put("person", foo);

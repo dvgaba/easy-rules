@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.api.Assertions;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.expression.BeanResolver;
@@ -39,7 +39,7 @@ import org.springframework.expression.common.TemplateParserContext;
 public class SpELConditionTest {
 
   @Test
-  public void testSpELExpressionEvaluation() {
+  void testSpELExpressionEvaluation() {
     // given
     Condition isAdult = new SpELCondition("#{ ['person'].age > 18 }");
     Facts facts = new Facts();
@@ -53,7 +53,7 @@ public class SpELConditionTest {
 
   // Note this behaviour is different in MVEL, where a missing fact yields an exception
   @Test
-  public void whenDeclaredFactIsNotPresent_thenShouldReturnFalse() {
+  void whenDeclaredFactIsNotPresent_thenShouldReturnFalse() {
     // given
     Condition isHot = new SpELCondition("#{ ['temperature'] > 30 }");
     Facts facts = new Facts();
@@ -66,7 +66,7 @@ public class SpELConditionTest {
   }
 
   @Test
-  public void testSpELConditionWithExpressionAndParserContext() {
+  void testSpELConditionWithExpressionAndParserContext() {
     // given
     ParserContext context = new TemplateParserContext("%{", "}"); // custom parser context
     Condition condition = new SpELCondition("%{ T(java.lang.Integer).MAX_VALUE > 1 }", context);
@@ -80,7 +80,7 @@ public class SpELConditionTest {
   }
 
   @Test
-  public void testSpELConditionWithExpressionAndParserContextAndBeanResolver() throws Exception {
+  void testSpELConditionWithExpressionAndParserContextAndBeanResolver() throws Exception {
 
     ApplicationContext applicationContext =
         new AnnotationConfigApplicationContext(MySpringAppConfig.class);

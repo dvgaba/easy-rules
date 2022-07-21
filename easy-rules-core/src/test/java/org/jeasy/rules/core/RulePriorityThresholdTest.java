@@ -28,12 +28,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.jeasy.rules.api.RulesEngineParameters;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RulePriorityThresholdTest extends AbstractTest {
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     super.setup();
 
@@ -45,7 +45,7 @@ public class RulePriorityThresholdTest extends AbstractTest {
   }
 
   @Test
-  public void rulesThatExceedPriorityThresholdMustNotBeExecuted() throws Exception {
+  void rulesThatExceedPriorityThresholdMustNotBeExecuted() throws Exception {
     // Given
     rules.register(rule1);
     rules.register(rule2);

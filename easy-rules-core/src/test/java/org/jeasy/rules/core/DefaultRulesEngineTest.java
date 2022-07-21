@@ -25,11 +25,13 @@ package org.jeasy.rules.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.util.List;
 import java.util.Map;
@@ -42,9 +44,9 @@ import org.jeasy.rules.api.RuleListener;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngineListener;
 import org.jeasy.rules.api.RulesEngineParameters;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 
@@ -56,36 +58,44 @@ public class DefaultRulesEngineTest extends AbstractTest {
 
   private AnnotatedRule annotatedRule;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     super.setup();
-    when(rule1.getName()).thenReturn("r");
-    when(rule1.getPriority()).thenReturn(1);
+    lenient().when(rule1.getName()).thenReturn("r");
+    lenient().when(rule1.getPriority()).thenReturn(1);
     annotatedRule = new AnnotatedRule();
   }
 
-  @Test(expected = NullPointerException.class)
-  public void whenFireRules_thenNullRulesShouldNotBeAccepted() {
-    rulesEngine.fire(null, new Facts());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whenFireRules_thenNullFactsShouldNotBeAccepted() {
-    rulesEngine.fire(new Rules(), null);
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whenCheckRules_thenNullRulesShouldNotBeAccepted() {
-    rulesEngine.check(null, new Facts());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whenCheckRules_thenNullFactsShouldNotBeAccepted() {
-    rulesEngine.check(new Rules(), null);
+  @Test
+  void whenFireRules_thenNullRulesShouldNotBeAccepted() {
+    assertThrows(NullPointerException.class, () -> {
+      rulesEngine.fire(null, new Facts());
+    });
   }
 
   @Test
-  public void whenConditionIsTrue_thenActionShouldBeExecuted() throws Exception {
+  void whenFireRules_thenNullFactsShouldNotBeAccepted() {
+    assertThrows(NullPointerException.class, () -> {
+      rulesEngine.fire(new Rules(), null);
+    });
+  }
+
+  @Test
+  void whenCheckRules_thenNullRulesShouldNotBeAccepted() {
+    assertThrows(NullPointerException.class, () -> {
+      rulesEngine.check(null, new Facts());
+    });
+  }
+
+  @Test
+  void whenCheckRules_thenNullFactsShouldNotBeAccepted() {
+    assertThrows(NullPointerException.class, () -> {
+      rulesEngine.check(new Rules(), null);
+    });
+  }
+
+  @Test
+  void whenConditionIsTrue_thenActionShouldBeExecuted() throws Exception {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     rules.register(rule1);
@@ -98,7 +108,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void whenConditionIsFalse_thenActionShouldNotBeExecuted() throws Exception {
+  void whenConditionIsFalse_thenActionShouldNotBeExecuted() throws Exception {
     // Given
     when(rule1.evaluate(facts)).thenReturn(false);
     rules.register(rule1);
@@ -111,7 +121,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void rulesMustBeTriggeredInTheirNaturalOrder() throws Exception {
+  void rulesMustBeTriggeredInTheirNaturalOrder() throws Exception {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     when(rule2.evaluate(facts)).thenReturn(true);
@@ -129,7 +139,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void rulesMustBeCheckedInTheirNaturalOrder() {
+  void rulesMustBeCheckedInTheirNaturalOrder() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     when(rule2.evaluate(facts)).thenReturn(true);
@@ -147,7 +157,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void actionsMustBeExecutedInTheDefinedOrder() {
+  void actionsMustBeExecutedInTheDefinedOrder() {
     // Given
     rules.register(annotatedRule);
     rulesEngine = new DefaultRulesEngine(new RulesEngineParameters().failsOnException(true));
@@ -159,7 +169,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void doesntThrowExceptionForExceptionInRule() {
+  void doesntThrowExceptionForExceptionInRule() {
     // Given
     rules.register(new ExceptionRule(true, true));
     rulesEngine = new DefaultRulesEngine();
@@ -168,7 +178,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void doesThrowExceptionForExceptionInRule() {
+  void doesThrowExceptionForExceptionInRule() {
     // Given
     rules.register(new ExceptionRule(true, true));
     rulesEngine = new DefaultRulesEngine(new RulesEngineParameters().failsOnException(true));
@@ -177,7 +187,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void annotatedRulesAndNonAnnotatedRulesShouldBeUsableTogether() throws Exception {
+  void annotatedRulesAndNonAnnotatedRulesShouldBeUsableTogether() throws Exception {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     rules.register(rule1);
@@ -192,20 +202,19 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void whenRuleNameIsNotSpecified_thenItShouldBeEqualToClassNameByDefault() {
+  void whenRuleNameIsNotSpecified_thenItShouldBeEqualToClassNameByDefault() {
     org.jeasy.rules.api.Rule rule = RuleProxy.asRule(new DummyRule());
     assertThat(rule.getName()).isEqualTo("DummyRule");
   }
 
   @Test
-  public void
-      whenRuleDescriptionIsNotSpecified_thenItShouldBeEqualToConditionNameFollowedByActionsNames() {
+  void whenRuleDescriptionIsNotSpecified_thenItShouldBeEqualToConditionNameFollowedByActionsNames() {
     org.jeasy.rules.api.Rule rule = RuleProxy.asRule(new DummyRule());
     assertThat(rule.getDescription()).isEqualTo("when condition then action1,action2");
   }
 
   @Test
-  public void testCheckRules() {
+  void testCheckRules() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     rules.register(rule1);
@@ -222,7 +231,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void listenerShouldBeInvokedBeforeCheckingRules() {
+  void listenerShouldBeInvokedBeforeCheckingRules() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     when(ruleListener.beforeEvaluate(rule1, facts)).thenReturn(true);
@@ -238,7 +247,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void getParametersShouldReturnACopyOfTheParameters() {
+  void getParametersShouldReturnACopyOfTheParameters() {
     // Given
     RulesEngineParameters parameters =
         new RulesEngineParameters()
@@ -257,7 +266,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void testGetRuleListeners() {
+  void testGetRuleListeners() {
     // Given
     DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
     rulesEngine.registerRuleListener(ruleListener);
@@ -270,7 +279,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void getRuleListenersShouldReturnAnUnmodifiableList() {
+  void getRuleListenersShouldReturnAnUnmodifiableList() {
     // Given
     DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
     rulesEngine.registerRuleListener(ruleListener);
@@ -283,7 +292,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void testGetRulesEngineListeners() {
+  void testGetRulesEngineListeners() {
     // Given
     DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
     rulesEngine.registerRulesEngineListener(rulesEngineListener);
@@ -296,7 +305,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
   }
 
   @Test
-  public void getRulesEngineListenersShouldReturnAnUnmodifiableList() {
+  void getRulesEngineListenersShouldReturnAnUnmodifiableList() {
     // Given
     DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
     rulesEngine.registerRulesEngineListener(rulesEngineListener);
@@ -309,7 +318,7 @@ public class DefaultRulesEngineTest extends AbstractTest {
         .isInstanceOf(UnsupportedOperationException.class);
   }
 
-  @After
+  @AfterEach
   public void clearRules() {
     rules.clear();
   }

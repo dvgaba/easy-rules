@@ -24,6 +24,7 @@
 package org.jeasy.rules.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
@@ -34,36 +35,44 @@ import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngine;
 import org.jeasy.rules.api.RulesEngineListener;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class InferenceRulesEngineTest {
 
-  @Test(expected = NullPointerException.class)
-  public void whenFireRules_thenNullRulesShouldNotBeAccepted() {
-    InferenceRulesEngine engine = new InferenceRulesEngine();
-    engine.fire(null, new Facts());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whenFireRules_thenNullFactsShouldNotBeAccepted() {
-    InferenceRulesEngine engine = new InferenceRulesEngine();
-    engine.fire(new Rules(), null);
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whenCheckRules_thenNullRulesShouldNotBeAccepted() {
-    InferenceRulesEngine engine = new InferenceRulesEngine();
-    engine.check(null, new Facts());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whenCheckRules_thenNullFactsShouldNotBeAccepted() {
-    InferenceRulesEngine engine = new InferenceRulesEngine();
-    engine.check(new Rules(), null);
+  @Test
+  void whenFireRules_thenNullRulesShouldNotBeAccepted() {
+    assertThrows(NullPointerException.class, () -> {
+      InferenceRulesEngine engine = new InferenceRulesEngine();
+      engine.fire(null, new Facts());
+    });
   }
 
   @Test
-  public void testCandidateSelection() {
+  void whenFireRules_thenNullFactsShouldNotBeAccepted() {
+    assertThrows(NullPointerException.class, () -> {
+      InferenceRulesEngine engine = new InferenceRulesEngine();
+      engine.fire(new Rules(), null);
+    });
+  }
+
+  @Test
+  void whenCheckRules_thenNullRulesShouldNotBeAccepted() {
+    assertThrows(NullPointerException.class, () -> {
+      InferenceRulesEngine engine = new InferenceRulesEngine();
+      engine.check(null, new Facts());
+    });
+  }
+
+  @Test
+  void whenCheckRules_thenNullFactsShouldNotBeAccepted() {
+    assertThrows(NullPointerException.class, () -> {
+      InferenceRulesEngine engine = new InferenceRulesEngine();
+      engine.check(new Rules(), null);
+    });
+  }
+
+  @Test
+  void testCandidateSelection() {
     // Given
     Facts facts = new Facts();
     facts.put("foo", true);
@@ -81,7 +90,7 @@ public class InferenceRulesEngineTest {
   }
 
   @Test
-  public void testCandidateOrdering() {
+  void testCandidateOrdering() {
     // Given
     Facts facts = new Facts();
     facts.put("foo", true);
@@ -101,7 +110,7 @@ public class InferenceRulesEngineTest {
   }
 
   @Test
-  public void testRulesEngineListener() {
+  void testRulesEngineListener() {
     // Given
     class StubRulesEngineListener implements RulesEngineListener {
 

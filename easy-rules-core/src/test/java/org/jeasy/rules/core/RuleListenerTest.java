@@ -25,13 +25,14 @@ package org.jeasy.rules.core;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.jeasy.rules.api.RuleListener;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 
@@ -39,17 +40,17 @@ public class RuleListenerTest extends AbstractTest {
 
   @Mock private RuleListener ruleListener1, ruleListener2;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     super.setup();
     when(ruleListener1.beforeEvaluate(rule1, facts)).thenReturn(true);
-    when(ruleListener2.beforeEvaluate(rule1, facts)).thenReturn(true);
+    lenient().when(ruleListener2.beforeEvaluate(rule1, facts)).thenReturn(true);
     rulesEngine.registerRuleListener(ruleListener1);
     rulesEngine.registerRuleListener(ruleListener2);
   }
 
   @Test
-  public void whenTheRuleExecutesSuccessfully_thenOnSuccessShouldBeExecuted() {
+  void whenTheRuleExecutesSuccessfully_thenOnSuccessShouldBeExecuted() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     rules.register(rule1);
@@ -66,7 +67,7 @@ public class RuleListenerTest extends AbstractTest {
   }
 
   @Test
-  public void whenTheRuleFails_thenOnFailureShouldBeExecuted() throws Exception {
+  void whenTheRuleFails_thenOnFailureShouldBeExecuted() throws Exception {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     final Exception exception = new Exception("fatal error!");
@@ -85,8 +86,7 @@ public class RuleListenerTest extends AbstractTest {
   }
 
   @Test
-  public void
-      whenListenerBeforeEvaluateReturnsFalse_thenTheRuleShouldBeSkippedBeforeBeingEvaluated() {
+  void whenListenerBeforeEvaluateReturnsFalse_thenTheRuleShouldBeSkippedBeforeBeingEvaluated() {
     // Given
     when(ruleListener1.beforeEvaluate(rule1, facts)).thenReturn(false);
     rules.register(rule1);
@@ -99,7 +99,7 @@ public class RuleListenerTest extends AbstractTest {
   }
 
   @Test
-  public void whenListenerBeforeEvaluateReturnsTrue_thenTheRuleShouldBeEvaluated() {
+  void whenListenerBeforeEvaluateReturnsTrue_thenTheRuleShouldBeEvaluated() {
     // Given
     when(ruleListener1.beforeEvaluate(rule1, facts)).thenReturn(true);
     rules.register(rule1);
@@ -112,7 +112,7 @@ public class RuleListenerTest extends AbstractTest {
   }
 
   @Test
-  public void whenTheRuleEvaluatesToTrue_thenTheListenerShouldBeInvoked() {
+  void whenTheRuleEvaluatesToTrue_thenTheListenerShouldBeInvoked() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     rules.register(rule1);
@@ -125,7 +125,7 @@ public class RuleListenerTest extends AbstractTest {
   }
 
   @Test
-  public void whenTheRuleEvaluatesToFalse_thenTheListenerShouldBeInvoked() {
+  void whenTheRuleEvaluatesToFalse_thenTheListenerShouldBeInvoked() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(false);
     rules.register(rule1);
@@ -138,7 +138,7 @@ public class RuleListenerTest extends AbstractTest {
   }
 
   @Test
-  public void whenTheRuleEvaluatesToFalseInDoCheck_thenTheListenerShouldBeInvoked() {
+  void whenTheRuleEvaluatesToFalseInDoCheck_thenTheListenerShouldBeInvoked() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(false);
     rules.register(rule1);
@@ -151,7 +151,7 @@ public class RuleListenerTest extends AbstractTest {
   }
 
   @Test
-  public void whenTheRuleEvaluatesToTrueInDoCheck_thenTheListenerShouldBeInvoked() {
+  void whenTheRuleEvaluatesToTrueInDoCheck_thenTheListenerShouldBeInvoked() {
     // Given
     when(rule1.evaluate(facts)).thenReturn(true);
     rules.register(rule1);

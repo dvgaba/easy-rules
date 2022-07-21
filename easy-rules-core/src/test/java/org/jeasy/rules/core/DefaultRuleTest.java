@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -41,7 +41,7 @@ public class DefaultRuleTest extends AbstractTest {
   @Mock private Action action1, action2;
 
   @Test
-  public void WhenConditionIsTrue_ThenActionsShouldBeExecutedInOrder() throws Exception {
+  void WhenConditionIsTrue_ThenActionsShouldBeExecutedInOrder() throws Exception {
     // given
     when(condition.evaluate(facts)).thenReturn(true);
     Rule rule = new RuleBuilder().when(condition).then(action1).then(action2).build();
@@ -57,7 +57,7 @@ public class DefaultRuleTest extends AbstractTest {
   }
 
   @Test
-  public void WhenConditionIsFalse_ThenActionsShouldNotBeExecuted() throws Exception {
+  void WhenConditionIsFalse_ThenActionsShouldNotBeExecuted() throws Exception {
     // given
     when(condition.evaluate(facts)).thenReturn(false);
     Rule rule = new RuleBuilder().when(condition).then(action1).then(action2).build();

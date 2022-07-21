@@ -23,6 +23,8 @@
  */
 package org.jeasy.rules.core;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.util.Map;
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
@@ -30,14 +32,13 @@ import org.jeasy.rules.annotation.Fact;
 import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /** Null facts are not accepted by design, a declared fact can be missing though. */
 public class MissingFactAnnotationParameterTest extends AbstractTest {
 
   @Test
-  public void testMissingFact() {
+  void testMissingFact() {
     Rules rules = new Rules();
     rules.register(new AnnotatedParametersRule());
 
@@ -47,7 +48,7 @@ public class MissingFactAnnotationParameterTest extends AbstractTest {
     Map<org.jeasy.rules.api.Rule, Boolean> results = rulesEngine.check(rules, facts);
 
     for (boolean b : results.values()) {
-      Assert.assertFalse(b);
+      assertFalse(b);
     }
   }
 

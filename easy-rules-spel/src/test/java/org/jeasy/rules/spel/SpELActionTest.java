@@ -29,14 +29,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Facts;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.expression.ParserContext;
 import org.springframework.expression.common.TemplateParserContext;
 
 public class SpELActionTest {
 
   @Test
-  public void testSpELActionExecution() throws Exception {
+  void testSpELActionExecution() throws Exception {
     // given
     Action markAsAdult = new SpELAction("#{ ['person'].setAdult(true) }");
     Facts facts = new Facts();
@@ -51,7 +51,7 @@ public class SpELActionTest {
   }
 
   @Test
-  public void testSpELFunctionExecution() throws Exception {
+  void testSpELFunctionExecution() throws Exception {
     // given
     Action printAction = new SpELAction("#{ T(org.jeasy.rules.spel.Person).sayHello() }");
     Facts facts = new Facts();
@@ -64,7 +64,7 @@ public class SpELActionTest {
   }
 
   @Test
-  public void testSpELActionExecutionWithFailure() {
+  void testSpELActionExecutionWithFailure() {
     // given
     Action action = new SpELAction("#{ T(org.jeasy.rules.spel.Person).sayHi() }");
     Facts facts = new Facts();
@@ -80,7 +80,7 @@ public class SpELActionTest {
   }
 
   @Test
-  public void testSpELActionWithExpressionAndParserContext() throws Exception {
+  void testSpELActionWithExpressionAndParserContext() throws Exception {
     // given
     ParserContext context = new TemplateParserContext("%{", "}");
     Action printAction = new SpELAction("%{ T(org.jeasy.rules.spel.Person).sayHello() }", context);

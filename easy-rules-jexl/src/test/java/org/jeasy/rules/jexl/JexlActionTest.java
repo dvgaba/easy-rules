@@ -38,7 +38,7 @@ import org.apache.commons.jexl3.introspection.JexlSandbox;
 import org.assertj.core.api.Assertions;
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Facts;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Lauri Kimmel
@@ -47,7 +47,7 @@ import org.junit.Test;
 public class JexlActionTest {
 
   @Test
-  public void testJexlActionExecution() throws Exception {
+  void testJexlActionExecution() throws Exception {
     // given
     Action markAsAdult = new JexlAction("person.setAdult(true);");
     Facts facts = new Facts();
@@ -62,7 +62,7 @@ public class JexlActionTest {
   }
 
   @Test
-  public void testJexlActionExecutionWithCustomFunction() throws Exception {
+  void testJexlActionExecutionWithCustomFunction() throws Exception {
     // given
     PrintStream originalStream = System.out;
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -84,7 +84,7 @@ public class JexlActionTest {
   }
 
   @Test
-  public void testJexlActionExecutionWithFailure() throws Exception {
+  void testJexlActionExecutionWithFailure() throws Exception {
     // given
     Action action = new JexlAction("person.setBlah(true);");
     Facts facts = new Facts();
@@ -101,7 +101,7 @@ public class JexlActionTest {
   }
 
   @Test
-  public void testJexlActionWithExpressionAndFacts() throws Exception {
+  void testJexlActionWithExpressionAndFacts() throws Exception {
     // given
     PrintStream originalStream = System.out;
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -124,7 +124,7 @@ public class JexlActionTest {
   }
 
   @Test
-  public void testWithBlackSandbox() {
+  void testWithBlackSandbox() {
     // given
     JexlSandbox sandbox = new JexlSandbox(false);
     sandbox.block(System.class.getName()).execute("currentTimeMillis");
@@ -141,7 +141,7 @@ public class JexlActionTest {
   }
 
   @Test
-  public void testWithWhiteSandbox() {
+  void testWithWhiteSandbox() {
     // given
     JexlSandbox sandbox = new JexlSandbox(true);
     sandbox.white(System.class.getName()).execute("currentTimeMillis");

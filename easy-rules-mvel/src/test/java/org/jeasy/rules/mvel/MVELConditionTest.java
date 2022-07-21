@@ -24,16 +24,17 @@
 package org.jeasy.rules.mvel;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mvel2.ParserContext;
 
 public class MVELConditionTest {
 
   @Test
-  public void testMVELExpressionEvaluation() {
+  void testMVELExpressionEvaluation() {
     // given
     Condition isAdult = new MVELCondition("person.age > 18");
     Facts facts = new Facts();
@@ -48,21 +49,26 @@ public class MVELConditionTest {
 
   // Note this behaviour is different in SpEL, where a missing fact is silently ignored and returns
   // false
-  @Test(expected = RuntimeException.class)
-  public void whenDeclaredFactIsNotPresent_thenShouldThrowRuntimeException() {
-    // given
-    Condition isHot = new MVELCondition("temperature > 30");
-    Facts facts = new Facts();
+  @Test
+  void whenDeclaredFactIsNotPresent_thenShouldThrowRuntimeException() {
+    assertThrows(RuntimeException.class, () -> {
+      // given
+      Condition isHot = new MVELCondition("temperature > 30");
+      Facts facts = new Facts();
 
-    // when
-    boolean evaluationResult = isHot.evaluate(facts);
+      // when
+      boolean evaluationResult = isHot.evaluate(facts);
+
+      // then
+      // expected exception
+    });
 
     // then
     // expected exception
   }
 
   @Test
-  public void testMVELConditionWithExpressionAndParserContext() {
+  void testMVELConditionWithExpressionAndParserContext() {
     // given
     ParserContext context = new ParserContext();
     context.addPackageImport("java.util");
