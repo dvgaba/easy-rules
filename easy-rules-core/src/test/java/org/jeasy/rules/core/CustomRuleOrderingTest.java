@@ -27,19 +27,19 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 
 import org.jeasy.rules.api.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CustomRuleOrderingTest extends AbstractTest {
 
   @Mock private MyRule rule1, rule2;
 
   @Test
-  public void whenCompareToIsOverridden_thenShouldExecuteRulesInTheCustomOrder() throws Exception {
+  void whenCompareToIsOverridden_thenShouldExecuteRulesInTheCustomOrder() throws Exception {
     // Given
     when(rule1.getName()).thenReturn("a");
     when(rule1.getPriority()).thenReturn(1);

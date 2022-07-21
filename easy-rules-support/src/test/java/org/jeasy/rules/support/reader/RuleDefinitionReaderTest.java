@@ -24,6 +24,7 @@
 package org.jeasy.rules.support.reader;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.FileReader;
@@ -33,34 +34,28 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.support.RuleDefinition;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class RuleDefinitionReaderTest {
 
-  @Parameterized.Parameters
   public static Collection<Object[]> parameters() {
     return Arrays.asList(
-        new Object[][] {
-          {new YamlRuleDefinitionReader(), "yml"},
-          {new JsonRuleDefinitionReader(), "json"},
+        new Object[][]{
+            {new YamlRuleDefinitionReader(), "yml"},
+            {new JsonRuleDefinitionReader(), "json"},
         });
   }
-
-  @Parameterized.Parameter(0)
   public RuleDefinitionReader ruleDefinitionReader;
-
-  @Parameterized.Parameter(1)
   public String fileExtension;
 
-  @Test
-  public void testRuleDefinitionReadingFromFile() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleDefinitionReadingFromFile(RuleDefinitionReader ruleDefinitionReader, String fileExtension) throws Exception {
+    initRuleDefinitionReaderTest(ruleDefinitionReader, fileExtension);
     // given
     File adultRuleDescriptor = new File("src/test/resources/adult-rule." + fileExtension);
 
@@ -78,11 +73,13 @@ public class RuleDefinitionReaderTest {
     assertThat(adultRuleDefinition.getPriority()).isEqualTo(1);
     assertThat(adultRuleDefinition.getCondition()).isEqualTo("person.age > 18");
     assertThat(adultRuleDefinition.getActions())
-        .isEqualTo(Collections.singletonList("person.setAdult(true);"));
+        .isEqualTo(List.of("person.setAdult(true);"));
   }
 
-  @Test
-  public void testRuleDefinitionReadingFromString() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleDefinitionReadingFromString(RuleDefinitionReader ruleDefinitionReader, String fileExtension) throws Exception {
+    initRuleDefinitionReaderTest(ruleDefinitionReader, fileExtension);
     // given
     Path ruleDescriptor = Paths.get("src/test/resources/adult-rule." + fileExtension);
     String adultRuleDescriptor = new String(Files.readAllBytes(ruleDescriptor));
@@ -101,11 +98,13 @@ public class RuleDefinitionReaderTest {
     assertThat(adultRuleDefinition.getPriority()).isEqualTo(1);
     assertThat(adultRuleDefinition.getCondition()).isEqualTo("person.age > 18");
     assertThat(adultRuleDefinition.getActions())
-        .isEqualTo(Collections.singletonList("person.setAdult(true);"));
+        .isEqualTo(List.of("person.setAdult(true);"));
   }
 
-  @Test
-  public void testRuleDefinitionReading_withDefaultValues() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleDefinitionReading_withDefaultValues(RuleDefinitionReader ruleDefinitionReader, String fileExtension) throws Exception {
+    initRuleDefinitionReaderTest(ruleDefinitionReader, fileExtension);
     // given
     File adultRuleDescriptor =
         new File("src/test/resources/adult-rule-with-default-values." + fileExtension);
@@ -123,39 +122,55 @@ public class RuleDefinitionReaderTest {
     assertThat(adultRuleDefinition.getPriority()).isEqualTo(Rule.DEFAULT_PRIORITY);
     assertThat(adultRuleDefinition.getCondition()).isEqualTo("person.age > 18");
     assertThat(adultRuleDefinition.getActions())
-        .isEqualTo(Collections.singletonList("person.setAdult(true);"));
+        .isEqualTo(List.of("person.setAdult(true);"));
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidRuleDefinitionReading_whenNoCondition() throws Exception {
-    // given
-    File adultRuleDescriptor =
-        new File("src/test/resources/adult-rule-without-condition." + fileExtension);
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testInvalidRuleDefinitionReading_whenNoCondition(RuleDefinitionReader ruleDefinitionReader, String fileExtension) throws Exception {
+    initRuleDefinitionReaderTest(ruleDefinitionReader, fileExtension);
+    assertThrows(IllegalArgumentException.class, () -> {
+      // given
+      File adultRuleDescriptor =
+          new File("src/test/resources/adult-rule-without-condition." + fileExtension);
 
-    // when
-    List<RuleDefinition> ruleDefinitions =
-        ruleDefinitionReader.read(new FileReader(adultRuleDescriptor));
+      // when
+      List<RuleDefinition> ruleDefinitions =
+          ruleDefinitionReader.read(new FileReader(adultRuleDescriptor));
+
+      // then
+      // expected exception
+    });
 
     // then
     // expected exception
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidRuleDefinitionReading_whenNoActions() throws Exception {
-    // given
-    File adultRuleDescriptor =
-        new File("src/test/resources/adult-rule-without-actions." + fileExtension);
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testInvalidRuleDefinitionReading_whenNoActions(RuleDefinitionReader ruleDefinitionReader, String fileExtension) throws Exception {
+    initRuleDefinitionReaderTest(ruleDefinitionReader, fileExtension);
+    assertThrows(IllegalArgumentException.class, () -> {
+      // given
+      File adultRuleDescriptor =
+          new File("src/test/resources/adult-rule-without-actions." + fileExtension);
 
-    // when
-    List<RuleDefinition> ruleDefinitions =
-        ruleDefinitionReader.read(new FileReader(adultRuleDescriptor));
+      // when
+      List<RuleDefinition> ruleDefinitions =
+          ruleDefinitionReader.read(new FileReader(adultRuleDescriptor));
+
+      // then
+      // expected exception
+    });
 
     // then
     // expected exception
   }
 
-  @Test
-  public void testRulesDefinitionReading() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRulesDefinitionReading(RuleDefinitionReader ruleDefinitionReader, String fileExtension) throws Exception {
+    initRuleDefinitionReaderTest(ruleDefinitionReader, fileExtension);
     // given
     File rulesDescriptor = new File("src/test/resources/rules." + fileExtension);
 
@@ -173,7 +188,7 @@ public class RuleDefinitionReaderTest {
     assertThat(ruleDefinition.getPriority()).isEqualTo(1);
     assertThat(ruleDefinition.getCondition()).isEqualTo("person.age > 18");
     assertThat(ruleDefinition.getActions())
-        .isEqualTo(Collections.singletonList("person.setAdult(true);"));
+        .isEqualTo(List.of("person.setAdult(true);"));
 
     ruleDefinition = ruleDefinitions.get(1);
     assertThat(ruleDefinition).isNotNull();
@@ -183,11 +198,13 @@ public class RuleDefinitionReaderTest {
     assertThat(ruleDefinition.getCondition()).isEqualTo("rain == true");
     assertThat(ruleDefinition.getActions())
         .isEqualTo(
-            Collections.singletonList("System.out.println(\"It rains, take an umbrella!\");"));
+            List.of("System.out.println(\"It rains, take an umbrella!\");"));
   }
 
-  @Test
-  public void testEmptyRulesDefinitionReading() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testEmptyRulesDefinitionReading(RuleDefinitionReader ruleDefinitionReader, String fileExtension) throws Exception {
+    initRuleDefinitionReaderTest(ruleDefinitionReader, fileExtension);
     // given
     File rulesDescriptor = new File("src/test/resources/rules-empty." + fileExtension);
 
@@ -199,8 +216,10 @@ public class RuleDefinitionReaderTest {
     assertThat(ruleDefinitions).isEmpty();
   }
 
-  @Test
-  public void testRuleDefinitionReading_withCompositeAndBasicRules() throws Exception {
+  @MethodSource("parameters")
+  @ParameterizedTest
+  void testRuleDefinitionReading_withCompositeAndBasicRules(RuleDefinitionReader ruleDefinitionReader, String fileExtension) throws Exception {
+    initRuleDefinitionReaderTest(ruleDefinitionReader, fileExtension);
     // given
     File compositeRuleDescriptor = new File("src/test/resources/composite-rules." + fileExtension);
 
@@ -241,6 +260,11 @@ public class RuleDefinitionReaderTest {
     assertThat(ruleDefinition.getCondition()).isEqualTo("rain == True");
     assertThat(ruleDefinition.getActions())
         .isEqualTo(
-            Collections.singletonList("System.out.println(\"It rains, take an umbrella!\");"));
+            List.of("System.out.println(\"It rains, take an umbrella!\");"));
+  }
+
+  public void initRuleDefinitionReaderTest(RuleDefinitionReader ruleDefinitionReader, String fileExtension) {
+    this.ruleDefinitionReader = ruleDefinitionReader;
+    this.fileExtension = fileExtension;
   }
 }

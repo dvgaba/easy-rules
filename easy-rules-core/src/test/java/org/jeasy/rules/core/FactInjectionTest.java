@@ -32,15 +32,15 @@ import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngine;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FactInjectionTest {
 
   @Test
-  public void declaredFactsShouldBeCorrectlyInjectedByNameOrType() {
+  void declaredFactsShouldBeCorrectlyInjectedByNameOrType() {
     // Given
     Object fact1 = new Object();
     Object fact2 = new Object();
@@ -62,7 +62,7 @@ public class FactInjectionTest {
   }
 
   @Test
-  public void rulesShouldBeExecutedWhenFactsAreCorrectlyInjected() {
+  void rulesShouldBeExecutedWhenFactsAreCorrectlyInjected() {
     // Given
     Facts facts = new Facts();
     facts.put("rain", true);
@@ -82,7 +82,7 @@ public class FactInjectionTest {
   }
 
   @Test
-  public void whenFactTypeDoesNotMatchParameterType_thenTheRuleShouldNotBeExecuted() {
+  void whenFactTypeDoesNotMatchParameterType_thenTheRuleShouldNotBeExecuted() {
     // Given
     Facts facts = new Facts();
     facts.put("age", "foo");
@@ -98,7 +98,7 @@ public class FactInjectionTest {
   }
 
   @Test
-  public void whenADeclaredFactIsMissingInEvaluateMethod_thenTheRuleShouldNotBeExecuted() {
+  void whenADeclaredFactIsMissingInEvaluateMethod_thenTheRuleShouldNotBeExecuted() {
     // Given
     Facts facts = new Facts();
     AgeRule ageRule = new AgeRule();
@@ -113,7 +113,7 @@ public class FactInjectionTest {
   }
 
   @Test
-  public void whenADeclaredFactIsMissingInExecuteMethod_thenTheRuleShouldNotBeExecuted() {
+  void whenADeclaredFactIsMissingInExecuteMethod_thenTheRuleShouldNotBeExecuted() {
     // Given
     Facts facts = new Facts();
     AnotherDummyRule rule = new AnotherDummyRule();

@@ -26,14 +26,14 @@ package org.jeasy.rules.api;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FactsTest {
 
   private final Facts facts = new Facts();
 
   @Test
-  public void factsMustHaveUniqueName() {
+  void factsMustHaveUniqueName() {
     facts.add(new Fact<>("foo", 1));
     facts.add(new Fact<>("foo", 2));
 
@@ -43,7 +43,7 @@ public class FactsTest {
   }
 
   @Test
-  public void testAdd() {
+  void testAdd() {
     Fact<Integer> fact1 = new Fact<>("foo", 1);
     Fact<Integer> fact2 = new Fact<>("bar", 2);
     facts.add(fact1);
@@ -53,7 +53,7 @@ public class FactsTest {
   }
 
   @Test
-  public void testPut() {
+  void testPut() {
     facts.put("foo", 1);
     facts.put("bar", 2);
 
@@ -61,7 +61,7 @@ public class FactsTest {
   }
 
   @Test
-  public void testRemove() {
+  void testRemove() {
     Fact<Integer> foo = new Fact<>("foo", 1);
     facts.add(foo);
     facts.remove(foo);
@@ -70,7 +70,7 @@ public class FactsTest {
   }
 
   @Test
-  public void testRemoveByName() {
+  void testRemoveByName() {
     Fact<Integer> foo = new Fact<>("foo", 1);
     facts.add(foo);
     facts.remove("foo");
@@ -79,7 +79,7 @@ public class FactsTest {
   }
 
   @Test
-  public void testGet() {
+  void testGet() {
     Fact<Integer> fact = new Fact<>("foo", 1);
     facts.add(fact);
     Integer value = facts.get("foo");
@@ -87,7 +87,7 @@ public class FactsTest {
   }
 
   @Test
-  public void testGetFact() {
+  void testGetFact() {
     Fact<Integer> fact = new Fact<>("foo", 1);
     facts.add(fact);
     Fact<?> retrievedFact = facts.getFact("foo");
@@ -95,7 +95,7 @@ public class FactsTest {
   }
 
   @Test
-  public void testAsMap() {
+  void testAsMap() {
     Fact<Integer> fact1 = new Fact<>("foo", 1);
     Fact<Integer> fact2 = new Fact<>("bar", 2);
     facts.add(fact1);
@@ -105,7 +105,7 @@ public class FactsTest {
   }
 
   @Test
-  public void testClear() {
+  void testClear() {
     Facts facts = new Facts();
     facts.add(new Fact<>("foo", 1));
     facts.clear();

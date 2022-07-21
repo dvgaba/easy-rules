@@ -28,12 +28,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.jeasy.rules.api.RulesEngineParameters;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SkipOnFirstNonTriggeredRuleTest extends AbstractTest {
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     super.setup();
     RulesEngineParameters parameters =
@@ -42,7 +42,7 @@ public class SkipOnFirstNonTriggeredRuleTest extends AbstractTest {
   }
 
   @Test
-  public void testSkipOnFirstNonTriggeredRule() throws Exception {
+  void testSkipOnFirstNonTriggeredRule() throws Exception {
     // Given
     when(rule1.evaluate(facts)).thenReturn(false);
     when(rule2.compareTo(rule1)).thenReturn(1);

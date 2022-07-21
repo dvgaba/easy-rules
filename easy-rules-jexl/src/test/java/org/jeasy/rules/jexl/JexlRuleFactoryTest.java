@@ -44,39 +44,32 @@ import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.support.composite.UnitRuleGroup;
 import org.jeasy.rules.support.reader.JsonRuleDefinitionReader;
 import org.jeasy.rules.support.reader.YamlRuleDefinitionReader;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * @author Lauri Kimmel
  * @author Mahmoud Ben Hassine
  */
-@RunWith(Parameterized.class)
 public class JexlRuleFactoryTest {
 
-  @Parameters
   public static Collection<Object[]> params() {
     Map<String, Object> namespaces = new HashMap<>();
     namespaces.put("sout", System.out);
     JexlEngine jexlEngine = new JexlBuilder().namespaces(namespaces).strict(false).create();
     return Arrays.asList(
-        new Object[][] {
-          {new JexlRuleFactory(new YamlRuleDefinitionReader(), jexlEngine), "yml"},
-          {new JexlRuleFactory(new JsonRuleDefinitionReader(), jexlEngine), "json"},
+        new Object[][]{
+            {new JexlRuleFactory(new YamlRuleDefinitionReader(), jexlEngine), "yml"},
+            {new JexlRuleFactory(new JsonRuleDefinitionReader(), jexlEngine), "json"},
         });
   }
-
-  @Parameter(0)
   public JexlRuleFactory factory;
-
-  @Parameter(1)
   public String ext;
 
-  @Test
-  public void testRulesCreation() throws Exception {
+  @MethodSource("params")
+  @ParameterizedTest
+  void testRulesCreation(JexlRuleFactory factory, String ext) throws Exception {
+    initJexlRuleFactoryTest(factory, ext);
     // given
     File rulesDescriptor = new File("src/test/resources/rules." + ext);
 
@@ -100,8 +93,10 @@ public class JexlRuleFactoryTest {
     assertThat(rule.getPriority()).isEqualTo(2);
   }
 
-  @Test
-  public void testRuleCreationFromFileReader() throws Exception {
+  @MethodSource("params")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader(JexlRuleFactory factory, String ext) throws Exception {
+    initJexlRuleFactoryTest(factory, ext);
     // given
     Reader adultRuleDescriptorAsReader = new FileReader("src/test/resources/adult-rule." + ext);
 
@@ -115,8 +110,10 @@ public class JexlRuleFactoryTest {
     assertThat(adultRule.getPriority()).isEqualTo(1);
   }
 
-  @Test
-  public void testRuleCreationFromStringReader() throws Exception {
+  @MethodSource("params")
+  @ParameterizedTest
+  void testRuleCreationFromStringReader(JexlRuleFactory factory, String ext) throws Exception {
+    initJexlRuleFactoryTest(factory, ext);
     // given
     Reader adultRuleDescriptorAsReader =
         new StringReader(
@@ -132,8 +129,10 @@ public class JexlRuleFactoryTest {
     assertThat(adultRule.getPriority()).isEqualTo(1);
   }
 
-  @Test
-  public void testRuleCreationFromFileReader_withCompositeRules() throws Exception {
+  @MethodSource("params")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader_withCompositeRules(JexlRuleFactory factory, String ext) throws Exception {
+    initJexlRuleFactoryTest(factory, ext);
     // given
     File rulesDescriptor = new File("src/test/resources/composite-rules." + ext);
 
@@ -158,8 +157,10 @@ public class JexlRuleFactoryTest {
     assertThat(rule.getPriority()).isEqualTo(1);
   }
 
-  @Test
-  public void testRuleCreationFromFileReader_withInvalidCompositeRuleType() {
+  @MethodSource("params")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader_withInvalidCompositeRuleType(JexlRuleFactory factory, String ext) {
+    initJexlRuleFactoryTest(factory, ext);
     // given
     File rulesDescriptor =
         new File("src/test/resources/composite-rule-invalid-composite-rule-type." + ext);
@@ -174,8 +175,10 @@ public class JexlRuleFactoryTest {
     // expected exception
   }
 
-  @Test
-  public void testRuleCreationFromFileReader_withEmptyComposingRules() {
+  @MethodSource("params")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader_withEmptyComposingRules(JexlRuleFactory factory, String ext) {
+    initJexlRuleFactoryTest(factory, ext);
     // given
     File rulesDescriptor =
         new File("src/test/resources/composite-rule-invalid-empty-composing-rules." + ext);
@@ -189,8 +192,10 @@ public class JexlRuleFactoryTest {
     // expected exception
   }
 
-  @Test
-  public void testRuleCreationFromFileReader_withNonCompositeRuleDeclaresComposingRules() {
+  @MethodSource("params")
+  @ParameterizedTest
+  void testRuleCreationFromFileReader_withNonCompositeRuleDeclaresComposingRules(JexlRuleFactory factory, String ext) {
+    initJexlRuleFactoryTest(factory, ext);
     // given
     File rulesDescriptor =
         new File("src/test/resources/non-composite-rule-with-composing-rules." + ext);
@@ -202,5 +207,10 @@ public class JexlRuleFactoryTest {
 
     // then
     // expected exception
+  }
+
+  public void initJexlRuleFactoryTest(JexlRuleFactory factory, String ext) {
+    this.factory = factory;
+    this.ext = ext;
   }
 }

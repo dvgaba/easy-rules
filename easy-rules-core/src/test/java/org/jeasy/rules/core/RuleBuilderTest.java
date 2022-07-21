@@ -28,19 +28,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RuleBuilderTest {
 
   @Mock private Condition condition;
   @Mock private Action action1, action2;
 
   @Test
-  public void testDefaultRuleCreationWithDefaultValues() {
+  void testDefaultRuleCreationWithDefaultValues() {
     // when
     Rule rule = new RuleBuilder().build();
 
@@ -52,7 +52,7 @@ public class RuleBuilderTest {
   }
 
   @Test
-  public void testDefaultRuleCreationWithCustomValues() {
+  void testDefaultRuleCreationWithCustomValues() {
     // when
     Rule rule =
         new RuleBuilder()

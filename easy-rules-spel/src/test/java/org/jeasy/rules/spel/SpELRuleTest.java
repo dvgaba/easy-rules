@@ -26,15 +26,15 @@ package org.jeasy.rules.spel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.jeasy.rules.api.Facts;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SpELRuleTest {
 
   private Facts facts;
   private SpELRule spelRule;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     facts = new Facts();
     spelRule =
@@ -47,7 +47,7 @@ public class SpELRuleTest {
   }
 
   @Test
-  public void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
+  void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
     // given
     Person person = new Person("foo", 20);
     facts.put("person", person);
@@ -60,7 +60,7 @@ public class SpELRuleTest {
   }
 
   @Test
-  public void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
+  void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
     // given
     Person foo = new Person("foo", 20);
     facts.put("person", foo);
@@ -73,7 +73,7 @@ public class SpELRuleTest {
   }
 
   @Test
-  public void testRuleWithRootVariable() throws Exception {
+  void testRuleWithRootVariable() throws Exception {
     // given
     Person foo = new Person("foo", 20);
     facts.put("person", foo);

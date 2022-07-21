@@ -24,6 +24,7 @@
 package org.jeasy.rules.support.composite;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,9 @@ import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.core.BasicRule;
 import org.jeasy.rules.core.DefaultRulesEngine;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ConditionalRuleGroupTest {
 
@@ -50,7 +51,7 @@ public class ConditionalRuleGroupTest {
 
   private DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
 
-  @Before
+  @BeforeEach
   public void setUp() {
     conditionalRule = new TestRule("conditionalRule", "description0", 0, true);
     rule1 = new TestRule("rule1", "description1", 1, true);
@@ -62,14 +63,14 @@ public class ConditionalRuleGroupTest {
     rules.register(conditionalRuleGroup);
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     rules.clear();
     actions.clear();
   }
 
   @Test
-  public void rulesMustNotBeExecutedIfConditionalRuleEvaluatesToFalse() {
+  void rulesMustNotBeExecutedIfConditionalRuleEvaluatesToFalse() {
     // Given
     conditionalRule.setEvaluationResult(false);
 
@@ -91,7 +92,7 @@ public class ConditionalRuleGroupTest {
   }
 
   @Test
-  public void selectedRulesMustBeExecutedIfConditionalRuleEvaluatesToTrue() {
+  void selectedRulesMustBeExecutedIfConditionalRuleEvaluatesToTrue() {
     // Given
     rule1.setEvaluationResult(false);
 
@@ -113,7 +114,7 @@ public class ConditionalRuleGroupTest {
   }
 
   @Test
-  public void whenARuleIsRemoved_thenItShouldNotBeEvaluated() {
+  void whenARuleIsRemoved_thenItShouldNotBeEvaluated() {
     // Given
     conditionalRuleGroup.removeRule(rule2);
 
@@ -130,7 +131,7 @@ public class ConditionalRuleGroupTest {
   }
 
   @Test
-  public void testCompositeRuleWithAnnotatedComposingRules() {
+  void testCompositeRuleWithAnnotatedComposingRules() {
     // Given
     MyRule rule = new MyRule();
     conditionalRuleGroup.addRule(rule);
@@ -144,7 +145,7 @@ public class ConditionalRuleGroupTest {
   }
 
   @Test
-  public void whenAnnotatedRuleIsRemoved_thenItsProxyShouldBeRetrieved() {
+  void whenAnnotatedRuleIsRemoved_thenItsProxyShouldBeRetrieved() {
     // Given
     MyRule rule = new MyRule();
     MyAnnotatedRule annotatedRule = new MyAnnotatedRule();
@@ -161,16 +162,18 @@ public class ConditionalRuleGroupTest {
     assertThat(annotatedRule.isExecuted()).isFalse();
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void twoRulesWithSameHighestPriorityIsNotAllowed() {
-    conditionalRuleGroup.addRule(new MyOtherRule(0)); // same priority as conditionalRule
-    conditionalRuleGroup.addRule(new MyOtherRule(1));
-    conditionalRuleGroup.addRule(new MyRule());
-    conditionalRuleGroup.evaluate(facts);
+  @Test
+  void twoRulesWithSameHighestPriorityIsNotAllowed() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      conditionalRuleGroup.addRule(new MyOtherRule(0)); // same priority as conditionalRule
+      conditionalRuleGroup.addRule(new MyOtherRule(1));
+      conditionalRuleGroup.addRule(new MyRule());
+      conditionalRuleGroup.evaluate(facts);
+    });
   }
 
   @Test
-  public void twoRulesWithSamePriorityIsAllowedIfAnotherRuleHasHigherPriority() {
+  void twoRulesWithSamePriorityIsAllowedIfAnotherRuleHasHigherPriority() {
     MyOtherRule rule1 = new MyOtherRule(3);
     conditionalRuleGroup.addRule(rule1);
     conditionalRuleGroup.addRule(new MyOtherRule(2));
@@ -181,7 +184,7 @@ public class ConditionalRuleGroupTest {
   }
 
   @Test
-  public void aRuleWithoutPriorityHasLowestPriority() {
+  void aRuleWithoutPriorityHasLowestPriority() {
     // given
     UnprioritizedRule rule = new UnprioritizedRule();
     conditionalRuleGroup.addRule(rule);
@@ -194,7 +197,7 @@ public class ConditionalRuleGroupTest {
   }
 
   @Test
-  public void testComposingRulesExecutionOrder() {
+  void testComposingRulesExecutionOrder() {
     // When
     rulesEngine.fire(rules, facts);
 

@@ -23,54 +23,54 @@
  */
 package org.jeasy.rules.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class UtilsTest {
 
   @Test
-  public void findAnnotationWithClassWhereAnnotationIsPresent() {
+  void findAnnotationWithClassWhereAnnotationIsPresent() {
     Annotation foo = Utils.findAnnotation(Foo.class, AnnotationIsPresent.class);
 
     assertCorrectAnnotationIsFound(Foo.class, foo);
   }
 
   @Test
-  public void findAnnotationWithClassWhereAnnotationIsPresentViaMetaAnnotation() {
+  void findAnnotationWithClassWhereAnnotationIsPresentViaMetaAnnotation() {
     Annotation foo = Utils.findAnnotation(Foo.class, AnnotationIsPresentViaMetaAnnotation.class);
 
     assertCorrectAnnotationIsFound(Foo.class, foo);
   }
 
   @Test
-  public void findAnnotationWithClassWhereAnnotationIsNotPresent() {
+  void findAnnotationWithClassWhereAnnotationIsNotPresent() {
     Annotation foo = Utils.findAnnotation(Foo.class, Object.class);
 
     assertNull(foo);
   }
 
   @Test
-  public void isAnnotationPresentWithClassWhereAnnotationIsPresent() {
+  void isAnnotationPresentWithClassWhereAnnotationIsPresent() {
     assertTrue(Utils.isAnnotationPresent(Foo.class, AnnotationIsPresent.class));
   }
 
   @Test
-  public void isAnnotationPresentWithClassWhereAnnotationIsPresentViaMetaAnnotation() {
+  void isAnnotationPresentWithClassWhereAnnotationIsPresentViaMetaAnnotation() {
     assertTrue(Utils.isAnnotationPresent(Foo.class, AnnotationIsPresentViaMetaAnnotation.class));
   }
 
   @Test
-  public void isAnnotationPresentWithClassWhereAnnotationIsNotPresent() {
+  void isAnnotationPresentWithClassWhereAnnotationIsNotPresent() {
     assertFalse(Utils.isAnnotationPresent(Foo.class, Object.class));
   }
 

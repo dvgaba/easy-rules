@@ -26,12 +26,12 @@ package org.jeasy.rules.core;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.api.Rules;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public abstract class AbstractTest {
 
   @Mock protected Rule rule1, rule2;
@@ -42,7 +42,7 @@ public abstract class AbstractTest {
 
   protected DefaultRulesEngine rulesEngine;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     facts = new Facts();
     facts.put("fact1", fact1);

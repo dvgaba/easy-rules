@@ -24,27 +24,28 @@
 package org.jeasy.rules.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashSet;
 import java.util.Set;
 import org.jeasy.rules.BasicRuleTestImpl;
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RulesTest {
 
   private Rules rules = new Rules();
 
   @Test
-  public void register() {
+  void register() {
     rules.register(new DummyRule());
 
     assertThat(rules).hasSize(1);
   }
 
   @Test
-  public void rulesMustHaveUniqueName() {
+  void rulesMustHaveUniqueName() {
     Rule r1 = new BasicRuleTestImpl("rule");
     Rule r2 = new BasicRuleTestImpl("rule");
     Set<Rule> ruleSet = new HashSet<>();
@@ -57,7 +58,7 @@ public class RulesTest {
   }
 
   @Test
-  public void unregister() {
+  void unregister() {
     DummyRule rule = new DummyRule();
     rules.register(rule);
     rules.unregister(rule);
@@ -66,7 +67,7 @@ public class RulesTest {
   }
 
   @Test
-  public void unregisterByName() {
+  void unregisterByName() {
     Rule r1 = new BasicRuleTestImpl("rule1");
     Rule r2 = new BasicRuleTestImpl("rule2");
     Set<Rule> ruleSet = new HashSet<>();
@@ -80,7 +81,7 @@ public class RulesTest {
   }
 
   @Test
-  public void unregisterByNameNonExistingRule() {
+  void unregisterByNameNonExistingRule() {
     Rule r1 = new BasicRuleTestImpl("rule1");
     Set<Rule> ruleSet = new HashSet<>();
     ruleSet.add(r1);
@@ -92,12 +93,12 @@ public class RulesTest {
   }
 
   @Test
-  public void isEmpty() {
+  void isEmpty() {
     assertThat(rules.isEmpty()).isTrue();
   }
 
   @Test
-  public void clear() {
+  void clear() {
     rules.register(new DummyRule());
     rules.clear();
 
@@ -105,7 +106,7 @@ public class RulesTest {
   }
 
   @Test
-  public void sort() {
+  void sort() {
     Rule r1 = new BasicRuleTestImpl("rule", "", 1);
     Rule r2 = new BasicRuleTestImpl("rule", "", Integer.MAX_VALUE);
     DummyRule r3 = new DummyRule();
@@ -118,7 +119,7 @@ public class RulesTest {
   }
 
   @Test
-  public void size() {
+  void size() {
     assertThat(rules.size()).isZero();
 
     rules.register(new DummyRule());
@@ -129,13 +130,13 @@ public class RulesTest {
   }
 
   @Test
-  public void register_multiple() {
+  void register_multiple() {
     rules.register(new BasicRuleTestImpl("ruleA"), new BasicRuleTestImpl("ruleB"));
     assertThat(rules.size()).isEqualTo(2);
   }
 
   @Test
-  public void unregister_noneLeft() {
+  void unregister_noneLeft() {
     rules.register(new BasicRuleTestImpl("ruleA"), new BasicRuleTestImpl("ruleB"));
     assertThat(rules.size()).isEqualTo(2);
 
@@ -144,7 +145,7 @@ public class RulesTest {
   }
 
   @Test
-  public void unregister_oneLeft() {
+  void unregister_oneLeft() {
     rules.register(new BasicRuleTestImpl("ruleA"), new BasicRuleTestImpl("ruleB"));
     assertThat(rules.size()).isEqualTo(2);
 
@@ -152,9 +153,11 @@ public class RulesTest {
     assertThat(rules.size()).isEqualTo(1);
   }
 
-  @Test(expected = NullPointerException.class)
-  public void whenRegisterNullRule_thenShouldThrowNullPointerException() {
-    rules.register(null);
+  @Test
+  void whenRegisterNullRule_thenShouldThrowNullPointerException() {
+    assertThrows(NullPointerException.class, () -> {
+      rules.register(null);
+    });
   }
 
   @org.jeasy.rules.annotation.Rule

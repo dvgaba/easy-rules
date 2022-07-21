@@ -30,11 +30,11 @@ import org.jeasy.rules.annotation.Condition;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.core.DefaultRulesEngine;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ActivationRuleGroupTest {
 
   private Facts facts = new Facts();
@@ -43,7 +43,7 @@ public class ActivationRuleGroupTest {
   private DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
 
   @Test
-  public void onlySelectedRuleShouldBeExecuted_whenComposingRulesHaveDifferentPriorities() {
+  void onlySelectedRuleShouldBeExecuted_whenComposingRulesHaveDifferentPriorities() {
     // given
     Rule1 rule1 = new Rule1();
     Rule2 rule2 = new Rule2();
@@ -62,7 +62,7 @@ public class ActivationRuleGroupTest {
   }
 
   @Test
-  public void onlySelectedRuleShouldBeExecuted_whenComposingRulesHaveSamePriority() {
+  void onlySelectedRuleShouldBeExecuted_whenComposingRulesHaveSamePriority() {
     // given
     Rule2 rule2 = new Rule2();
     Rule3 rule3 = new Rule3();
@@ -85,7 +85,7 @@ public class ActivationRuleGroupTest {
   }
 
   @Test
-  public void whenNoSelectedRule_thenNothingShouldHappen() {
+  void whenNoSelectedRule_thenNothingShouldHappen() {
     // given
     Rule4 rule4 = new Rule4();
     ActivationRuleGroup activationRuleGroup =

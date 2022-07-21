@@ -26,8 +26,8 @@ package org.jeasy.rules.jexl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.jeasy.rules.api.Facts;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Lauri Kimmel
@@ -38,14 +38,14 @@ public class JexlRuleTest {
   private final Facts facts = new Facts();
   private final JexlRule jexlRule = new JexlRule();
 
-  @Before
+  @BeforeEach
   public void setUp() {
     jexlRule.when("person.age > 18");
     jexlRule.then("person.setAdult(true);");
   }
 
   @Test
-  public void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
+  void whenTheRuleIsTriggered_thenConditionShouldBeEvaluated() {
     // given
     facts.put("person", new Person("foo", 20));
 
@@ -57,7 +57,7 @@ public class JexlRuleTest {
   }
 
   @Test
-  public void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
+  void whenTheConditionIsTrue_thenActionsShouldBeExecuted() throws Exception {
     // given
     Person foo = new Person("foo", 20);
     facts.put("person", foo);

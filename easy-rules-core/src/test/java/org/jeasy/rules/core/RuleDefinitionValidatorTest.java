@@ -23,6 +23,8 @@
  */
 package org.jeasy.rules.core;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.assertj.core.api.Assertions;
 import org.jeasy.rules.annotation.AnnotatedRuleWithActionMethodHavingMoreThanOneArgumentOfTypeFacts;
 import org.jeasy.rules.annotation.AnnotatedRuleWithActionMethodHavingOneArgumentNotOfTypeFacts;
@@ -42,14 +44,14 @@ import org.jeasy.rules.annotation.AnnotatedRuleWithPriorityMethodHavingArguments
 import org.jeasy.rules.annotation.AnnotatedRuleWithPriorityMethodHavingNonIntegerReturnType;
 import org.jeasy.rules.annotation.AnnotatedRuleWithoutActionMethod;
 import org.jeasy.rules.annotation.AnnotatedRuleWithoutConditionMethod;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RuleDefinitionValidatorTest {
 
   private RuleDefinitionValidator ruleDefinitionValidator;
 
-  @Before
+  @BeforeEach
   public void setup() {
     ruleDefinitionValidator = new RuleDefinitionValidator();
   }
@@ -57,118 +59,148 @@ public class RuleDefinitionValidatorTest {
   /*
    * Rule annotation test
    */
-  @Test(expected = IllegalArgumentException.class)
-  public void notAnnotatedRuleMustNotBeAccepted() {
-    ruleDefinitionValidator.validateRuleDefinition(new Object());
+  @Test
+  void notAnnotatedRuleMustNotBeAccepted() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(new Object());
+    });
   }
 
   @Test
-  public void withCustomAnnotationThatIsItselfAnnotatedWithTheRuleAnnotation() {
+  void withCustomAnnotationThatIsItselfAnnotatedWithTheRuleAnnotation() {
     ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithMetaRuleAnnotation());
   }
 
   /*
    * Conditions methods tests
    */
-  @Test(expected = IllegalArgumentException.class)
-  public void conditionMethodMustBeDefined() {
-    ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithoutConditionMethod());
+  @Test
+  void conditionMethodMustBeDefined() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithoutConditionMethod());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void conditionMethodMustBePublic() {
-    ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithNonPublicConditionMethod());
+  @Test
+  void conditionMethodMustBePublic() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithNonPublicConditionMethod());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void whenConditionMethodHasOneNonAnnotatedParameter_thenThisParameterMustBeOfTypeFacts() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithConditionMethodHavingOneArgumentNotOfTypeFacts());
+  @Test
+  void whenConditionMethodHasOneNonAnnotatedParameter_thenThisParameterMustBeOfTypeFacts() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithConditionMethodHavingOneArgumentNotOfTypeFacts());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void conditionMethodMustReturnBooleanType() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithConditionMethodHavingNonBooleanReturnType());
+  @Test
+  void conditionMethodMustReturnBooleanType() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithConditionMethodHavingNonBooleanReturnType());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void
-      conditionMethodParametersShouldAllBeAnnotatedWithFactUnlessExactlyOneOfThemIsOfTypeFacts() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithOneParameterNotAnnotatedWithFactAndNotOfTypeFacts());
+  @Test
+  void conditionMethodParametersShouldAllBeAnnotatedWithFactUnlessExactlyOneOfThemIsOfTypeFacts() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithOneParameterNotAnnotatedWithFactAndNotOfTypeFacts());
+    });
   }
 
   /*
    * Action method tests
    */
-  @Test(expected = IllegalArgumentException.class)
-  public void actionMethodMustBeDefined() {
-    ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithoutActionMethod());
+  @Test
+  void actionMethodMustBeDefined() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithoutActionMethod());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void actionMethodMustBePublic() {
-    ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithNonPublicActionMethod());
+  @Test
+  void actionMethodMustBePublic() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithNonPublicActionMethod());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void actionMethodMustHaveAtMostOneArgumentOfTypeFacts() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithActionMethodHavingOneArgumentNotOfTypeFacts());
+  @Test
+  void actionMethodMustHaveAtMostOneArgumentOfTypeFacts() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithActionMethodHavingOneArgumentNotOfTypeFacts());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void actionMethodMustHaveExactlyOneArgumentOfTypeFactsIfAny() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithActionMethodHavingMoreThanOneArgumentOfTypeFacts());
+  @Test
+  void actionMethodMustHaveExactlyOneArgumentOfTypeFactsIfAny() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithActionMethodHavingMoreThanOneArgumentOfTypeFacts());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void actionMethodMustReturnVoid() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithActionMethodThatReturnsNonVoidType());
+  @Test
+  void actionMethodMustReturnVoid() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithActionMethodThatReturnsNonVoidType());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void
-      actionMethodParametersShouldAllBeAnnotatedWithFactUnlessExactlyOneOfThemIsOfTypeFacts() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithOneParameterNotAnnotatedWithFactAndNotOfTypeFacts());
+  @Test
+  void actionMethodParametersShouldAllBeAnnotatedWithFactUnlessExactlyOneOfThemIsOfTypeFacts() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithOneParameterNotAnnotatedWithFactAndNotOfTypeFacts());
+    });
   }
 
   /*
    * Priority method tests
    */
 
-  @Test(expected = IllegalArgumentException.class)
-  public void priorityMethodMustBeUnique() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithMoreThanOnePriorityMethod());
+  @Test
+  void priorityMethodMustBeUnique() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithMoreThanOnePriorityMethod());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void priorityMethodMustBePublic() {
-    ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithNonPublicPriorityMethod());
+  @Test
+  void priorityMethodMustBePublic() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(new AnnotatedRuleWithNonPublicPriorityMethod());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void priorityMethodMustHaveNoArguments() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithPriorityMethodHavingArguments());
+  @Test
+  void priorityMethodMustHaveNoArguments() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithPriorityMethodHavingArguments());
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void priorityMethodReturnTypeMustBeInteger() {
-    ruleDefinitionValidator.validateRuleDefinition(
-        new AnnotatedRuleWithPriorityMethodHavingNonIntegerReturnType());
+  @Test
+  void priorityMethodReturnTypeMustBeInteger() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      ruleDefinitionValidator.validateRuleDefinition(
+          new AnnotatedRuleWithPriorityMethodHavingNonIntegerReturnType());
+    });
   }
 
   /*
    * Valid definition tests
    */
   @Test
-  public void validAnnotationsShouldBeAccepted() {
+  void validAnnotationsShouldBeAccepted() {
     try {
       ruleDefinitionValidator.validateRuleDefinition(
           new AnnotatedRuleWithMultipleAnnotatedParametersAndOneParameterOfTypeFacts());
