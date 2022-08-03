@@ -24,6 +24,12 @@ in maintaince mode. Current plan is to support community with minor enhacements 
 
 ## Latest news
 
+* 08/02/2022: Version 1.0.4 is out
+  Upgraded to JDK 11/Junit 5
+  Fixed dependency vulnerabilities
+  New parameter isFailsOnException for better exception handling
+  
+
 * 06/12/2020: Version 4.1 is out with a new module to
   support [Apache JEXL](https://commons.apache.org/proper/commons-jexl/) as an additional supported
   expression language! You can find all details about other changes in
