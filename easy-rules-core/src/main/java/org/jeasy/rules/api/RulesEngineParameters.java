@@ -40,6 +40,9 @@ import org.jeasy.rules.core.InferenceRulesEngine;
  */
 public class RulesEngineParameters {
 
+  /** Parameter to define annotation used to mark facts optional, for example javax.annotation.Nullable */
+  private static Class<?> OPTIONAL_PARAMETER_ANNOTATION = null;
+
   /** Default rule priority threshold. */
   public static final int DEFAULT_RULE_PRIORITY_THRESHOLD = Integer.MAX_VALUE;
 
@@ -149,6 +152,14 @@ public class RulesEngineParameters {
   public RulesEngineParameters failsOnException(final boolean failsOnException) {
     setFailsOnException(failsOnException);
     return this;
+  }
+
+  public static boolean hasOptionalParameterAnnotation(Class<?> methodAnnotation) {
+    return OPTIONAL_PARAMETER_ANNOTATION != null && OPTIONAL_PARAMETER_ANNOTATION.equals(methodAnnotation);
+  }
+
+  public static void setOptionalParameterAnnotation(Class<?> optionalParameterAnnotation) {
+    OPTIONAL_PARAMETER_ANNOTATION = optionalParameterAnnotation;
   }
 
   @Override

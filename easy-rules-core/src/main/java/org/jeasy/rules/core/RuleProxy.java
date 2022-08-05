@@ -42,6 +42,7 @@ import org.jeasy.rules.annotation.Fact;
 import org.jeasy.rules.annotation.Priority;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
+import org.jeasy.rules.api.RulesEngineParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -181,7 +182,7 @@ public class RuleProxy implements InvocationHandler {
       for (Annotation annotation : annotations) {
         if (annotation.annotationType().equals(Fact.class)) {
           factName = ((Fact) annotation).value();
-        } else if ("javax.annotation.Nullable".equals(annotation.annotationType().getCanonicalName())) {
+        } else if (RulesEngineParameters.hasOptionalParameterAnnotation(annotation.annotationType())) {
           annotatedAsNullable = true;
         }
       }

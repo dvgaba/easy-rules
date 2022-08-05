@@ -40,6 +40,7 @@ import org.jeasy.rules.annotation.Fact;
 import org.jeasy.rules.annotation.Priority;
 import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.Facts;
+import org.jeasy.rules.api.RulesEngineParameters;
 
 /**
  * This component validates that an annotated rule object is well defined.
@@ -144,8 +145,6 @@ class RuleDefinitionValidator {
         && validParameters(method);
   }
 
-  private static final Set<String> OTHER_ANNOTATIONS = Collections.singleton("javax.annotation.Nullable");
-
   private boolean validParameters(final Method method) {
     int notAnnotatedParameterCount = 0;
     Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -155,7 +154,7 @@ class RuleDefinitionValidator {
         //Annotation types has to be Fact or another accepted annotation
         if (annotation.annotationType().equals(Fact.class)) {
           annotatedAsFact = true;
-        } else if (!OTHER_ANNOTATIONS.contains(annotation.annotationType().getCanonicalName())) {
+        } else if (!RulesEngineParameters.hasOptionalParameterAnnotation(annotation.annotationType())) {
           return false;
         }
       }

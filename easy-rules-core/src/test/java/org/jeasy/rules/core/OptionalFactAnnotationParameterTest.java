@@ -29,11 +29,13 @@ import org.jeasy.rules.annotation.Fact;
 import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
+import org.jeasy.rules.api.RulesEngineParameters;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import org.mockito.internal.matchers.Null;
 
 /**
  * Null facts are not accepted by design, a declared fact can be missing though.
@@ -42,6 +44,7 @@ public class OptionalFactAnnotationParameterTest extends AbstractTest {
 
   @Test
   public void testMissingFact() {
+    RulesEngineParameters.setOptionalParameterAnnotation(Nullable.class);
     Rules rules = new Rules();
     rules.register(new AnnotatedParametersRule());
 
