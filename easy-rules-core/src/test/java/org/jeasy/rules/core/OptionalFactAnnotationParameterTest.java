@@ -30,7 +30,10 @@ import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngineParameters;
+import org.jeasy.rules.core.MissingFactAnnotationParameterTest.AnnotatedParametersRule;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.Nullable;
@@ -42,6 +45,23 @@ import org.mockito.internal.matchers.Null;
  */
 public class OptionalFactAnnotationParameterTest extends AbstractTest {
 
+  @BeforeEach
+  public void setup() throws Exception {
+    facts = new Facts();
+    facts.put("fact1", fact1);
+    facts.put("fact2", fact2);
+    rules = new Rules();
+
+    RulesEngineParameters rulesEngineParameters = new RulesEngineParameters();
+    rulesEngineParameters.setFailsOnException(true);
+    rulesEngine = new DefaultRulesEngine(rulesEngineParameters);
+  }
+
+  @AfterEach
+  void cleanup() {
+    RulesEngineParameters.setOptionalParameterAnnotation(null);
+  }
+
   @Test
   public void testMissingFact() {
     RulesEngineParameters.setOptionalParameterAnnotation(Nullable.class);
@@ -50,6 +70,45 @@ public class OptionalFactAnnotationParameterTest extends AbstractTest {
 
     Facts facts = new Facts();
     facts.put("fact1", new Object());
+
+    Map<org.jeasy.rules.api.Rule, Boolean> results = rulesEngine.check(rules, facts);
+
+    for (boolean b : results.values()) {
+      Assertions.assertTrue(b);
+    }
+  }
+
+  @Test
+  public void testMissingFactNotAnnotated() {
+
+    Rules rules = new Rules();
+
+
+      new AnnotatedParametersRule();
+      rules.register(new AnnotatedParametersRule());
+
+    Facts facts = new Facts();
+    facts.put("fact1", new Object());
+
+    Map<org.jeasy.rules.api.Rule, Boolean> results = rulesEngine.check(rules, facts);
+
+    for (boolean b : results.values()) {
+      Assertions.assertFalse(b);
+    }
+  }
+
+  @Test
+  public void testNoMissingFact() {
+    Rules rules = new Rules();
+    rules.register(new AnnotatedParametersRule() {
+      @Condition
+      public boolean when(@Fact("fact1") Object fact1, @Nullable @Fact("fact2") Object fact2) {
+        return fact1 != null && fact2 != null;
+      }
+    });
+    Facts facts = new Facts();
+    facts.put("fact1", new Object());
+    facts.put("fact2", new Object());
 
     Map<org.jeasy.rules.api.Rule, Boolean> results = rulesEngine.check(rules, facts);
 

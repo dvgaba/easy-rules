@@ -154,8 +154,6 @@ class RuleDefinitionValidator {
         //Annotation types has to be Fact or another accepted annotation
         if (annotation.annotationType().equals(Fact.class)) {
           annotatedAsFact = true;
-        } else if (!RulesEngineParameters.hasOptionalParameterAnnotation(annotation.annotationType())) {
-          return false;
         }
       }
       if (!annotatedAsFact) {
