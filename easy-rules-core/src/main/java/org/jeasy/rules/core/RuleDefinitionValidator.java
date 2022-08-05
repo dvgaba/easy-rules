@@ -30,7 +30,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
 import org.jeasy.rules.annotation.Fact;
@@ -141,19 +144,23 @@ class RuleDefinitionValidator {
         && validParameters(method);
   }
 
+  private static final Set<String> OTHER_ANNOTATIONS = Collections.singleton("javax.annotation.Nullable");
+
   private boolean validParameters(final Method method) {
     int notAnnotatedParameterCount = 0;
     Annotation[][] parameterAnnotations = method.getParameterAnnotations();
     for (Annotation[] annotations : parameterAnnotations) {
-      if (annotations.length == 0) {
-        notAnnotatedParameterCount += 1;
-      } else {
-        // Annotation types has to be Fact
-        for (Annotation annotation : annotations) {
-          if (!annotation.annotationType().equals(Fact.class)) {
-            return false;
-          }
+      boolean annotatedAsFact = false;
+      for (Annotation annotation : annotations) {
+        //Annotation types has to be Fact or another accepted annotation
+        if (annotation.annotationType().equals(Fact.class)) {
+          annotatedAsFact = true;
+        } else if (!OTHER_ANNOTATIONS.contains(annotation.annotationType().getCanonicalName())) {
+          return false;
         }
+      }
+      if (!annotatedAsFact) {
+        notAnnotatedParameterCount += 1;
       }
     }
     if (notAnnotatedParameterCount > 1) {
@@ -171,7 +178,13 @@ class RuleDefinitionValidator {
   private Parameter getNotAnnotatedParameter(Method method) {
     Parameter[] parameters = method.getParameters();
     for (Parameter parameter : parameters) {
-      if (parameter.getAnnotations().length == 0) {
+      boolean hasAnnotation = false;
+      for (Annotation annotation : parameter.getAnnotations()) {
+        if (annotation.annotationType().equals(Fact.class)) {
+          hasAnnotation = true;
+        }
+      }
+      if (!hasAnnotation) {
         return parameter;
       }
     }
