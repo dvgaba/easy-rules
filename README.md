@@ -20,7 +20,7 @@
 ## Project status
 
 This project is forked from [j-easy/easy-rules](https://github.com/j-easy/easy-rules) because it is
-in maintaince mode. Current plan is to support community with minor enhacements and bug fixes.
+in maintenance mode. Current plan is to support community with minor enhancements and bug fixes.
 
 ## Latest news
 
