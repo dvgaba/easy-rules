@@ -23,6 +23,8 @@
  */
 package org.jeasy.rules.core;
 
+import java.util.Map;
+import javax.annotation.Nullable;
 import org.jeasy.rules.annotation.Action;
 import org.jeasy.rules.annotation.Condition;
 import org.jeasy.rules.annotation.Fact;
@@ -30,19 +32,12 @@ import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.api.RulesEngineParameters;
-import org.jeasy.rules.core.MissingFactAnnotationParameterTest.AnnotatedParametersRule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nullable;
-import java.util.Map;
-import org.mockito.internal.matchers.Null;
-
-/**
- * Null facts are not accepted by design, a declared fact can be missing though.
- */
+/** Null facts are not accepted by design, a declared fact can be missing though. */
 public class OptionalFactAnnotationParameterTest extends AbstractTest {
 
   @BeforeEach
@@ -83,9 +78,8 @@ public class OptionalFactAnnotationParameterTest extends AbstractTest {
 
     Rules rules = new Rules();
 
-
-      new AnnotatedParametersRule();
-      rules.register(new AnnotatedParametersRule());
+    new AnnotatedParametersRule();
+    rules.register(new AnnotatedParametersRule());
 
     Facts facts = new Facts();
     facts.put("fact1", new Object());
@@ -100,12 +94,13 @@ public class OptionalFactAnnotationParameterTest extends AbstractTest {
   @Test
   public void testNoMissingFact() {
     Rules rules = new Rules();
-    rules.register(new AnnotatedParametersRule() {
-      @Condition
-      public boolean when(@Fact("fact1") Object fact1, @Nullable @Fact("fact2") Object fact2) {
-        return fact1 != null && fact2 != null;
-      }
-    });
+    rules.register(
+        new AnnotatedParametersRule() {
+          @Condition
+          public boolean when(@Fact("fact1") Object fact1, @Nullable @Fact("fact2") Object fact2) {
+            return fact1 != null && fact2 != null;
+          }
+        });
     Facts facts = new Facts();
     facts.put("fact1", new Object());
     facts.put("fact2", new Object());
@@ -126,8 +121,6 @@ public class OptionalFactAnnotationParameterTest extends AbstractTest {
     }
 
     @Action
-    public void then(@Fact("fact1") Object fact1, @Nullable @Fact("fact2") Object fact2) {
-    }
-
+    public void then(@Fact("fact1") Object fact1, @Nullable @Fact("fact2") Object fact2) {}
   }
 }
