@@ -24,6 +24,10 @@ in maintenance mode. Current plan is to support community with minor enhancement
 
 ## Latest news
 
+
+* 08/06/2022: Version 1.0.5 is out
+  Minor release to support optional fact parameters.
+
 * 08/02/2022: Version 1.0.4 is out
   Upgraded to JDK 11/Junit 5
   Fixed dependency vulnerabilities
