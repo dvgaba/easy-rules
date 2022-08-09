@@ -7,3 +7,4 @@ site/_site
 .classpath
 **/.gradle/*
 **/build/*
+*.versionsBackup
