@@ -16,5 +16,23 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+               
       - name: Build with Maven
         run: mvn clean package
+        
+      - name: Generate Jacoco Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+         generate-branches-badge: true
+
+      - name: Log coverage percentage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branches = ${{ steps.jacoco.outputs.branches }}"       
+
+      - name: Upload Jacoco coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
