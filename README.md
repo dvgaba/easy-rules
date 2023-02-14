@@ -24,6 +24,8 @@ in maintenance mode. Current plan is to support community with minor enhancement
 
 ## Latest news
 
+* 02/13/2023: Version 1.0.6 is out
+  Minor release to fix jackson vulnerability
 
 * 08/06/2022: Version 1.0.5 is out
   Minor release to support optional fact parameters.
