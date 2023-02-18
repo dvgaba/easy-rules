@@ -2,7 +2,7 @@
   <parent>
     <groupId>io.github.dvgaba</groupId>
     <artifactId>easy-rules</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.7</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -27,7 +27,7 @@
     <url>git@github.com:dvgaba/easy-rules.git</url>
     <connection>scm:git:git@github.com:dvgaba/easy-rules.git</connection>
     <developerConnection>scm:git:git@github.com:dvgaba/easy-rules.git</developerConnection>
-    <tag>easy-rules-1.0.6</tag>
+    <tag>easy-rules-1.0.7</tag>
   </scm>
 
   <issueManagement>
