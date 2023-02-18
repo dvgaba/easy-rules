@@ -9,7 +9,7 @@
 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
 [![Build Status](https://github.com/dvgaba/easy-rules/workflows/Java%20CI/badge.svg)](https://github.com/dvgaba/easy-rules/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.dvgaba/easy-rules-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|io.github.dvgaba|easy-rules-core|1.0.4|)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.dvgaba/easy-rules-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|io.github.dvgaba|easy-rules-core|1.0.7|)
 [![Javadoc](https://www.javadoc.io/badge/io.github.dvgaba/easy-rules-core.svg)](https://www.javadoc.io/doc/io.github.dvgaba/easy-rules-core)
 [![Project status](https://img.shields.io/badge/Project%20status-active-green.svg)](https://img.shields.io/badge/Project%20status-active-green.svg)
 
@@ -24,7 +24,7 @@ in maintenance mode. Current plan is to support community with minor enhancement
 
 ## Latest news
 
-* 02/13/2023: Version 1.0.6 is out
+* 02/13/2023: Version 1.0.7 is out
   Minor release to fix jackson vulnerability
 
 * 08/06/2022: Version 1.0.5 is out
