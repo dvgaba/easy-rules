@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.github.dvgaba</groupId>
     <artifactId>easy-rules</artifactId>
-    <version>1.0.7</version>
+    <version>1.1.0</version>
   </parent>
 
   <artifactId>easy-rules-jexl</artifactId>
@@ -13,7 +13,7 @@
   <description>JEXL integration module</description>
 
   <properties>
-    <jexl.version>3.2.1</jexl.version>
+    <jexl.version>3.3</jexl.version>
   </properties>
 
   <scm>
@@ -79,19 +79,16 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

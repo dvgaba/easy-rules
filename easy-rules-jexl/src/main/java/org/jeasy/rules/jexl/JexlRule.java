@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
+import org.apache.commons.jexl3.introspection.JexlPermissions;
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Condition;
 import org.jeasy.rules.api.Facts;
@@ -40,7 +41,7 @@ import org.jeasy.rules.core.BasicRule;
  */
 public class JexlRule extends BasicRule {
 
-  static final JexlEngine DEFAULT_JEXL = new JexlBuilder().safe(false).create();
+  static final JexlEngine DEFAULT_JEXL = new JexlBuilder().permissions(JexlPermissions.UNRESTRICTED).safe(false).create();
 
   private Condition condition = Condition.FALSE;
   private final List<Action> actions = new ArrayList<>();

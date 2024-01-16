@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlException;
+import org.apache.commons.jexl3.introspection.JexlPermissions;
 import org.apache.commons.jexl3.introspection.JexlSandbox;
 import org.assertj.core.api.Assertions;
 import org.jeasy.rules.api.Action;
@@ -49,7 +50,7 @@ public class JexlActionTest {
   @Test
   void testJexlActionExecution() throws Exception {
     // given
-    Action markAsAdult = new JexlAction("person.setAdult(true);");
+    Action markAsAdult = new JexlAction("person.setAdult(true)");
     Facts facts = new Facts();
     Person foo = new Person("foo", 20);
     facts.put("person", foo);
@@ -94,7 +95,7 @@ public class JexlActionTest {
     Assertions.assertThatThrownBy(() -> action.execute(facts))
         .isInstanceOf(JexlException.Method.class)
         .hasMessage(
-            "org.jeasy.rules.jexl.JexlAction.<init>:49 unsolvable function/method 'setBlah(Boolean)'");
+            "org.jeasy.rules.jexl.JexlAction.<init>:49@1:7 unsolvable function/method 'setBlah(Boolean)'");
 
     // then
     // excepted exception
@@ -147,7 +148,7 @@ public class JexlActionTest {
     sandbox.white(System.class.getName()).execute("currentTimeMillis");
     Map<String, Object> namespaces = new HashMap<>();
     namespaces.put("s", System.class);
-    JexlEngine jexl = new JexlBuilder().sandbox(sandbox).namespaces(namespaces).create();
+    JexlEngine jexl = new JexlBuilder().permissions(JexlPermissions.UNRESTRICTED).sandbox(sandbox).namespaces(namespaces).create();
     Facts facts = new Facts();
     AtomicLong atomicLong = new AtomicLong();
     facts.put("result", atomicLong);

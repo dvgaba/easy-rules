@@ -24,6 +24,10 @@ in maintenance mode. Current plan is to support community with minor enhancement
 
 ## Latest news
 
+* 01/15/2024: Version 1.1.0 is out
+  * 3PP Version bumps
+  * easy-rules-jexl - Breaking change due to bump to Jexl 3.3
+
 * 02/13/2023: Version 1.0.7 is out
   Minor release to fix jackson vulnerability
 
