@@ -23,7 +23,7 @@ This project is forked from [j-easy/easy-rules](https://github.com/j-easy/easy-r
 in maintenance mode. Current plan is to support community with minor enhancements and bug fixes.
 
 ## Latest news
-
+* 6/3/2024: Version 1.2.0. Bumped mvel version to 2.5.2.FINAL to fix issue with JDK 21.
 * 01/15/2024: Version 1.1.0 is out
   * 3PP Version bumps
   * easy-rules-jexl - Breaking change due to bump to Jexl 3.3

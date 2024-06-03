@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.github.dvgaba</groupId>
     <artifactId>easy-rules</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
   </parent>
 
   <artifactId>easy-rules-mvel</artifactId>
@@ -13,14 +13,14 @@
   <description>MVEL integration module</description>
 
   <properties>
-    <mvel2.version>2.4.10.Final</mvel2.version>
+    <mvel2.version>2.5.2.Final</mvel2.version>
   </properties>
 
   <scm>
     <url>git@github.com:dvgaba/easy-rules.git</url>
     <connection>scm:git:git@github.com:dvgaba/easy-rules.git</connection>
     <developerConnection>scm:git:git@github.com:dvgaba/easy-rules.git</developerConnection>
-    <tag>easy-rules-1.0.7</tag>
+    <tag>easy-rules-1.1.0</tag>
   </scm>
 
   <issueManagement>
